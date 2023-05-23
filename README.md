@@ -1,2 +1,2 @@
-# pokeAPI
+# PokeAPI
 Pokemon's API

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import {
   Chip,
@@ -18,6 +17,11 @@ import {
   Card
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 import BugIcon from './images/Pokemon_Type_Icon_Bug.svg';
 import DarkIcon from './images/Pokemon_Type_Icon_Dark.svg';
 import DragonIcon from './images/Pokemon_Type_Icon_Dragon.svg';
@@ -38,14 +42,13 @@ import SteelIcon from './images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from './images/Pokemon_Type_Icon_Water.svg';
 import PokeballIcon from './images/Pokemon_Type_Icon_Pokeball.png';
 import Placeholder from './images/Pokemon_Icon_Placeholder.png';
-import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
   const [pokemonData, setPokemonData] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [selectedType1, setSelectedType1] = useState('All');
   const [selectedType2, setSelectedType2] = useState('All');
+  const [selectedSort, setSelectedSort] = useState('idAscending');
 
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -139,134 +142,250 @@ function App() {
     setSelectedType2(event.target.value);
   };
 
+  const handleSortChange = (event) => {
+    setSelectedSort(event.target.value);
+  };
+
   const clearSearchText = () => {
     setSearchText('');
   };
 
   const filterPokemon = (pokemon) => {
-  const matchesType1 =
-    selectedType1 === 'All' || pokemon.types.some((type) => type.type.name === selectedType1);
-  const matchesType2 =
-    selectedType2 === 'All' || pokemon.types.some((type) => type.type.name === selectedType2);
-  const matchesSearchText = pokemon.name.includes(searchText.toLowerCase());
-  return matchesType1 && matchesType2 && matchesSearchText;
-};
+    const matchesType1 =
+      selectedType1 === 'All' || pokemon.types.some((type) => type.type.name === selectedType1);
+    const matchesType2 =
+      selectedType2 === 'All' || pokemon.types.some((type) => type.type.name === selectedType2);
+    const matchesSearchText = pokemon.name.includes(searchText.toLowerCase());
+    return matchesType1 && matchesType2 && matchesSearchText;
+  };
 
-  const filteredPokemonData = pokemonData.filter(filterPokemon);
+  let sortedPokemonData = [...pokemonData];
+
+  switch (selectedSort) {
+    case 'idAscending':
+      sortedPokemonData.sort((a, b) => a.id - b.id);
+      break;
+    case 'idDescending':
+      sortedPokemonData.sort((a, b) => b.id - a.id);
+      break;
+    case 'nameAscending':
+      sortedPokemonData.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'nameDescending':
+      sortedPokemonData.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+  }
+
+  const filteredPokemonData = sortedPokemonData.filter(filterPokemon);
+
+  const style = {
+    pokemonContainer: {
+      padding: '16px',
+    },
+    filterContainer: {
+      mb: 3,
+    },
+    searchFilter: {
+      maxWidth: '200px'
+    },
+    closeIcon: {
+      cursor: 'pointer',
+    },
+    select: {
+      minWidth: '120px',
+    },
+    menuItemIcon: {
+      width: '17px',
+      height: '17px',
+    },
+    menuItemText: {
+      fontSize: '14px',
+    },
+    sortIcon: {
+      fontSize: '1em',
+    },
+    imgContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    cardMedia: {
+      maxWidth: 150,
+    },
+    pokeballIcon: {
+      width: '13px',
+      height: '13px',
+    },
+    pokemonName: {
+      lineHeight: 1.2,
+      maxHeight: '2.4em',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
+    pokemonTypeContainer: {
+      marginTop: '8px',
+    },
+    pokemonTypeChip: {
+      cursor: 'pointer',
+    },
+    noDataPlaceholder: {
+      ml: 2,
+    },
+  };
 
   return (
     <Fragment>
-      <Box sx={{ padding: '16px' }}>
-        <Stack direction="row" spacing={2} sx={{ mb:3 }}>
-          <TextField
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-            value={searchText}
-            onChange={handleSearchTextChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  {searchText && (
-                    <CloseIcon
-                      onClick={clearSearchText}
-                      sx={{ cursor: 'pointer' }}
-                    />
-                  )}
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Select
-            id="outlined-select-type1"
-            value={selectedType1}
-            onChange={handleType1Change}
-            label="Type 1"
-            variant="outlined"
-            sx={{ minWidth: '120px' }}
-          >
-            <MenuItem value='All'>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <CardMedia
-                  component="img"
-                  sx={{ width: '17px', height: '17px' }}
-                  image={PokeballIcon}
-                />
-                <Typography variant="body2" sx={{ fontSize: '14px' }}>
-                  All
-                </Typography>
-              </Stack>
-            </MenuItem>
-            {pokemonType.map((type) => (
-              <MenuItem value={type.value} key={type.value}>
+      <Box sx={style.pokemonContainer}>
+        <Grid container sx={style.filterContainer} spacing={2}>
+          <Grid item>
+            <TextField
+              sx={style.searchFilter}
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
+              value={searchText}
+              onChange={handleSearchTextChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {searchText && (
+                      <CloseIcon
+                        onClick={clearSearchText}
+                        sx={style.closeIcon}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <Select
+              id="outlined-select-sort"
+              value={selectedSort}
+              onChange={handleSortChange}
+              label="Sort By"
+              variant="outlined"
+              sx={style.select}
+            >
+              <MenuItem value='idAscending'>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Box sx={{ width: '17px', height: '17px' }}>
-                    {getTypeIcon(type.value)}
-                  </Box>
-                  <Typography variant="body2" sx={{ fontSize: '14px' }}>
-                    {type.name}
+                  <ArrowUpwardIcon sx={style.sortIcon} />
+                  <Typography variant="body2" sx={style.menuItemText}>
+                    ID
                   </Typography>
                 </Stack>
               </MenuItem>
-            ))}
-          </Select>
-          <Select
-            id="outlined-select-type2"
-            value={selectedType2}
-            onChange={handleType2Change}
-            label="Type 2"
-            variant="outlined"
-            sx={{ minWidth: '120px' }}
-          >
-            <MenuItem value='All'>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <CardMedia
-                  component="img"
-                  sx={{ width: '17px', height: '17px' }}
-                  image={PokeballIcon}
-                />
-                <Typography variant="body2" sx={{ fontSize: '14px' }}>
-                  All
-                </Typography>
-              </Stack>
-            </MenuItem>
-            {pokemonType.map((type) => (
-              <MenuItem value={type.value} key={type.value}>
+              <MenuItem value='idDescending'>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Box sx={{ width: '17px', height: '17px' }}>
-                    {getTypeIcon(type.value)}
-                  </Box>
-                  <Typography variant="body2" sx={{ fontSize: '14px' }}>
-                    {type.name}
+                  <ArrowDownwardIcon sx={style.sortIcon} />
+                  <Typography variant="body2" sx={style.menuItemText}>
+                    ID
                   </Typography>
                 </Stack>
               </MenuItem>
-            ))}
-          </Select>
-        </Stack>
+              <MenuItem value='nameAscending'>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <ArrowUpwardIcon sx={style.sortIcon} />
+                  <Typography variant="body2" sx={style.menuItemText}>
+                    Name
+                  </Typography>
+                </Stack>
+              </MenuItem>
+              <MenuItem value='nameDescending'>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <ArrowDownwardIcon sx={style.sortIcon} />
+                  <Typography variant="body2" sx={style.menuItemText}>
+                    Name
+                  </Typography>
+                </Stack>
+              </MenuItem>
+            </Select>
+          </Grid>
+          <Grid item>
+            <Select
+              id="outlined-select-type1"
+              value={selectedType1}
+              onChange={handleType1Change}
+              label="Type 1"
+              variant="outlined"
+              sx={style.select}
+            >
+              <MenuItem value='All'>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CardMedia
+                    component="img"
+                    sx={style.menuItemIcon}
+                    image={PokeballIcon}
+                  />
+                  <Typography variant="body2" sx={style.menuItemText}>
+                    All
+                  </Typography>
+                </Stack>
+              </MenuItem>
+              {pokemonType.map((type) => (
+                <MenuItem value={type.value} key={type.value}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Box sx={style.menuItemIcon}>
+                      {getTypeIcon(type.value)}
+                    </Box>
+                    <Typography variant="body2" sx={style.menuItemText}>
+                      {type.name}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item>
+            <Select
+              id="outlined-select-type2"
+              value={selectedType2}
+              onChange={handleType2Change}
+              label="Type 2"
+              variant="outlined"
+              sx={style.select}
+            >
+              <MenuItem value='All'>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CardMedia
+                    component="img"
+                    sx={style.menuItemIcon}
+                    image={PokeballIcon}
+                  />
+                  <Typography variant="body2" sx={style.menuItemText}>
+                    All
+                  </Typography>
+                </Stack>
+              </MenuItem>
+              {pokemonType.map((type) => (
+                <MenuItem value={type.value} key={type.value}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Box sx={style.menuItemIcon}>
+                      {getTypeIcon(type.value)}
+                    </Box>
+                    <Typography variant="body2" sx={style.menuItemText}>
+                      {type.name}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        </Grid>
         <Grid container spacing={2}>
           {filteredPokemonData.length > 0 ? (
             filteredPokemonData.map((pokemon, index) => (
               <Grid item key={index} xs={12} sm={6} md={4} lg={2} xl={2}>
                 <Card>
                   <CardActionArea>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        sx={{ maxWidth: 150 }}
-                        image={pokemon.sprites.front_default || Placeholder}
-                      />
+                    <Box sx={style.imgContainer}>
+                      <CardMedia component="img" sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} />
                     </Box>
                     <CardContent>
                       <Stack direction="row" spacing={1} alignItems="center">
@@ -284,10 +403,10 @@ function App() {
                           #{pokemon.id.toString().padStart(3, '0')}
                         </Typography>
                       </Stack>
-                      <Typography variant="h6" noWrap sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <Typography variant="h6" noWrap sx={style.pokemonName}>
                         {formatPokemonName(pokemon.name)}
                       </Typography>
-                      <Stack direction="row" spacing={1} sx={{ marginTop: '8px' }}>
+                      <Stack direction="row" spacing={1} sx={style.pokemonTypeContainer}>
                         {pokemon.types.map((type, index) => (
                           <Chip
                             key={index}
@@ -295,7 +414,7 @@ function App() {
                             label={capitalizeFirstLetter(type.type.name)}
                             size="small"
                             variant="outlined"
-                            sx={{ cursor: 'pointer' }}
+                            sx={style.pokemonTypeChip}
                           />
                         ))}
                       </Stack>
@@ -305,7 +424,7 @@ function App() {
               </Grid>
             ))
           ) : (
-            <Typography sx={{ml: 2}} variant="body1">Not found</Typography>
+            <Typography sx={style.noDataPlaceholder} variant="body1">Not found</Typography>
           )}
         </Grid>
       </Box>

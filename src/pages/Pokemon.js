@@ -45,10 +45,45 @@ import Placeholder from '../images/Pokemon_Icon_Placeholder.png';
 
 function Pokemon() {
   const [pokemonData, setPokemonData] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [selectedType1, setSelectedType1] = useState('All');
-  const [selectedType2, setSelectedType2] = useState('All');
-  const [selectedSort, setSelectedSort] = useState('idAscending');
+  const [searchText, setSearchText] = useState(
+    localStorage.getItem('searchText') || ''
+  );
+  const [selectedType1, setSelectedType1] = useState(
+    localStorage.getItem('selectedType1') || 'All'
+  );
+  const [selectedType2, setSelectedType2] = useState(
+    localStorage.getItem('selectedType2') || 'All'
+  );
+  const [selectedSort, setSelectedSort] = useState(
+    localStorage.getItem('selectedSort') || 'idAscending'
+  );
+
+  useEffect(() => {
+    const storedSearchText = localStorage.getItem('searchText');
+    const storedSelectedType1 = localStorage.getItem('selectedType1');
+    const storedSelectedType2 = localStorage.getItem('selectedType2');
+    const storedSelectedSort = localStorage.getItem('selectedSort');
+
+    if (storedSearchText) {
+      setSearchText(storedSearchText);
+    }
+    if (storedSelectedType1) {
+      setSelectedType1(storedSelectedType1);
+    }
+    if (storedSelectedType2) {
+      setSelectedType2(storedSelectedType2);
+    }
+    if (storedSelectedSort) {
+      setSelectedSort(storedSelectedSort);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('searchText', searchText);
+    localStorage.setItem('selectedType1', selectedType1);
+    localStorage.setItem('selectedType2', selectedType2);
+    localStorage.setItem('selectedSort', selectedSort);
+  }, [searchText, selectedType1, selectedType2, selectedSort]);
 
   useEffect(() => {
     const fetchPokemonData = async () => {

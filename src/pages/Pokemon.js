@@ -14,7 +14,8 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
-  Card
+  Card,
+  CircularProgress
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import CloseIcon from '@mui/icons-material/Close';
@@ -45,6 +46,8 @@ import Placeholder from '../images/Pokemon_Icon_Placeholder.png';
 
 function Pokemon() {
   const [pokemonData, setPokemonData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [searchText, setSearchText] = useState(
     localStorage.getItem('searchText') || ''
   );
@@ -89,16 +92,23 @@ function Pokemon() {
     const fetchPokemonData = async () => {
       try {
         const response = await axios.get(
-          'https://pokeapi.co/api/v2/pokemon?limit=12&offset=0'
+          'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0'
         );
         const results = response.data.results;
+        const pokemonCount = results.length; // Total number of Pokémon
+
+        // Fetch each Pokémon and update the loading progress
         const pokemon = await Promise.all(
-          results.map(async (result) => {
+          results.map(async (result, index) => {
             const response = await axios.get(result.url);
+            const progress = ((index + 1) / pokemonCount) * 100; // Calculate loading progress percentage
+            setLoadingProgress(progress); // Update loading progress state
             return response.data;
           })
         );
+
         setPokemonData(pokemon);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -416,55 +426,79 @@ function Pokemon() {
             </Select>
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
-          {filteredPokemonData.length > 0 ? (
-            filteredPokemonData.map((pokemon, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
-                <Card>
-                  <CardActionArea>
-                    <Box sx={style.imgContainer}>
-                      <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} />
-                    </Box>
-                    <CardContent>
-                      <Stack direction='row' spacing={1} alignItems='center'>
-                        <img
-                          src={PokeballIcon}
-                          alt='Pokeball'
-                          style={{ width: '13px', height: '13px' }}
-                        />
-                        <Typography
-                          gutterBottom
-                          variant='body2'
-                          component='div'
-                          color='text.secondary'
-                        >
-                          #{pokemon.id.toString().padStart(3, '0')}
-                        </Typography>
-                      </Stack>
-                      <Typography variant='h6' noWrap sx={style.pokemonName}>
-                        {formatPokemonName(pokemon.name)}
-                      </Typography>
-                      <Stack direction='row' spacing={1} sx={style.pokemonTypeContainer}>
-                        {pokemon.types.map((type, index) => (
-                          <Chip
-                            key={index}
-                            avatar={getTypeIcon(type.type.name)}
-                            label={capitalizeFirstLetter(type.type.name)}
-                            size='small'
-                            variant='outlined'
-                            sx={style.pokemonTypeChip}
-                          />
-                        ))}
-                      </Stack>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography sx={style.noDataPlaceholder} variant='body1'>Not found</Typography>
-          )}
-        </Grid>
+          {
+            isLoading ?
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '50vh',
+              }}
+            >
+              <CircularProgress size={60} />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant="caption" component="div" color="text.secondary">
+                  {loadingProgress.toFixed(2)}%
+                </Typography>
+              </Box>
+            </Box>
+              :
+            <Grid container spacing={2}>
+                {filteredPokemonData.length > 0 ? (
+                  filteredPokemonData.map((pokemon, index) => (
+                    <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
+                      <Card>
+                        <CardActionArea>
+                          <Box sx={style.imgContainer}>
+                            <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} />
+                          </Box>
+                          <CardContent>
+                            <Stack direction='row' spacing={1} alignItems='center'>
+                              <img
+                                src={PokeballIcon}
+                                alt='Pokeball'
+                                style={{ width: '13px', height: '13px' }}
+                              />
+                              <Typography
+                                gutterBottom
+                                variant='body2'
+                                component='div'
+                                color='text.secondary'
+                              >
+                                #{pokemon.id.toString().padStart(3, '0')}
+                              </Typography>
+                            </Stack>
+                            <Typography variant='h6' noWrap sx={style.pokemonName}>
+                              {formatPokemonName(pokemon.name)}
+                            </Typography>
+                            <Stack direction='row' spacing={1} sx={style.pokemonTypeContainer}>
+                              {pokemon.types.map((type, index) => (
+                                <Chip
+                                  key={index}
+                                  avatar={getTypeIcon(type.type.name)}
+                                  label={capitalizeFirstLetter(type.type.name)}
+                                  size='small'
+                                  variant='outlined'
+                                  sx={style.pokemonTypeChip}
+                                />
+                              ))}
+                            </Stack>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))
+                ) : (
+                  <Typography sx={style.noDataPlaceholder} variant='body1'>Not found</Typography>
+                )}
+            </Grid>
+          }
       </Box>
     </Fragment>
   );

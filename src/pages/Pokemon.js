@@ -20,7 +20,7 @@ import {
   Card,
   CircularProgress
 } from '@mui/material';
-import { grey, red } from '@mui/material/colors';
+import { brown, grey, red, pink, yellow, purple, blue, green } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -95,7 +95,7 @@ function Pokemon() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100&offset=0');
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1015&offset=0');
         const results = response.data.results;
         const pokemonCount = results.length; // Total number of Pokémon
 
@@ -139,27 +139,27 @@ function Pokemon() {
   const getColor = (color,) => {
     switch (color) {
       case 'black':
-        return mode === 'dark' ? '#424242' : '#616161';
+        return grey[800];
       case 'blue':
-        return mode === 'dark' ? '#2196f3' : '#64b5f6';
+        return blue[500];
       case 'brown':
-        return mode === 'dark' ? '#a1887f' : '#795548';
+        return brown[300];
       case 'gray':
-        return mode === 'dark' ? '#9e9e9e' : '#bdbdbd';
+        return grey[500];
       case 'green':
-        return mode === 'dark' ? '#4caf50' : '#81c784';
+        return green[500];
       case 'pink':
-        return mode === 'dark' ? '#e91e63' : '#f06292';
+        return pink[500];
       case 'purple':
-        return mode === 'dark' ? '#9c27b0' : '#ba68c8';
+        return purple[500];
       case 'red':
-        return mode === 'dark' ? '#f44336' : '#e57373';
+        return red[500];
       case 'white':
-        return mode === 'dark' ? '#fafafa' : '#f5f5f5';
+        return grey[50];
       case 'yellow':
-        return mode === 'dark' ? '#ffeb3b' : '#fff176';
+        return yellow[500];
       default:
-        return mode === 'dark' ? '#fafafa' : '#f5f5f5';
+        return grey[50];
     }
   };
 
@@ -268,7 +268,7 @@ function Pokemon() {
       mb: 3,
     },
     searchFilter: {
-      maxWidth: '200px'
+      maxWidth: { xs: '170px', sm: '170px', md: '170px', lg: '260px', xl: '260px' }
     },
     closeIcon: {
       cursor: 'pointer'
@@ -499,24 +499,13 @@ function Pokemon() {
                       <Scale key={index}>
                         <Card>
                           <CardActionArea>
-                            {
-                              mode === 'dark' ? 
-                                <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(to bottom, ${getColor(pokemon.color)}, transparent)` }]}>
-                                  {
-                                    pokemon.sprites.front_default ?
-                                      <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
-                                      : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
-                                  }
-                                </Box>
-                              : 
-                                <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(to bottom, ${getColor(pokemon.color)}, transparent)` }]}>
-                                  {
-                                    pokemon.sprites.front_default ?
-                                      <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
-                                      : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
-                                  }
-                                </Box>
-                            }
+                            <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(to bottom, ${getColor(pokemon.color)}, transparent)` }]}>
+                              {
+                                pokemon.sprites.front_default ?
+                                  <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
+                                  : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
+                              }
+                            </Box>
                             <CardContent>
                               <Stack direction='row' spacing={1} alignItems='center'>
                                 <img

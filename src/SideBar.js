@@ -10,8 +10,6 @@ import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Logo from './images/Pokemon_Icon_PokeAPI.svg';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useStore from './Store';
 
 const drawerWidth = 200;
@@ -19,7 +17,7 @@ const drawerWidth = 200;
 function SideBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { mode, toggleColorMode } = useStore();
+  const { mode } = useStore();
   const location = useLocation();
   const path = location.pathname;
 
@@ -137,9 +135,6 @@ function SideBar(props) {
                   'PokeAPI 2023'
                 }
               </Typography>
-              <IconButton color="inherit" onClick={toggleColorMode}>
-                {theme.palette.mode === 'dark' ? <Brightness7Icon sx={style.darkModeBtn} /> : <Brightness4Icon />}
-              </IconButton>
             </Toolbar>
           </AppBar>
           <Box component='nav' sx={style.nav} aria-label='mailbox folders' >

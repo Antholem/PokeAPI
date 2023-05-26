@@ -20,7 +20,7 @@ import {
   Card,
   CircularProgress
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -45,6 +45,7 @@ import RockIcon from '../images/Pokemon_Type_Icon_Rock.svg';
 import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
 import { CatchingPokemon } from '@mui/icons-material';
+import useStore from '../Store';
 
 function Pokemon() {
   const [pokemonData, setPokemonData] = useState([]);
@@ -62,6 +63,7 @@ function Pokemon() {
   const [selectedSort, setSelectedSort] = useState(
     localStorage.getItem('selectedSort') || 'idAscending'
   );
+  const { mode } = useStore();
 
   useEffect(() => {
     const storedSearchText = localStorage.getItem('searchText');
@@ -93,9 +95,7 @@ function Pokemon() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get(
-          'https://pokeapi.co/api/v2/pokemon?limit=12&offset=0'
-        );
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100&offset=0');
         const results = response.data.results;
         const pokemonCount = results.length; // Total number of Pokémon
 
@@ -105,7 +105,12 @@ function Pokemon() {
             const response = await axios.get(result.url);
             const progress = ((index + 1) / pokemonCount) * 100; // Calculate loading progress percentage
             setLoadingProgress(progress); // Update loading progress state
-            return response.data;
+
+            // Fetch color data for each Pokémon
+            const colorResponse = await axios.get(response.data.species.url);
+            const color = colorResponse.data.color.name;
+
+            return { ...response.data, color }; // Include color in the Pokémon data
           })
         );
 
@@ -129,6 +134,33 @@ function Pokemon() {
       return `${capitalizeFirstLetter(words[0])} ${capitalizeFirstLetter(words[1])}`;
     }
     return capitalizeFirstLetter(name);
+  };
+
+  const getColor = (color,) => {
+    switch (color) {
+      case 'black':
+        return mode === 'dark' ? '#424242' : '#616161';
+      case 'blue':
+        return mode === 'dark' ? '#2196f3' : '#64b5f6';
+      case 'brown':
+        return mode === 'dark' ? '#a1887f' : '#795548';
+      case 'gray':
+        return mode === 'dark' ? '#9e9e9e' : '#bdbdbd';
+      case 'green':
+        return mode === 'dark' ? '#4caf50' : '#81c784';
+      case 'pink':
+        return mode === 'dark' ? '#e91e63' : '#f06292';
+      case 'purple':
+        return mode === 'dark' ? '#9c27b0' : '#ba68c8';
+      case 'red':
+        return mode === 'dark' ? '#f44336' : '#e57373';
+      case 'white':
+        return mode === 'dark' ? '#fafafa' : '#f5f5f5';
+      case 'yellow':
+        return mode === 'dark' ? '#ffeb3b' : '#fff176';
+      default:
+        return mode === 'dark' ? '#fafafa' : '#f5f5f5';
+    }
   };
 
   const getTypeIcon = (type) => {
@@ -247,7 +279,7 @@ function Pokemon() {
     menuItemIcon: {
       width: '20px',
       height: '20px',
-      color: grey[600]
+      color: mode === 'dark' ? grey[200] : grey[600]
     },
     menuItemText: {
       fontSize: '14px'
@@ -257,7 +289,7 @@ function Pokemon() {
     },
     sortIcon: {
       fontSize: '1em',
-      color: grey[600]
+      color: mode === 'dark' ? grey[200] : grey[600]
     },
     imgContainer: {
       display: 'flex',
@@ -269,11 +301,11 @@ function Pokemon() {
     },
     pokemonIconPlaceholder: {
       fontSize: '8em',
-      color: grey[600]
+      color: mode === 'dark' ? grey[200] : grey[600]
     },
     pokemonImgPlaceholder: {
       fontSize: '11.25em',
-      color: grey[600],
+      color: mode === 'dark' ? grey[200] : grey[600],
       maxWidth: 150
     },
     pokemonName: {
@@ -467,14 +499,24 @@ function Pokemon() {
                       <Scale key={index}>
                         <Card>
                           <CardActionArea>
-                            <Box sx={style.imgContainer}>
-                              {
-                                pokemon.sprites.front_default ? 
-                                  <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
-                                  : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
-                              }
-                              {/* <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} /> */}
-                            </Box>
+                            {
+                              mode === 'dark' ? 
+                                <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(to bottom, ${getColor(pokemon.color)}, transparent)` }]}>
+                                  {
+                                    pokemon.sprites.front_default ?
+                                      <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
+                                      : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
+                                  }
+                                </Box>
+                              : 
+                                <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(to bottom, ${getColor(pokemon.color)}, transparent)` }]}>
+                                  {
+                                    pokemon.sprites.front_default ?
+                                      <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
+                                      : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
+                                  }
+                                </Box>
+                            }
                             <CardContent>
                               <Stack direction='row' spacing={1} alignItems='center'>
                                 <img

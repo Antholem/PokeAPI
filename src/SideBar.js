@@ -9,16 +9,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Logo from './images/Pokemon_Icon_PokeAPI.svg';
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import useStore from './Store';
 
 const drawerWidth = 200;
 
 function SideBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [mode, setMode] = React.useState(localStorage.getItem('mode') || 'dark');
+  const { mode, toggleColorMode } = useStore();
   const location = useLocation();
   const path = location.pathname;
 
@@ -29,15 +30,6 @@ function SideBar(props) {
   useEffect(() => {
     localStorage.setItem('mode', mode);
   }, [mode]);
-
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-      },
-    }),
-    [],
-  );
 
   const theme = React.useMemo(
     () =>
@@ -95,7 +87,7 @@ function SideBar(props) {
       flexGrow: 1
     },
     darkModeBtn: {
-      color: yellow[400]
+      color: yellow[300]
     }
   }
 
@@ -141,11 +133,11 @@ function SideBar(props) {
               <Typography variant='h6' noWrap component='div' sx={style.pageTitle}>
                 {
                   path === '/' ? 'Pokémon' :
-                    path === '/moves' ? 'Moves' :
-                      'PokeAPI 2023'
+                  path === '/moves' ? 'Moves' :
+                  'PokeAPI 2023'
                 }
               </Typography>
-              <IconButton color="inherit" onClick={colorMode.toggleColorMode}>
+              <IconButton color="inherit" onClick={toggleColorMode}>
                 {theme.palette.mode === 'dark' ? <Brightness7Icon sx={style.darkModeBtn} /> : <Brightness4Icon />}
               </IconButton>
             </Toolbar>

@@ -44,7 +44,6 @@ import PsychicIcon from '../images/Pokemon_Type_Icon_Psychic.svg';
 import RockIcon from '../images/Pokemon_Type_Icon_Rock.svg';
 import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
-import Placeholder from '../images/Pokemon_Icon_Placeholder.png';
 import { CatchingPokemon } from '@mui/icons-material';
 
 function Pokemon() {
@@ -268,6 +267,15 @@ function Pokemon() {
     cardMedia: {
       maxWidth: 150
     },
+    pokemonIconPlaceholder: {
+      fontSize: '8em',
+      color: grey[600]
+    },
+    pokemonImgPlaceholder: {
+      fontSize: '11.25em',
+      color: grey[600],
+      maxWidth: 150
+    },
     pokemonName: {
       lineHeight: 1.2,
       maxHeight: '2.4em',
@@ -463,7 +471,7 @@ function Pokemon() {
                               {
                                 pokemon.sprites.front_default ? 
                                   <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
-                                  : <CatchingPokemon sx={{ fontSize: '11.25em', color: grey[600], maxWidth: 150 }} />
+                                  : <CatchingPokemon sx={style.pokemonImgPlaceholder} />
                               }
                               {/* <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} /> */}
                             </Box>
@@ -508,7 +516,7 @@ function Pokemon() {
               ) : (
                   <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '50vh' }}>
                     <Grid item style={{ textAlign: 'center' }}>
-                      <CatchingPokemon sx={{ fontSize: '8em', color: grey[600] }} />
+                      <CatchingPokemon sx={style.pokemonIconPlaceholder} />
                       <Typography variant="body1" component="div" color="text.secondary">
                         No Pokemon Found
                       </Typography>

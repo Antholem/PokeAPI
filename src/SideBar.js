@@ -1,25 +1,53 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
+import { yellow } from '@mui/material/colors';
 import MenuIcon from '@mui/icons-material/Menu';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Logo from './images/Pokemon_Icon_PokeAPI.svg';
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const drawerWidth = 200;
 
 function SideBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mode, setMode] = React.useState(localStorage.getItem('mode') || 'dark');
   const location = useLocation();
   const path = location.pathname;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  useEffect(() => {
+    localStorage.setItem('mode', mode);
+  }, [mode]);
+
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
 
   const menu = [
     { title: 'Pokémon', path: '/', icon: <CatchingPokemon /> },
@@ -62,6 +90,12 @@ function SideBar(props) {
       flexGrow: 1,
       p: 3,
       width: { sm: `calc(100% - ${drawerWidth}px)` }
+    },
+    pageTitle: {
+      flexGrow: 1
+    },
+    darkModeBtn: {
+      color: yellow[400]
     }
   }
 
@@ -90,48 +124,53 @@ function SideBar(props) {
 
   return (
     <Fragment>
-      <Box sx={style.drawerContainer}>
-        <CssBaseline />
-        <AppBar position='fixed' sx={style.appBar} >
-          <Toolbar>
-            <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='start'
-              onClick={handleDrawerToggle}
-              sx={style.iconButton}
+      <ThemeProvider theme={theme}>
+        <Box sx={style.drawerContainer}>
+          <CssBaseline />
+          <AppBar position='fixed' sx={style.appBar} >
+            <Toolbar>
+              <IconButton
+                color='inherit'
+                aria-label='open drawer'
+                edge='start'
+                onClick={handleDrawerToggle}
+                sx={style.iconButton}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant='h6' noWrap component='div' sx={style.pageTitle}>
+                {
+                  path === '/' ? 'Pokémon' :
+                    path === '/moves' ? 'Moves' :
+                      'PokeAPI 2023'
+                }
+              </Typography>
+              <IconButton color="inherit" onClick={colorMode.toggleColorMode}>
+                {theme.palette.mode === 'dark' ? <Brightness7Icon sx={style.darkModeBtn} /> : <Brightness4Icon />}
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Box component='nav' sx={style.nav} aria-label='mailbox folders' >
+            <Drawer
+              container={container}
+              variant='temporary'
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{ keepMounted: true }}
+              sx={style.drawerTemporary}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant='h6' noWrap component='div'>
-              {
-                path === '/' ? 'Pokémon' : 
-                path === '/moves' ? 'Moves' :
-                'PokeAPI 2023'
-              }
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Box component='nav' sx={style.nav} aria-label='mailbox folders' >
-          <Drawer
-            container={container}
-            variant='temporary'
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{keepMounted: true}}
-            sx={style.drawerTemporary}
-          >
-            {drawer}
-          </Drawer>
-          <Drawer variant='permanent' sx={style.drawerPermanent} open>
-            {drawer}
-          </Drawer>
+              {drawer}
+            </Drawer>
+            <Drawer variant='permanent' sx={style.drawerPermanent} open>
+              {drawer}
+            </Drawer>
+          </Box>
+          <Box component='main' sx={style.main}>
+            <Toolbar />
+            <Outlet />
+          </Box>
         </Box>
-        <Box component='main' sx={style.main}>
-          <Toolbar />
-          <Outlet />
-        </Box>
-      </Box>
+      </ThemeProvider>
     </Fragment>
   );
 }

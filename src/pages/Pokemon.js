@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
+import Scale from '../animations/Scale';
+import FadeIn from '../animations/FadeIn';
 import {
   Chip,
   Stack,
@@ -9,6 +11,7 @@ import {
   InputAdornment,
   MenuItem,
   Select,
+  Grid
 } from '@mui/material';
 import {
   CardActionArea,
@@ -17,7 +20,7 @@ import {
   Card,
   CircularProgress
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -41,8 +44,8 @@ import PsychicIcon from '../images/Pokemon_Type_Icon_Psychic.svg';
 import RockIcon from '../images/Pokemon_Type_Icon_Rock.svg';
 import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
-import PokeballIcon from '../images/Pokemon_Type_Icon_Pokeball.png';
 import Placeholder from '../images/Pokemon_Icon_Placeholder.png';
+import { CatchingPokemon } from '@mui/icons-material';
 
 function Pokemon() {
   const [pokemonData, setPokemonData] = useState([]);
@@ -92,7 +95,7 @@ function Pokemon() {
     const fetchPokemonData = async () => {
       try {
         const response = await axios.get(
-          'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0'
+          'https://pokeapi.co/api/v2/pokemon?limit=12&offset=0'
         );
         const results = response.data.results;
         const pokemonCount = results.length; // Total number of Pokémon
@@ -219,13 +222,16 @@ function Pokemon() {
     case 'nameDescending':
       sortedPokemonData.sort((a, b) => b.name.localeCompare(a.name));
       break;
+    default:
+      // Handle the default case here
+      break;
   }
 
   const filteredPokemonData = sortedPokemonData.filter(filterPokemon);
 
   const style = {
     pokemonContainer: {
-      padding: '16px',
+      padding: '16px'
     },
     filterContainer: {
       mb: 3,
@@ -234,55 +240,67 @@ function Pokemon() {
       maxWidth: '200px'
     },
     closeIcon: {
-      cursor: 'pointer',
+      cursor: 'pointer'
     },
     select: {
-      minWidth: '120px',
+      minWidth: '125px'
     },
     menuItemIcon: {
-      width: '17px',
-      height: '17px',
+      width: '20px',
+      height: '20px',
+      color: grey[600]
     },
     menuItemText: {
-      fontSize: '14px',
+      fontSize: '14px'
     },
     sort: {
       minWidth: '110px'
     },
     sortIcon: {
       fontSize: '1em',
+      color: grey[600]
     },
     imgContainer: {
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     cardMedia: {
-      maxWidth: 150,
-    },
-    pokeballIcon: {
-      width: '13px',
-      height: '13px',
+      maxWidth: 150
     },
     pokemonName: {
       lineHeight: 1.2,
       maxHeight: '2.4em',
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
+      textOverflow: 'ellipsis'
     },
     pokemonTypeContainer: {
-      marginTop: '8px',
+      marginTop: '8px'
     },
     pokemonTypeChip: {
-      cursor: 'pointer',
+      cursor: 'pointer'
     },
     noDataPlaceholder: {
-      ml: 2,
+      ml: 2
     },
+    loadingProgress: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '50vh'
+    },
+    loadingProgressText: {
+      position: 'absolute',
+      textAlign: 'center'
+    },
+    pokeballIcon: {
+      width: '20px',
+      height: '20px'
+    }
   };
 
   return (
-    <Fragment>
+    <FadeIn>
       <Box sx={style.pokemonContainer}>
         <Grid container sx={style.filterContainer} spacing={1}>
           <Grid item>
@@ -366,13 +384,11 @@ function Pokemon() {
             >
               <MenuItem value='All'>
                 <Stack direction='row' spacing={1} alignItems='center'>
-                  <CardMedia
-                    component='img'
+                  <CatchingPokemon
                     sx={style.menuItemIcon}
-                    image={PokeballIcon}
                   />
                   <Typography variant='body2' sx={style.menuItemText}>
-                    All
+                    Any
                   </Typography>
                 </Stack>
               </MenuItem>
@@ -401,13 +417,11 @@ function Pokemon() {
             >
               <MenuItem value='All'>
                 <Stack direction='row' spacing={1} alignItems='center'>
-                  <CardMedia
-                    component='img'
+                  <CatchingPokemon
                     sx={style.menuItemIcon}
-                    image={PokeballIcon}
                   />
                   <Typography variant='body2' sx={style.menuItemText}>
-                    All
+                    Any
                   </Typography>
                 </Stack>
               </MenuItem>
@@ -426,81 +440,85 @@ function Pokemon() {
             </Select>
           </Grid>
         </Grid>
-          {
-            isLoading ?
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '50vh',
-              }}
-            >
+        {
+          isLoading ?
+            <Box sx={style.loadingProgress}>
               <CircularProgress size={60} />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  textAlign: 'center',
-                }}
-              >
+              <Box sx={style.loadingProgressText}>
                 <Typography variant="caption" component="div" color="text.secondary">
                   {loadingProgress.toFixed(2)}%
                 </Typography>
               </Box>
             </Box>
-              :
-            <Grid container spacing={2}>
-                {filteredPokemonData.length > 0 ? (
-                  filteredPokemonData.map((pokemon, index) => (
+            :
+            <Fragment>
+              {filteredPokemonData.length > 0 ? (
+                <Grid container spacing={2}>
+                  {filteredPokemonData.map((pokemon, index) => (
                     <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
-                      <Card>
-                        <CardActionArea>
-                          <Box sx={style.imgContainer}>
-                            <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} />
-                          </Box>
-                          <CardContent>
-                            <Stack direction='row' spacing={1} alignItems='center'>
-                              <img
-                                src={PokeballIcon}
-                                alt='Pokeball'
-                                style={{ width: '13px', height: '13px' }}
-                              />
-                              <Typography
-                                gutterBottom
-                                variant='body2'
-                                component='div'
-                                color='text.secondary'
-                              >
-                                #{pokemon.id.toString().padStart(3, '0')}
-                              </Typography>
-                            </Stack>
-                            <Typography variant='h6' noWrap sx={style.pokemonName}>
-                              {formatPokemonName(pokemon.name)}
-                            </Typography>
-                            <Stack direction='row' spacing={1} sx={style.pokemonTypeContainer}>
-                              {pokemon.types.map((type, index) => (
-                                <Chip
-                                  key={index}
-                                  avatar={getTypeIcon(type.type.name)}
-                                  label={capitalizeFirstLetter(type.type.name)}
-                                  size='small'
-                                  variant='outlined'
-                                  sx={style.pokemonTypeChip}
+                      <Scale key={index}>
+                        <Card>
+                          <CardActionArea>
+                            <Box sx={style.imgContainer}>
+                              {
+                                pokemon.sprites.front_default ? 
+                                  <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
+                                  : <CatchingPokemon sx={{ fontSize: '11.25em', color: grey[600], maxWidth: 150 }} />
+                              }
+                              {/* <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default || Placeholder} /> */}
+                            </Box>
+                            <CardContent>
+                              <Stack direction='row' spacing={1} alignItems='center'>
+                                <img
+                                  src={'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'}
+                                  alt='Pokeball'
+                                  style={style.pokeballIcon}
                                 />
-                              ))}
-                            </Stack>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
+                                <Typography
+                                  gutterBottom
+                                  variant='body2'
+                                  component='div'
+                                  color='text.secondary'
+                                >
+                                  #{pokemon.id.toString().padStart(3, '0')}
+                                </Typography>
+                              </Stack>
+                              <Typography variant='h6' noWrap sx={style.pokemonName}>
+                                {formatPokemonName(pokemon.name)}
+                              </Typography>
+                              <Stack direction='row' spacing={1} sx={style.pokemonTypeContainer}>
+                                {pokemon.types.map((type, index) => (
+                                  <Chip
+                                    key={index}
+                                    avatar={getTypeIcon(type.type.name)}
+                                    label={capitalizeFirstLetter(type.type.name)}
+                                    size='small'
+                                    variant='outlined'
+                                    sx={style.pokemonTypeChip}
+                                  />
+                                ))}
+                              </Stack>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Scale>
                     </Grid>
-                  ))
-                ) : (
-                  <Typography sx={style.noDataPlaceholder} variant='body1'>Not found</Typography>
-                )}
-            </Grid>
-          }
+                  ))}
+                </Grid>
+              ) : (
+                  <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '50vh' }}>
+                    <Grid item style={{ textAlign: 'center' }}>
+                      <CatchingPokemon sx={{ fontSize: '8em', color: grey[600] }} />
+                      <Typography variant="body1" component="div" color="text.secondary">
+                        No Pokemon Found
+                      </Typography>
+                    </Grid>
+                  </Grid>
+              )}
+            </Fragment>
+        }
       </Box>
-    </Fragment>
+    </FadeIn>
   );
 }
 

@@ -20,7 +20,7 @@ import {
   Card,
   CircularProgress
 } from '@mui/material';
-import { brown, grey, red, pink, yellow, purple, blue, green } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -95,7 +95,7 @@ function Pokemon() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1015&offset=0');
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=500&offset=0');
         const results = response.data.results;
         const pokemonCount = results.length; // Total number of Pokémon
 
@@ -136,30 +136,30 @@ function Pokemon() {
     return capitalizeFirstLetter(name);
   };
 
-  const getColor = (color,) => {
+  const getColor = (color) => {
     switch (color) {
       case 'black':
-        return grey[800];
+        return 'rgba(128,128,128,1) 0%, rgba(73,73,73,1) 38%, rgba(50,50,50,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'blue':
-        return blue[500];
+        return 'rgba(0,133,232,1) 0%, rgba(0,49,181,1) 38%, rgba(8,0,124,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'brown':
-        return brown[300];
+        return 'rgba(198,99,0,1) 0%, rgba(136,68,0,1) 38%, rgba(89,45,0,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'gray':
-        return grey[500];
+        return 'rgba(203,203,203,1) 0%, rgba(158,158,158,1) 38%, rgba(102,102,102,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'green':
-        return green[500];
+        return 'rgba(0,232,85,1) 0%, rgba(8,164,0,1) 38%, rgba(15,89,0,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'pink':
-        return pink[500];
+        return 'rgba(255,192,203,1) 0%, rgba(221,100,122,1) 38%, rgba(144,73,85,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'purple':
-        return purple[500];
+        return 'rgba(171,0,232,1) 0%, rgba(103,0,181,1) 38%, rgba(56,0,96,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'red':
-        return red[500];
+      return 'rgba(232,81,0,1) 0%, rgba(181,0,0,1) 38%, rgba(124,0,0,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'white':
-        return grey[50];
+        return 'rgba(255,255,255,1) 0%, rgba(228,228,228,1) 38%, rgba(145,145,145,0.7) 65%, rgba(0,0,0,0) 100%';
       case 'yellow':
-        return yellow[500];
+        return 'rgba(247,255,50,1) 0%, rgba(185,174,0,1) 38%, rgba(101,96,0,0.7) 65%, rgba(0,0,0,0) 100%';
       default:
-        return grey[50];
+        return 'rgba(128,128,128,1) 0%, rgba(73,73,73,1) 38%, rgba(50,50,50,0.7) 65%, rgba(0,0,0,0) 100%';
     }
   };
 
@@ -499,7 +499,7 @@ function Pokemon() {
                       <Scale key={index}>
                         <Card>
                           <CardActionArea>
-                            <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(to bottom, ${getColor(pokemon.color)}, transparent)` }]}>
+                            <Box key={pokemon.id} sx={[style.imgContainer, { backgroundImage: `linear-gradient(180deg, ${getColor(pokemon.color)})` }]}>
                               {
                                 pokemon.sprites.front_default ?
                                   <CardMedia component='img' sx={style.cardMedia} image={pokemon.sprites.front_default} />
@@ -545,14 +545,14 @@ function Pokemon() {
                   ))}
                 </Grid>
               ) : (
-                  <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '50vh' }}>
-                    <Grid item style={{ textAlign: 'center' }}>
-                      <CatchingPokemon sx={style.pokemonIconPlaceholder} />
-                      <Typography variant="body1" component="div" color="text.secondary">
-                        No Pokemon Found
-                      </Typography>
-                    </Grid>
+                <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '50vh' }}>
+                  <Grid item style={{ textAlign: 'center' }}>
+                    <CatchingPokemon sx={style.pokemonIconPlaceholder} />
+                    <Typography variant="body1" component="div" color="text.secondary">
+                      No Pokemon Found
+                    </Typography>
                   </Grid>
+                </Grid>
               )}
             </Fragment>
         }

@@ -41,7 +41,8 @@ function SideBar(props) {
 
   const menu = [
     { title: 'Pokémon', path: '/', icon: <CatchingPokemon /> },
-    { title: 'Moves', path: '/moves', icon: <PetsIcon /> }
+    { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
+    { title: 'Test', path: '/test', icon: <PetsIcon /> }
   ];
 
   const style = {

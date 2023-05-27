@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState, useMemo } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
@@ -16,7 +16,7 @@ const drawerWidth = 200;
 
 function SideBar(props) {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { mode } = useStore();
   const location = useLocation();
   const path = location.pathname;
@@ -29,7 +29,7 @@ function SideBar(props) {
     localStorage.setItem('mode', mode);
   }, [mode]);
 
-  const theme = React.useMemo(
+  const theme = useMemo(
     () =>
       createTheme({
         palette: {

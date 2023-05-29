@@ -5,8 +5,6 @@ import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
 import { yellow } from '@mui/material/colors';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import MenuIcon from '@mui/icons-material/Menu';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -19,13 +17,9 @@ const drawerWidth = 200;
 function SideBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { mode, toggleColorMode } = useStore();
+  const { mode } = useStore();
   const location = useLocation();
   const path = location.pathname;
-
-  const handleModeToggle = () => {
-    toggleColorMode();
-  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -151,9 +145,6 @@ function SideBar(props) {
                   item.path === path ? item.title : null
                 )}
               </Typography>
-              <IconButton onClick={handleModeToggle}>
-                {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
             </Toolbar>
           </AppBar>
           <Box component='nav' sx={style.nav} aria-label='mailbox folders' >

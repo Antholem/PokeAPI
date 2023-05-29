@@ -9,6 +9,15 @@ const useStore = create((set) => ({
       return { mode: newMode };
     });
   },
+
+  shiny: localStorage.getItem('shiny') === true || false,
+  toggleShiny: () => {
+    set((state) => {
+      const newShiny = !state.shiny;
+      localStorage.setItem('shiny', newShiny);
+      return { shiny: newShiny };
+    });
+  },
 }));
 
 export default useStore;

@@ -73,9 +73,9 @@ function SideBar(props) {
     },
     logo: {
       width: '90px',
+      mx: 'auto',
+      my: 'auto',
       display: 'flex',
-      ml: 'auto',
-      mr: 'auto',
       mt: 2,
       mb: -6.5
     },
@@ -126,6 +126,7 @@ function SideBar(props) {
       </List>
     </Fragment>
   );
+
 
   const container = window !== undefined ? () => window().document.body : undefined;
 

@@ -5,6 +5,8 @@ import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
 import { yellow } from '@mui/material/colors';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import MenuIcon from '@mui/icons-material/Menu';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -17,9 +19,13 @@ const drawerWidth = 200;
 function SideBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { mode } = useStore();
+  const { mode, toggleColorMode } = useStore();
   const location = useLocation();
   const path = location.pathname;
+
+  const handleModeToggle = () => {
+    toggleColorMode();
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -40,9 +46,17 @@ function SideBar(props) {
   );
 
   const menu = [
-    { title: 'Pokémon', path: '/', icon: <CatchingPokemon /> },
+    { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
+    { title: 'Team Builder', path: '/team-builder', icon: <CatchingPokemon /> },
+    { title: 'Favorites', path: '/favorites', icon: <CatchingPokemon /> },
+    { title: 'Comparator', path: '/comparator', icon: <CatchingPokemon /> },
+
+    { title: 'Types', path: '/types', icon: <CatchingPokemon /> },
+    { title: 'Abilities', path: '/abilities', icon: <CatchingPokemon /> },
+    { title: 'Items', path: '/items', icon: <CatchingPokemon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
-    { title: 'Test', path: '/test', icon: <PetsIcon /> }
+
+    { title: 'Settings', path: '/settings', icon: <PetsIcon /> },
   ];
 
   const style = {
@@ -94,20 +108,22 @@ function SideBar(props) {
     <Fragment>
       <CardMedia component='img' image={Logo} sx={style.logo} />
       <Toolbar />
-      <Divider />
       <List>
-        {menu.map((item) => (
-          <ListItem key={item.title} disablePadding component={Link} to={item.path} selected={item.path === path} button>
-            <ListItemButton>
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.title} />
-            </ListItemButton>
-          </ListItem>
+        {menu.map((item, index) => (
+          <Fragment key={item.title}>
+            {(index === 0) && <Divider />}
+            <ListItem disablePadding component={Link} to={item.path} selected={item.path === path} button>
+              <ListItemButton>
+                <ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.title} />
+              </ListItemButton>
+            </ListItem>
+            {(index === 3 || index === 7) && <Divider />}
+          </Fragment>
         ))}
       </List>
-      <Divider />
     </Fragment>
   );
 
@@ -130,12 +146,13 @@ function SideBar(props) {
                 <MenuIcon />
               </IconButton>
               <Typography variant='h6' noWrap component='div' sx={style.pageTitle}>
-                {
-                  path === '/' ? 'Pokémon' :
-                  path === '/moves' ? 'Moves' :
-                  'PokeAPI 2023'
-                }
+                {menu.map((item) =>
+                  item.path === path ? item.title : null
+                )}
               </Typography>
+              <IconButton onClick={handleModeToggle}>
+                {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
             </Toolbar>
           </AppBar>
           <Box component='nav' sx={style.nav} aria-label='mailbox folders' >

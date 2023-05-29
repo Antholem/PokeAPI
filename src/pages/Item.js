@@ -2,14 +2,14 @@ import React, { useEffect, useState, Fragment } from 'react';
 import useStore from '../Store';
 import axios from 'axios';
 
-function Moves() {
+function Items() {
     const { mode } = useStore();
 
     return (
         <Fragment>
-            Moves
+            Items
         </Fragment>
     );
 }
 
-export default Moves;
+export default Items;

@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import useStore from '../Store';
 import axios from 'axios';
 
-function Moves() {
+function Comparator() {
     const { mode } = useStore();
 
     return (
@@ -12,4 +12,4 @@ function Moves() {
     );
 }
 
-export default Moves;
+export default Comparator;

@@ -46,7 +46,10 @@ import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
 import { CatchingPokemon } from '@mui/icons-material';
 
 function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 function Test() {
@@ -63,7 +66,7 @@ function Test() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(
@@ -91,8 +94,9 @@ function Test() {
               specialAttack: pokemonData.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
               specialDefense: pokemonData.stats.find((stat) => stat.stat.name === 'special-defense').base_stat,
               speed: pokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat,
-              total:
-                pokemonData.stats.reduce((total, stat) => total + stat.base_stat, 0),
+              total: pokemonData.stats.reduce((total, stat) => total + stat.base_stat, 0),
+              weight: pokemonData.weight,
+              height: pokemonData.height,
             };
             return formattedPokemonData;
           })
@@ -163,19 +167,20 @@ function Test() {
     { name: 'Water', value: 'water' },
   ];
 
-  const spriteGen = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+  const defaultSprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+  const shinySprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/';
 
   const pokemonGen = [
     { name: 'All Gen', value: 'All' },
-    { name: 'Gen I', value: 'generation-i', icon: `${spriteGen}1.png` },
-    { name: 'Gen II', value: 'generation-ii', icon: `${spriteGen}155.png` },
-    { name: 'Gen III', value: 'generation-iii', icon: `${spriteGen}258.png` },
-    { name: 'Gen IV', value: 'generation-iv', icon: `${spriteGen}390.png` },
-    { name: 'Gen V', value: 'generation-v', icon: `${spriteGen}501.png` },
-    { name: 'Gen VI', value: 'generation-vi', icon: `${spriteGen}653.png` },
-    { name: 'Gen VII', value: 'generation-vii', icon: `${spriteGen}728.png` },
-    { name: 'Gen VIII', value: 'generation-viii', icon: `${spriteGen}810.png` },
-    { name: 'Gen IX', value: 'generation-ix', icon: `${spriteGen}909.png` },
+    { name: 'Gen I', value: 'generation-i', icon: shiny ? `${shinySprite}1.png` : `${defaultSprite}1.png` },
+    { name: 'Gen II', value: 'generation-ii', icon: shiny ? `${shinySprite}155.png` : `${defaultSprite}155.png` },
+    { name: 'Gen III', value: 'generation-iii', icon: shiny ? `${shinySprite}255.png` : `${defaultSprite}255.png` },
+    { name: 'Gen IV', value: 'generation-iv', icon: shiny ? `${shinySprite}387.png` : `${defaultSprite}387.png` },
+    { name: 'Gen V', value: 'generation-v', icon: shiny ? `${shinySprite}501.png` : `${defaultSprite}501.png` },
+    { name: 'Gen VI', value: 'generation-vi', icon: shiny ? `${shinySprite}656.png` : `${defaultSprite}656.png` },
+    { name: 'Gen VII', value: 'generation-vii', icon: shiny ? `${shinySprite}728.png` : `${defaultSprite}728.png` },
+    { name: 'Gen VIII', value: 'generation-viii', icon: shiny ? `${shinySprite}816.png` : `${defaultSprite}816.png` },
+    { name: 'Gen IX', value: 'generation-ix', icon: shiny ? `${shinySprite}172.png` : `${defaultSprite}172.png` },
   ];
 
   const pokemonStat = [
@@ -186,7 +191,9 @@ function Test() {
     { name: 'S.ATK', value: 'specialAttack' },
     { name: 'S.DEF', value: 'specialDefense' },
     { name: 'SPEED', value: 'speed' },
-    { name: 'TOTAL', value: 'total' }
+    { name: 'TOTAL', value: 'total' },
+    { name: 'HT', value: 'height' },
+    { name: 'WGT', value: 'weight' }
   ];
 
   const sortPokemonList = () => {
@@ -221,10 +228,6 @@ function Test() {
 
   const clearSearchText = () => {
     setSearchText('');
-  };
-
-  const handleChange = (event) => {
-    setSelectedStat(event.target.value);
   };
 
   const truncatePokemonName = (name, maxLength) => {
@@ -473,6 +476,10 @@ function Test() {
                           ? `${pokemon.speed}`
                           : selectedStat === 'total'
                           ? `${pokemon.total}`
+                          : selectedStat === 'height'
+                          ? `${pokemon.height} m`
+                          : selectedStat === 'weight'
+                          ? `${pokemon.total} kg`
                           : `#${pokemon.id.toString().padStart(3, '0')}`}
                       </Typography>
                       </Stack>

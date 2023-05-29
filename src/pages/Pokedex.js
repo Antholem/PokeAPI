@@ -50,7 +50,7 @@ function capitalizeFirstLetter(str) {
 }
 
 function Test() {
-  const { mode } = useStore();
+  const { mode, shiny } = useStore();
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState('asc');
@@ -79,7 +79,7 @@ function Test() {
 
             const formattedPokemonData = {
               sprites: {
-                front_default: pokemonData.sprites.front_default,
+                front_default: shiny ? pokemonData.sprites.front_shiny : pokemonData.sprites.front_default,
               },
               id: pokemonData.id,
               name: pokemonData.name,
@@ -460,7 +460,7 @@ function Test() {
                         {selectedStat === 'id'
                           ? `#${pokemon.id.toString().padStart(3, '0')}`
                           : selectedStat === 'hp'
-                          ? `${pokemon.hp}HP`
+                          ? `${pokemon.hp} HP`
                           : selectedStat === 'atk'
                           ? `${pokemon.atk}`
                           : selectedStat === 'def'

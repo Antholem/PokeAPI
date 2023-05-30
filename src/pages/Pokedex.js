@@ -20,6 +20,7 @@ import {
   ToggleButton
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { useTheme } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
@@ -46,24 +47,27 @@ import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
 import { CatchingPokemon } from '@mui/icons-material';
 
 function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 function Test() {
-  const { mode, shiny } = useStore();
+  const { mode, shiny, themeColor } = useStore();
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
   const [searchText, setSearchText] = useState('');
-  const [selectedType1, setSelectedType1] = useState('Any');
-  const [selectedType2, setSelectedType2] = useState('Any');
-  const [selectedGen, setSelectedGen] = useState('generation-i');
-  const [selectedStat, setSelectedStat] = useState('id'); 
+  const [selectedType1, setSelectedType1] = useState(localStorage.getItem('selectedType1') || 'Any');
+  const [selectedType2, setSelectedType2] = useState(localStorage.getItem('selectedType2') || 'Any');
+  const [selectedGen, setSelectedGen] = useState(localStorage.getItem('selectedGen') || 'generation-i');
+  const [selectedStat, setSelectedStat] = useState(localStorage.getItem('selectedStat') || 'id');
 
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0');
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1010&offset=0');
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(
@@ -91,8 +95,9 @@ function Test() {
               specialAttack: pokemonData.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
               specialDefense: pokemonData.stats.find((stat) => stat.stat.name === 'special-defense').base_stat,
               speed: pokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat,
-              total:
-                pokemonData.stats.reduce((total, stat) => total + stat.base_stat, 0),
+              total: pokemonData.stats.reduce((total, stat) => total + stat.base_stat, 0),
+              weight: pokemonData.weight,
+              height: pokemonData.height,
             };
             return formattedPokemonData;
           })
@@ -112,6 +117,12 @@ function Test() {
       } catch (error) {
         console.log(error);
       }
+      // Save state values to localStorage
+      localStorage.setItem('sortOrder', sortOrder);
+      localStorage.setItem('selectedType1', selectedType1);
+      localStorage.setItem('selectedType2', selectedType2);
+      localStorage.setItem('selectedGen', selectedGen);
+      localStorage.setItem('selectedStat', selectedStat);
     };
 
     fetchPokemonData();
@@ -163,19 +174,20 @@ function Test() {
     { name: 'Water', value: 'water' },
   ];
 
-  const spriteGen = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+  const defaultSprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+  const shinySprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/';
 
   const pokemonGen = [
     { name: 'All Gen', value: 'All' },
-    { name: 'Gen I', value: 'generation-i', icon: `${spriteGen}1.png` },
-    { name: 'Gen II', value: 'generation-ii', icon: `${spriteGen}155.png` },
-    { name: 'Gen III', value: 'generation-iii', icon: `${spriteGen}258.png` },
-    { name: 'Gen IV', value: 'generation-iv', icon: `${spriteGen}390.png` },
-    { name: 'Gen V', value: 'generation-v', icon: `${spriteGen}501.png` },
-    { name: 'Gen VI', value: 'generation-vi', icon: `${spriteGen}653.png` },
-    { name: 'Gen VII', value: 'generation-vii', icon: `${spriteGen}728.png` },
-    { name: 'Gen VIII', value: 'generation-viii', icon: `${spriteGen}810.png` },
-    { name: 'Gen IX', value: 'generation-ix', icon: `${spriteGen}909.png` },
+    { name: 'Gen I', value: 'generation-i', icon: shiny ? `${shinySprite}1.png` : `${defaultSprite}1.png` },
+    { name: 'Gen II', value: 'generation-ii', icon: shiny ? `${shinySprite}155.png` : `${defaultSprite}155.png` },
+    { name: 'Gen III', value: 'generation-iii', icon: shiny ? `${shinySprite}255.png` : `${defaultSprite}255.png` },
+    { name: 'Gen IV', value: 'generation-iv', icon: shiny ? `${shinySprite}387.png` : `${defaultSprite}387.png` },
+    { name: 'Gen V', value: 'generation-v', icon: shiny ? `${shinySprite}501.png` : `${defaultSprite}501.png` },
+    { name: 'Gen VI', value: 'generation-vi', icon: shiny ? `${shinySprite}656.png` : `${defaultSprite}656.png` },
+    { name: 'Gen VII', value: 'generation-vii', icon: shiny ? `${shinySprite}728.png` : `${defaultSprite}728.png` },
+    { name: 'Gen VIII', value: 'generation-viii', icon: shiny ? `${shinySprite}816.png` : `${defaultSprite}816.png` },
+    { name: 'Gen IX', value: 'generation-ix', icon: shiny ? `${shinySprite}172.png` : `${defaultSprite}172.png` },
   ];
 
   const pokemonStat = [
@@ -186,14 +198,16 @@ function Test() {
     { name: 'S.ATK', value: 'specialAttack' },
     { name: 'S.DEF', value: 'specialDefense' },
     { name: 'SPEED', value: 'speed' },
-    { name: 'TOTAL', value: 'total' }
+    { name: 'TOTAL', value: 'total' },
+    { name: 'HT', value: 'height' },
+    { name: 'WGT', value: 'weight' }
   ];
 
   const sortPokemonList = () => {
     const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     setSortOrder(newSortOrder); // Update sortOrder state
 
-    const sortedList = [...pokemonList].sort((a, b) => {
+    const sortedList = [...filteredPokemonList].sort((a, b) => {
       if (newSortOrder === 'asc') {
         return a[selectedStat] - b[selectedStat]; // Ascending order
       } else {
@@ -201,6 +215,9 @@ function Test() {
       }
     });
     setPokemonList(sortedList);
+
+    // Save sortOrder to localStorage
+    localStorage.setItem('sortOrder', newSortOrder);
   };
 
   const handleSearchTextChange = (event) => {
@@ -209,22 +226,27 @@ function Test() {
 
   const handleType1Change = (event) => {
     setSelectedType1(event.target.value);
+
+    // Save selectedType1 to localStorage
+    localStorage.setItem('selectedType1', event.target.value);
   };
 
   const handleType2Change = (event) => {
     setSelectedType2(event.target.value);
+
+    // Save selectedType2 to localStorage
+    localStorage.setItem('selectedType2', event.target.value);
   };
 
   const handleGenChange = (event) => {
     setSelectedGen(event.target.value);
+
+    // Save selectedGen to localStorage
+    localStorage.setItem('selectedGen', event.target.value);
   };
 
   const clearSearchText = () => {
     setSearchText('');
-  };
-
-  const handleChange = (event) => {
-    setSelectedStat(event.target.value);
   };
 
   const truncatePokemonName = (name, maxLength) => {
@@ -262,6 +284,8 @@ function Test() {
     return true;
   });
 
+  const theme = useTheme();
+
   return (
     <Fragment>
       <Box sx={{ padding: '16px' }}>
@@ -275,18 +299,25 @@ function Test() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                backgroundColor: theme.palette[themeColor].main, // Update this with the desired background color
+                '&:hover': {
+                  backgroundColor: theme.palette[themeColor].dark, // Update this with the desired hover background color
+                  transition: '0.3s'
+                },
               }}
             >
               <StraightIcon
                 sx={{
                   transform: `rotate(${sortOrder === 'desc' ? '180deg' : '0deg'})`,
                   transition: 'transform 0.3s ease',
+                  color: mode === 'dark' ? grey[900] : grey[50]
                 }}
               />
             </ToggleButton>
           </Grid>
           <Grid item>
             <TextField
+              color={themeColor}
               sx={{ maxWidth: { xs: '220px', sm: '290px', md: '290px', lg: '290px', xl: '290px' } }}
               id='outlined-basic'
               label='Search'
@@ -311,6 +342,7 @@ function Test() {
           </Grid>
           <Grid item>
             <Select
+              color={themeColor}
               id='outlined-select-type1'
               value={selectedType1}
               onChange={handleType1Change}
@@ -344,6 +376,7 @@ function Test() {
           </Grid>
           <Grid item>
             <Select
+              color={themeColor}
               id='outlined-select-type2'
               value={selectedType2}
               onChange={handleType2Change}
@@ -377,6 +410,7 @@ function Test() {
           </Grid>
           <Grid item>
             <Select
+              color={themeColor}
               id='outlined-select-gen'
               value={selectedGen}
               onChange={handleGenChange}
@@ -410,6 +444,7 @@ function Test() {
           </Grid>
           <Grid item>
             <Select
+              color={themeColor}
               id='outlined-select-stat'
               value={selectedStat}
               onChange={(event) => setSelectedStat(event.target.value)}
@@ -434,7 +469,7 @@ function Test() {
         </Grid>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-            <CircularProgress size={60} />
+            <CircularProgress size={60} color={themeColor} />
           </Box>
         ) : (
           <Grid container spacing={2}>
@@ -473,6 +508,10 @@ function Test() {
                           ? `${pokemon.speed}`
                           : selectedStat === 'total'
                           ? `${pokemon.total}`
+                          : selectedStat === 'height'
+                          ? `${pokemon.height / 10} m`
+                          : selectedStat === 'weight'
+                          ? `${pokemon.weight / 10} kg`
                           : `#${pokemon.id.toString().padStart(3, '0')}`}
                       </Typography>
                       </Stack>

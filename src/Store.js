@@ -10,12 +10,20 @@ const useStore = create((set) => ({
     });
   },
 
-  shiny: localStorage.getItem('shiny') === true || false,
+  shiny: localStorage.getItem('shiny') === 'true' || false,
   toggleShiny: () => {
     set((state) => {
       const newShiny = !state.shiny;
       localStorage.setItem('shiny', newShiny);
       return { shiny: newShiny };
+    });
+  },
+
+  themeColor: localStorage.getItem('themeColor') || 'navy',
+  setThemeColor: (color) => {
+    set(() => {
+      localStorage.setItem('themeColor', color);
+      return { themeColor: color };
     });
   },
 }));

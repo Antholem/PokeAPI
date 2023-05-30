@@ -4,8 +4,15 @@ import PropTypes from 'prop-types';
 import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
-import { yellow } from '@mui/material/colors';
+import { red, pink, purple, blue, teal, green, yellow, orange, grey } from '@mui/material/colors';
 import MenuIcon from '@mui/icons-material/Menu';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Logo from './images/Pokemon_Icon_PokeAPI.svg';
@@ -17,7 +24,7 @@ const drawerWidth = 200;
 function SideBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { mode } = useStore();
+  const { mode, themeColor } = useStore();
   const location = useLocation();
   const path = location.pathname;
 
@@ -34,23 +41,61 @@ function SideBar(props) {
       createTheme({
         palette: {
           mode,
-        },
+          cherry: {
+            main: mode === 'dark' ? red[400] : red[800],
+            dark: mode === 'dark' ? red[500] : red[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          rose: {
+            main: mode === 'dark' ? pink[200] : pink[600],
+            dark: mode === 'dark' ? pink[300] : pink[700],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          lavender: {
+            main: mode === 'dark' ? purple[200] : purple[800],
+            dark: mode === 'dark' ? purple[300] : purple[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          navy: {
+            main: mode === 'dark' ? blue[300] : blue[800],
+            dark: mode === 'dark' ? blue[400] : blue[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          teal: {
+            main: mode === 'dark' ? teal[200] : teal[700],
+            dark: mode === 'dark' ? teal[300] : teal[800],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          emerald: {
+            main: mode === 'dark' ? green[400] : green[800],
+            dark: mode === 'dark' ? green[500] : green[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          amber: {
+            main: mode === 'dark' ? yellow[400] : yellow[800],
+            dark: mode === 'dark' ? yellow[500] : yellow[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          apricot: {
+            main: mode === 'dark' ? orange[300] : orange[800],
+            dark: mode === 'dark' ? orange[400] : orange[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          }
+        }
       }),
     [mode],
   );
 
   const menu = [
     { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
-    { title: 'Team Builder', path: '/team-builder', icon: <CatchingPokemon /> },
-    { title: 'Favorites', path: '/favorites', icon: <CatchingPokemon /> },
-    { title: 'Comparator', path: '/comparator', icon: <CatchingPokemon /> },
-
-    { title: 'Types', path: '/types', icon: <CatchingPokemon /> },
-    { title: 'Abilities', path: '/abilities', icon: <CatchingPokemon /> },
-    { title: 'Items', path: '/items', icon: <CatchingPokemon /> },
+    { title: 'Team Builder', path: '/team-builder', icon: <ConstructionIcon /> },
+    { title: 'Favorites', path: '/favorites', icon: <FavoriteIcon /> },
+    { title: 'Comparator', path: '/comparator', icon: <CompareArrowsIcon /> },
+    { title: 'Types', path: '/types', icon: <LocalFireDepartmentIcon /> },
+    { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
+    { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
-
-    { title: 'Settings', path: '/settings', icon: <PetsIcon /> },
+    { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
   ];
 
   const style = {
@@ -129,7 +174,7 @@ function SideBar(props) {
       <ThemeProvider theme={theme}>
         <Box sx={style.drawerContainer}>
           <CssBaseline />
-          <AppBar position='fixed' sx={style.appBar} >
+          <AppBar position='fixed' sx={{ ...style.appBar, backgroundColor: mode === 'dark' ? 'none' : theme.palette[themeColor].main }}>
             <Toolbar>
               <IconButton
                 color='inherit'

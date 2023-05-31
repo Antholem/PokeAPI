@@ -16,9 +16,10 @@ import {
   InputAdornment,
   MenuItem,
   Select,
-  ToggleButton
+  ToggleButton,
+  Avatar
 } from '@mui/material';
-import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey } from '@mui/material/colors';
+import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey, lightBlue, orange, lightGreen, indigo, deepOrange, deepPurple } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -156,6 +157,56 @@ function Pokedex() {
     };
 
     return <img src={typeIcons[type]} alt={type} />;
+  };
+
+  const getTypeIcon2 = (type) => {
+    const typeIcons = {
+      bug: BugIcon,
+      dark: DarkIcon,
+      dragon: DragonIcon,
+      electric: ElectricIcon,
+      fairy: FairyIcon,
+      fighting: FightingIcon,
+      fire: FireIcon,
+      flying: FlyingIcon,
+      ghost: GhostIcon,
+      grass: GrassIcon,
+      ground: GroundIcon,
+      ice: IceIcon,
+      normal: NormalIcon,
+      poison: PoisonIcon,
+      psychic: PsychicIcon,
+      rock: RockIcon,
+      steel: SteelIcon,
+      water: WaterIcon,
+    };
+
+    return typeIcons[type];
+  };
+
+  const getTypeIconColor = (type) => {
+    const typeIconColors = {
+      bug: lightGreen[800],
+      dark: grey[900],
+      dragon: blue[900],
+      electric: yellow[800],
+      fairy: pink[300],
+      fighting: red[900],
+      fire: orange[900],
+      flying: indigo[400],
+      ghost: indigo[800],
+      grass: green[800],
+      ground: deepOrange[900],
+      ice: lightBlue[600],
+      normal: grey[700],
+      poison: deepPurple[600],
+      psychic: pink[500],
+      rock: brown[600],
+      steel: blueGrey[700],
+      water: blue[800],
+    };
+
+    return typeIconColors[type];
   };
 
   const getColor = (color) => {
@@ -321,6 +372,11 @@ function Pokedex() {
 
     return true;
   });
+
+  const primary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"; // 365 -
+  const secondary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png"; // 470
+  const tertiary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png"; // 570
+  const legendary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"; // 570 +
 
   const theme = useTheme();
 
@@ -531,30 +587,42 @@ function Pokedex() {
                         }
                       </Box>
                       <CardContent>
-                        <Stack direction='row' spacing={1} alignItems='center'>
-                          <Typography gutterBottom variant='body2' component='div' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
-                            {selectedStat === 'id'
-                              ? `#${pokemon.id.toString().padStart(3, '0')}`
-                              : selectedStat === 'hp'
-                                ? `${pokemon.hp} HP`
-                                : selectedStat === 'atk'
-                                  ? `${pokemon.atk}`
-                                  : selectedStat === 'def'
-                                    ? `${pokemon.def}`
-                                    : selectedStat === 'specialAttack'
-                                      ? `${pokemon.specialAttack}`
-                                      : selectedStat === 'specialDefense'
-                                        ? `${pokemon.specialDefense}`
-                                        : selectedStat === 'speed'
-                                          ? `${pokemon.speed}`
-                                          : selectedStat === 'total'
-                                            ? `${pokemon.total}`
-                                            : selectedStat === 'height'
-                                              ? `${pokemon.height / 10} m`
-                                              : selectedStat === 'weight'
-                                                ? `${pokemon.weight / 10} kg`
-                                                : `#${pokemon.id.toString().padStart(3, '0')}`}
-                          </Typography>
+                        <Stack direction='row' alignItems="center">
+                          <Box>
+                            <CardMedia
+                              sx={{ width: 25, ml: -0.7 }}
+                              component='img'
+                                // primary 1-365, secondary 366-469, tertiary 470-569, legend 570+
+                              image={pokemon.total >= 366 && pokemon.total <= 469 ? secondary : 
+                                pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
+                                pokemon.total >= 570 ? legendary : primary}
+                            />
+                          </Box>
+                          <Box>
+                            <Typography variant='body2' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
+                              {selectedStat === 'id'
+                                ? `#${pokemon.id.toString().padStart(3, '0')}`
+                                : selectedStat === 'hp'
+                                  ? `${pokemon.hp} HP`
+                                  : selectedStat === 'atk'
+                                    ? `${pokemon.atk}`
+                                    : selectedStat === 'def'
+                                      ? `${pokemon.def}`
+                                      : selectedStat === 'specialAttack'
+                                        ? `${pokemon.specialAttack}`
+                                        : selectedStat === 'specialDefense'
+                                          ? `${pokemon.specialDefense}`
+                                          : selectedStat === 'speed'
+                                            ? `${pokemon.speed}`
+                                            : selectedStat === 'total'
+                                              ? `${pokemon.total}`
+                                              : selectedStat === 'height'
+                                                ? `${pokemon.height / 10} m`
+                                                : selectedStat === 'weight'
+                                                  ? `${pokemon.weight / 10} kg`
+                                                  : `#${pokemon.id.toString().padStart(3, '0')}`}
+                            </Typography>
+                          </Box>
                         </Stack>
                         <Typography
                           sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
@@ -568,9 +636,10 @@ function Pokedex() {
                             <Chip
                               key={index}
                               label={capitalizeFirstLetter(type.type.name)}
+                              avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
                               variant='contained'
                               size='small'
-                              sx={{ color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
+                              sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
                             />
                           ))}
                         </Stack>

@@ -16,10 +16,9 @@ import {
   InputAdornment,
   MenuItem,
   Select,
-  Button,
   ToggleButton
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -53,7 +52,7 @@ function capitalizeFirstLetter(str) {
     .join(" ");
 }
 
-function Test() {
+function Pokedex() {
   const { mode, shiny, themeColor } = useStore();
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,6 +80,10 @@ function Test() {
             const generationResponse = await axios.get(generationUrl);
             const generation = generationResponse.data.name;
 
+            // Fetching color information
+            const colorResponse = await axios.get(pokemonData.species.url);
+            const color = colorResponse.data.color.name;
+
             const formattedPokemonData = {
               sprites: {
                 front_default: shiny ? pokemonData.sprites.front_shiny : pokemonData.sprites.front_default,
@@ -89,6 +92,7 @@ function Test() {
               name: pokemonData.name,
               types: pokemonData.types,
               generation: generation,
+              color: color,
               hp: pokemonData.stats.find((stat) => stat.stat.name === 'hp').base_stat,
               atk: pokemonData.stats.find((stat) => stat.stat.name === 'attack').base_stat,
               def: pokemonData.stats.find((stat) => stat.stat.name === 'defense').base_stat,
@@ -117,6 +121,7 @@ function Test() {
       } catch (error) {
         console.log(error);
       }
+
       // Save state values to localStorage
       localStorage.setItem('sortOrder', sortOrder);
       localStorage.setItem('selectedType1', selectedType1);
@@ -151,6 +156,39 @@ function Test() {
     };
 
     return <img src={typeIcons[type]} alt={type} />;
+  };
+
+  const getColor = (color) => {
+    const pokemonColorCard = {
+      black: mode === 'dark' ? grey[900] : grey[800], ////
+      blue: mode === 'dark' ? blue[900] : blue[200], ////
+      brown: mode === 'dark' ? brown[900] : brown[200], ////
+      gray: mode === 'dark' ? blueGrey[900] : blueGrey[200], ////
+      green: mode === 'dark' ? green[900] : green[200], ////
+      pink: mode === 'dark' ? pink[400] : pink[100], //
+      purple: mode === 'dark' ? purple[900] : purple[200], //
+      red: mode === 'dark' ? red[900] : red[200], ////
+      white: mode === 'dark' ? grey[300] : grey[50],
+      yellow: mode === 'dark' ? yellow[900] : yellow[200], //
+    };
+
+    const pokemonColorImage = {
+      black: mode === 'dark' ? grey[800] : grey[900], ////
+      blue: mode === 'dark' ? blue[300] : blue[500], ////
+      brown: mode === 'dark' ? brown[300] : brown[500], ////
+      gray: mode === 'dark' ? blueGrey[500] : blueGrey[500], ////
+      green: mode === 'dark' ? green[300] : green[500], ////
+      pink: mode === 'dark' ? pink[100] : pink[400], //
+      purple: mode === 'dark' ? purple[200] : purple[400], //
+      red: mode === 'dark' ? red[300] : red[500], ////
+      white: mode === 'dark' ? grey[50] : grey[300], //
+      yellow: mode === 'dark' ? yellow[200] : yellow[500], //
+    };
+
+    return {
+      cardBackground: pokemonColorCard[color] || '',
+      imageBackground: pokemonColorImage[color] || '',
+    };
   };
 
   const pokemonType = [
@@ -473,70 +511,75 @@ function Test() {
           </Box>
         ) : (
           <Grid container spacing={2}>
-            {filteredPokemonList.map((pokemon, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
-                <Card>
-                  <CardActionArea>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                      {
-                        pokemon.sprites.front_default ?
-                          <CardMedia
-                            sx={{ maxWidth: 150 }}
-                            component='img'
-                            image={pokemon.sprites.front_default}
-                            alt={pokemon.name}
-                          />
-                          : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
-                      }
-                    </Box>
-                    <CardContent>
-                      <Stack direction='row' spacing={1} alignItems='center'>
-                        <Typography gutterBottom variant='body2' component='div' color='text.secondary'>
-                        {selectedStat === 'id'
-                          ? `#${pokemon.id.toString().padStart(3, '0')}`
-                          : selectedStat === 'hp'
-                          ? `${pokemon.hp} HP`
-                          : selectedStat === 'atk'
-                          ? `${pokemon.atk}`
-                          : selectedStat === 'def'
-                          ? `${pokemon.def}`
-                          : selectedStat === 'specialAttack'
-                          ? `${pokemon.specialAttack}`
-                          : selectedStat === 'specialDefense'
-                          ? `${pokemon.specialDefense}`
-                          : selectedStat === 'speed'
-                          ? `${pokemon.speed}`
-                          : selectedStat === 'total'
-                          ? `${pokemon.total}`
-                          : selectedStat === 'height'
-                          ? `${pokemon.height / 10} m`
-                          : selectedStat === 'weight'
-                          ? `${pokemon.weight / 10} kg`
-                          : `#${pokemon.id.toString().padStart(3, '0')}`}
-                      </Typography>
-                      </Stack>
-                      <Typography
-                        sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                        variant='h6'
-                        component='div'
-                      >
-                        {truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
-                      </Typography>
-                      <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
-                        {pokemon.types.map((type, index) => (
-                          <Chip
-                            key={index}
-                            label={capitalizeFirstLetter(type.type.name)}
-                            variant='outlined'
-                            size='small'
-                          />
-                        ))}
-                      </Stack>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            ))}
+            {filteredPokemonList.map((pokemon, index) => {
+              const { cardBackground, imageBackground } = getColor(pokemon.color);
+
+              return (
+                <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
+                  <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
+                    <CardActionArea>
+                      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
+                        {
+                          pokemon.sprites.front_default ?
+                            <CardMedia
+                              sx={{ maxWidth: 150 }}
+                              component='img'
+                              image={pokemon.sprites.front_default}
+                              alt={pokemon.name}
+                            />
+                            : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
+                        }
+                      </Box>
+                      <CardContent>
+                        <Stack direction='row' spacing={1} alignItems='center'>
+                          <Typography gutterBottom variant='body2' component='div' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
+                            {selectedStat === 'id'
+                              ? `#${pokemon.id.toString().padStart(3, '0')}`
+                              : selectedStat === 'hp'
+                                ? `${pokemon.hp} HP`
+                                : selectedStat === 'atk'
+                                  ? `${pokemon.atk}`
+                                  : selectedStat === 'def'
+                                    ? `${pokemon.def}`
+                                    : selectedStat === 'specialAttack'
+                                      ? `${pokemon.specialAttack}`
+                                      : selectedStat === 'specialDefense'
+                                        ? `${pokemon.specialDefense}`
+                                        : selectedStat === 'speed'
+                                          ? `${pokemon.speed}`
+                                          : selectedStat === 'total'
+                                            ? `${pokemon.total}`
+                                            : selectedStat === 'height'
+                                              ? `${pokemon.height / 10} m`
+                                              : selectedStat === 'weight'
+                                                ? `${pokemon.weight / 10} kg`
+                                                : `#${pokemon.id.toString().padStart(3, '0')}`}
+                          </Typography>
+                        </Stack>
+                        <Typography
+                          sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
+                          variant='h6'
+                          component='div'
+                        >
+                          {truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
+                        </Typography>
+                        <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
+                          {pokemon.types.map((type, index) => (
+                            <Chip
+                              key={index}
+                              label={capitalizeFirstLetter(type.type.name)}
+                              variant='contained'
+                              size='small'
+                              sx={{ color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
+                            />
+                          ))}
+                        </Stack>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         )}
       </Box>
@@ -544,4 +587,4 @@ function Test() {
   );
 }
 
-export default Test;
+export default Pokedex;

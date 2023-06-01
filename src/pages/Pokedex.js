@@ -19,7 +19,8 @@ import {
   ToggleButton,
   Avatar
 } from '@mui/material';
-import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey, lightBlue, orange, lightGreen, indigo, deepOrange, deepPurple } from '@mui/material/colors';
+import Scale from '../animations/Scale';
+import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -186,24 +187,24 @@ function Pokedex() {
 
   const getTypeIconColor = (type) => {
     const typeIconColors = {
-      bug: lightGreen[800],
+      bug: lime[900],
       dark: grey[900],
-      dragon: blue[900],
-      electric: yellow[800],
-      fairy: pink[300],
-      fighting: red[900],
-      fire: orange[900],
-      flying: indigo[400],
-      ghost: indigo[800],
-      grass: green[800],
-      ground: deepOrange[900],
+      dragon: cyan[700],
+      electric: amber[800],
+      fairy: purple.A400,
+      fighting: pink[900],
+      fire: deepOrange[700],
+      flying: lightBlue[800],
+      ghost: indigo[900],
+      grass: lightGreen[800],
+      ground: deepOrange.A400,
       ice: lightBlue[600],
       normal: grey[700],
-      poison: deepPurple[600],
-      psychic: pink[500],
+      poison: deepPurple[500],
+      psychic: pink.A400,
       rock: brown[600],
       steel: blueGrey[700],
-      water: blue[800],
+      water: blue.A700,
     };
 
     return typeIconColors[type];
@@ -220,7 +221,7 @@ function Pokedex() {
       purple: mode === 'dark' ? purple[900] : purple[200], //
       red: mode === 'dark' ? red[900] : red[200], ////
       white: mode === 'dark' ? grey[300] : grey[50],
-      yellow: mode === 'dark' ? yellow[900] : yellow[200], //
+      yellow: mode === 'dark' ? yellow[800] : yellow[200], //
     };
 
     const pokemonColorImage = {
@@ -373,10 +374,10 @@ function Pokedex() {
     return true;
   });
 
-  const primary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"; // 365 -
-  const secondary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png"; // 470
-  const tertiary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png"; // 570
-  const legendary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"; // 570 +
+  const primary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
+  const secondary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png";
+  const tertiary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png";
+  const legendary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png";
 
   const theme = useTheme();
 
@@ -412,7 +413,7 @@ function Pokedex() {
           <Grid item>
             <TextField
               color={themeColor}
-              sx={{ maxWidth: { xs: '220px', sm: '290px', md: '290px', lg: '290px', xl: '290px' } }}
+              sx={{ maxWidth: '220px' }}
               id='outlined-basic'
               label='Search'
               variant='outlined'
@@ -572,80 +573,81 @@ function Pokedex() {
 
               return (
                 <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
-                    <CardActionArea>
-                      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
-                        {
-                          pokemon.sprites.front_default ?
-                            <CardMedia
-                              sx={{ maxWidth: 150 }}
-                              component='img'
-                              image={pokemon.sprites.front_default}
-                              alt={pokemon.name}
-                            />
-                            : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
-                        }
-                      </Box>
-                      <CardContent>
-                        <Stack direction='row' alignItems="center">
-                          <Box>
-                            <CardMedia
-                              sx={{ width: 25, ml: -0.7 }}
-                              component='img'
-                                // primary 1-365, secondary 366-469, tertiary 470-569, legend 570+
-                              image={pokemon.total >= 366 && pokemon.total <= 469 ? secondary : 
-                                pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
-                                pokemon.total >= 570 ? legendary : primary}
-                            />
-                          </Box>
-                          <Box>
-                            <Typography variant='body2' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
-                              {selectedStat === 'id'
-                                ? `#${pokemon.id.toString().padStart(3, '0')}`
-                                : selectedStat === 'hp'
-                                  ? `${pokemon.hp} HP`
-                                  : selectedStat === 'atk'
-                                    ? `${pokemon.atk}`
-                                    : selectedStat === 'def'
-                                      ? `${pokemon.def}`
-                                      : selectedStat === 'specialAttack'
-                                        ? `${pokemon.specialAttack}`
-                                        : selectedStat === 'specialDefense'
-                                          ? `${pokemon.specialDefense}`
-                                          : selectedStat === 'speed'
-                                            ? `${pokemon.speed}`
-                                            : selectedStat === 'total'
-                                              ? `${pokemon.total}`
-                                              : selectedStat === 'height'
-                                                ? `${pokemon.height / 10} m`
-                                                : selectedStat === 'weight'
-                                                  ? `${pokemon.weight / 10} kg`
-                                                  : `#${pokemon.id.toString().padStart(3, '0')}`}
-                            </Typography>
-                          </Box>
-                        </Stack>
-                        <Typography
-                          sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
-                          variant='h6'
-                          component='div'
-                        >
-                          {truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
-                        </Typography>
-                        <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
-                          {pokemon.types.map((type, index) => (
-                            <Chip
-                              key={index}
-                              label={capitalizeFirstLetter(type.type.name)}
-                              avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
-                              variant='contained'
-                              size='small'
-                              sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
-                            />
-                          ))}
-                        </Stack>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
+                  <Scale key={pokemon.id}>
+                    <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
+                      <CardActionArea>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
+                          {
+                            pokemon.sprites.front_default ?
+                              <CardMedia
+                                sx={{ maxWidth: 150 }}
+                                component='img'
+                                image={pokemon.sprites.front_default}
+                                alt={pokemon.name}
+                              />
+                              : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
+                          }
+                        </Box>
+                        <CardContent>
+                          <Stack direction='row' alignItems="center">
+                            <Box>
+                              <CardMedia
+                                sx={{ width: 25, ml: -0.7 }}
+                                component='img'
+                                image={pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
+                                  pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
+                                    pokemon.total >= 570 ? legendary : primary}
+                              />
+                            </Box>
+                            <Box>
+                              <Typography variant='body2' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
+                                {selectedStat === 'id'
+                                  ? `#${pokemon.id.toString().padStart(3, '0')}`
+                                  : selectedStat === 'hp'
+                                    ? `${pokemon.hp} HP`
+                                    : selectedStat === 'atk'
+                                      ? `${pokemon.atk}`
+                                      : selectedStat === 'def'
+                                        ? `${pokemon.def}`
+                                        : selectedStat === 'specialAttack'
+                                          ? `${pokemon.specialAttack}`
+                                          : selectedStat === 'specialDefense'
+                                            ? `${pokemon.specialDefense}`
+                                            : selectedStat === 'speed'
+                                              ? `${pokemon.speed}`
+                                              : selectedStat === 'total'
+                                                ? `${pokemon.total}`
+                                                : selectedStat === 'height'
+                                                  ? `${pokemon.height / 10} m`
+                                                  : selectedStat === 'weight'
+                                                    ? `${pokemon.weight / 10} kg`
+                                                    : `#${pokemon.id.toString().padStart(3, '0')}`}
+                              </Typography>
+                            </Box>
+                          </Stack>
+                          <Typography
+                            sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
+                            variant='h6'
+                            component='div'
+                          >
+                            {truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
+                          </Typography>
+                          <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
+                            {pokemon.types.map((type, index) => (
+                              <Chip
+                                key={index}
+                                label={capitalizeFirstLetter(type.type.name)}
+                                avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
+                                variant='contained'
+                                size='small'
+                                sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
+                              />
+                            ))}
+                          </Stack>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Scale>
                 </Grid>
               );
             })}

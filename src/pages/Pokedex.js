@@ -55,7 +55,7 @@ function capitalizeFirstLetter(str) {
 }
 
 function Pokedex() {
-  const { mode, shiny, themeColor } = useStore();
+  const { mode, shiny, themeColor, sprites } = useStore();
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
@@ -88,7 +88,16 @@ function Pokedex() {
 
             const formattedPokemonData = {
               sprites: {
-                front_default: shiny ? pokemonData.sprites.front_shiny : pokemonData.sprites.front_default,
+                front_default:
+                  shiny ? (
+                    sprites === 'home' ? pokemonData.sprites.other['home'].front_shiny :
+                      sprites === 'official-artwork' ? pokemonData.sprites.other['official-artwork'].front_shiny :
+                        pokemonData.sprites.front_shiny
+                  ) : (
+                      sprites === 'home' ? pokemonData.sprites.other['home'].front_default :
+                        sprites === 'official-artwork' ? pokemonData.sprites.other['official-artwork'].front_default :
+                          pokemonData.sprites.front_default
+                  ),
               },
               id: pokemonData.id,
               name: pokemonData.name,

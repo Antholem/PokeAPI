@@ -4,7 +4,7 @@ import { Box, Grid, MenuItem, Stack, Switch, TextField, Typography } from '@mui/
 import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
 
 function Settings() {
-    const { mode, toggleColorMode, shiny, toggleShiny, themeColor, setThemeColor } = useStore();
+    const { mode, toggleColorMode, shiny, toggleShiny, themeColor, setThemeColor, sprites, setSprites } = useStore();
 
     const palette = [
         { value: 'cherry', name: 'Cherry' },
@@ -17,8 +17,18 @@ function Settings() {
         { value: 'apricot', name: 'Apricot' }
     ];
 
+    const pokemonSprites = [
+        { value: 'default', name: 'Default' },
+        { value: 'home', name: 'Home' },
+        { value: 'official-artwork', name: 'Official' },
+    ];
+
     const handleModeToggle = () => {
         toggleColorMode();
+    };
+
+    const spritesHandler = (e) => {
+        setSprites(e.target.value);
     };
 
     const handleShinyToggle = () => {
@@ -77,6 +87,31 @@ function Settings() {
                                             width: 20
                                         }}
                                     />
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
+                </Grid>
+                <Grid sx={{ py: 1 }} container direction="row" justifyContent="space-between" alignItems="center">
+                    <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+                        <Stack direction="column">
+                            <Box>
+                                <Typography variant="body1">Sprites</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="caption" color="text.secondary">
+                                    2D image of a Pokemon
+                                </Typography>
+                            </Box>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3} container justifyContent="flex-end">
+                        <TextField value={sprites} onChange={spritesHandler} select color={themeColor}>
+                            {pokemonSprites.map((spritesOption) => (
+                                <MenuItem key={spritesOption.value} value={spritesOption.value}>
+                                    <Typography variant='body2' sx={{ fontSize: '14px' }}>
+                                        {spritesOption.name}
+                                    </Typography>
                                 </MenuItem>
                             ))}
                         </TextField>

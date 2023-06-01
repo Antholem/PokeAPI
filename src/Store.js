@@ -26,6 +26,12 @@ const useStore = create((set) => ({
       return { themeColor: color };
     });
   },
+
+  sprites: localStorage.getItem('sprites') || 'default',
+  setSprites: (sprites) => {
+    localStorage.setItem('sprites', sprites);
+    set({ sprites });
+  },
 }));
 
 export default useStore;

@@ -17,15 +17,19 @@ import {
   MenuItem,
   Select,
   ToggleButton,
-  Avatar
+  Avatar,
+  LinearProgress,
+  IconButton
 } from '@mui/material';
 import Scale from '../animations/Scale';
-import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
+import { grey, green, yellow, blue, brown, orange, teal, pink, purple, red, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import StraightIcon from '@mui/icons-material/Straight';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
 import DarkIcon from '../images/Pokemon_Type_Icon_Dark.svg';
@@ -46,6 +50,184 @@ import RockIcon from '../images/Pokemon_Type_Icon_Rock.svg';
 import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
 import { CatchingPokemon } from '@mui/icons-material';
+
+// Modal
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+function PokeModal(props) {
+  const { mode, themeColor, hpColor, atkColor, defColor, sAtkColor, sDefColor, speedColor, totalColor, favorite, toggleFavorite } = useStore();
+  const [openModal, setOpenModal] = React.useState(false);
+  const [value, setValue] = React.useState('summary');
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleFavoriteToggle = () => {
+    toggleFavorite();
+  };
+
+  const renderTabContent = () => {
+    switch (value) {
+      case 'summary':
+        return <>
+          <Grid container direction="row" justifyContent='center' alignItems='center' spacing={1}>
+            <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+              <Stack direction='column' key={props.key}>
+                <Box>
+                  <Stack direction='row' justifyContent='center' alignItems='center'>
+                    <Box>
+                      {props.pokeball}
+                    </Box>
+                    <Box>
+                      <Typography sx={{ textAlign: 'center' }} color='text.secondary' variant='body2'>
+                        #{props.pokemonNumber}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Box>
+                <Box>
+                  {props.pokeImage}
+                </Box>
+                <Box>
+                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
+                    <Box>
+                      <IconButton onClick={handleFavoriteToggle}>
+                        {favorite ? (
+                          <FavoriteIcon sx={{ color: mode === 'dark' ? red[400] : red[800], fontSize: '1em', mb: -0.3 }} />
+                        ) : (
+                          <FavoriteBorderIcon sx={{ color: mode === 'dark' ? red[400] : red[800], fontSize: '1em', mb: -0.3 }} />
+                        )}
+                      </IconButton>
+                    </Box>
+                    <Box>
+                      <Typography sx={{ textAlign: 'center' }} variant='body1'>
+                        {props.pokemonName}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Box>
+                <Box>
+                  {props.pokemonType}
+                </Box>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+              {stats.map((stats) => (
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ minWidth: 55, textAlign: 'right', mr: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        {stats.name}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ width: '100%', mr: 1 }}>
+                      <LinearProgress
+                        color={stats.color}
+                        variant="determinate"
+                        value={(stats.current / stats.total) * 100}
+                      />
+                    </Box>
+                    <Box sx={{ minWidth: 35 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        {stats.current}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              ))}
+            </Grid>
+          </Grid>
+        </>;
+      case 'stats':
+        return <div>Content for Tab Two</div>;
+      case 'moves':
+        return <div>Content for Tab Three</div>;
+      default:
+        return null;
+    }
+  };
+
+  const color = themeColor === 'cherry' ? (mode === 'dark' ? red[400] : red[800]) :
+    themeColor === 'rose' ? (mode === 'dark' ? pink[200] : pink[600]) :
+      themeColor === 'lavender' ? (mode === 'dark' ? purple[300] : purple[700]) :
+        themeColor === 'teal' ? (mode === 'dark' ? teal[200] : teal[700]) :
+          themeColor === 'emerald' ? (mode === 'dark' ? green[400] : green[800]) :
+            themeColor === 'amber' ? (mode === 'dark' ? yellow[400] : yellow[800]) :
+              themeColor === 'apricot' ? (mode === 'dark' ? orange[300] : orange[800]) :
+                (mode === 'dark' ? blue[300] : blue[800])
+    ;
+
+  const stats = [
+    { name: "HP", current: props.pokemonHp, total: 255, color: hpColor },
+    { name: "ATK", current: props.pokemonAtk, total: 181, color: atkColor },
+    { name: "DEF", current: props.pokemonDef, total: 230, color: defColor },
+    { name: "S.ATK", current: props.pokemonSatk, total: 173, color: sAtkColor },
+    { name: "S.DEF", current: props.pokemonSdef, total: 230, color: sDefColor },
+    { name: "SPEED", current: props.pokemonSpeed, total: 200, color: speedColor },
+    { name: "TOTAL", current: props.pokemonTotal, total: 720, color: totalColor },
+  ]
+
+  return (
+    <Fragment>
+      <CardActionArea onClick={handleOpenModal}>
+        {props.children}
+      </CardActionArea>
+      <Dialog
+        maxWidth='md'
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth
+      >
+        <DialogContent>
+          <Box sx={{ width: '100%' }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="secondary tabs example"
+              sx={{
+                '& .MuiTabs-indicator': {
+                  backgroundColor: color,
+                },
+                '& .Mui-selected': {
+                  color: color,
+                },
+              }}
+            >
+              <Tab value="summary" label="Summary" />
+              <Tab value="stats" label="Stats" />
+              <Tab value="moves" label="Moves" />
+            </Tabs>
+            {renderTabContent()}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color={themeColor} autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Fragment>
+  );
+}
 
 function capitalizeFirstLetter(str) {
   return str
@@ -68,7 +250,7 @@ function Pokedex() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1010&offset=0');
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=24&offset=0');
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(
@@ -584,7 +766,49 @@ function Pokedex() {
                 <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
                   <Scale key={pokemon.id}>
                     <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
-                      <CardActionArea>
+                      <PokeModal
+                        key={pokemon.id}
+                        pokeImage={
+                          pokemon.sprites.front_default ?
+                            <CardMedia
+                              sx={{ width: 100, mx: 'auto' }}
+                              component='img'
+                              image={pokemon.sprites.front_default}
+                              alt={pokemon.name}
+                            />
+                            : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} /> 
+                        }
+                        pokemonName={truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
+                        pokemonNumber={`${pokemon.id.toString().padStart(3, '0')}`}
+                        pokemonType={
+                          <Stack sx={{ marginTop: '8px' }} direction='row' justifyContent='center' spacing={1}>
+                            {pokemon.types.map((type, index) => (
+                              <Chip
+                                key={index}
+                                label={capitalizeFirstLetter(type.type.name)}
+                                avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
+                                variant='contained'
+                                size='small'
+                                sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
+                              />
+                            ))}
+                          </Stack>
+                        }
+                        pokeball={<CardMedia
+                          sx={{ width: 25, ml: -0.7 }}
+                          component='img'
+                          image={pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
+                            pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
+                              pokemon.total >= 570 ? legendary : primary}
+                        />}
+                        pokemonHp={pokemon.hp}
+                        pokemonAtk={pokemon.atk}
+                        pokemonDef={pokemon.def}
+                        pokemonSatk={pokemon.specialAttack}
+                        pokemonSdef={pokemon.specialDefense}
+                        pokemonSpeed={pokemon.speed}
+                        pokemonTotal={pokemon.total}
+                      >
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
                           {
                             pokemon.sprites.front_default ?
@@ -654,7 +878,7 @@ function Pokedex() {
                             ))}
                           </Stack>
                         </CardContent>
-                      </CardActionArea>
+                      </PokeModal>
                     </Card>
                   </Scale>
                 </Grid>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
-import { red, pink, purple, blue, teal, green, yellow, orange, grey } from '@mui/material/colors';
+import { red, pink, purple, blue, teal, green, yellow, orange, grey, deepOrange, indigo } from '@mui/material/colors';
 import MenuIcon from '@mui/icons-material/Menu';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -59,6 +59,11 @@ function SideBar(props) {
           navy: {
             main: mode === 'dark' ? blue[300] : blue[800],
             dark: mode === 'dark' ? blue[400] : blue[900],
+            contrastText: mode === 'dark' ? grey[900] : grey[50],
+          },
+          indigo: {
+            main: mode === 'dark' ? indigo[300] : indigo[800],
+            dark: mode === 'dark' ? indigo[400] : indigo[900],
             contrastText: mode === 'dark' ? grey[900] : grey[50],
           },
           teal: {

@@ -9,7 +9,6 @@ function Settings() {
     const palette = [
         { value: 'cherry', name: 'Cherry' },
         { value: 'rose', name: 'Rose' },
-        { value: 'lavender', name: 'Lavender' },
         { value: 'navy', name: 'Navy' },
         { value: 'teal', name: 'Teal' },
         { value: 'emerald', name: 'Emerald' },
@@ -106,7 +105,7 @@ function Settings() {
                         </Stack>
                     </Grid>
                     <Grid item xs={3} sm={3} md={3} lg={3} xl={3} container justifyContent="flex-end">
-                        <TextField value={sprites} onChange={spritesHandler} select color={themeColor}>
+                        <TextField sx={{ minWidth: '100px' }} value={sprites} onChange={spritesHandler} select color={themeColor}>
                             {pokemonSprites.map((spritesOption) => (
                                 <MenuItem key={spritesOption.value} value={spritesOption.value}>
                                     <Typography variant='body2' sx={{ fontSize: '14px' }}>

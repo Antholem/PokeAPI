@@ -27,6 +27,14 @@ const useStore = create((set) => ({
     });
   },
 
+  render: localStorage.getItem('render') || 1008,
+  setRender: (render) => {
+    set(() => {
+      localStorage.setItem('render', render);
+      return { render: render };
+    });
+  },
+
   sprites: localStorage.getItem('sprites') || 'default',
   setSprites: (sprites) => {
     localStorage.setItem('sprites', sprites);
@@ -74,16 +82,6 @@ const useStore = create((set) => ({
     localStorage.setItem('totalColor', totalColor);
     set({ totalColor });
   },
-
-  favorite: localStorage.getItem('favorite') === 'true' || false,
-  toggleFavorite: () => {
-    set((state) => {
-      const newFavorite = !state.favorite;
-      localStorage.setItem('favorite', newFavorite.toString());
-      return { favorite: newFavorite };
-    });
-  },
-
 }));
 
 export default useStore;

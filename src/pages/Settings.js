@@ -4,11 +4,12 @@ import { Box, Grid, MenuItem, Stack, Switch, TextField, Typography } from '@mui/
 import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
 
 function Settings() {
-    const { mode, toggleColorMode, shiny, toggleShiny, themeColor, setThemeColor, sprites, setSprites } = useStore();
+    const { mode, toggleColorMode, shiny, toggleShiny, themeColor, setThemeColor, sprites, setSprites, render, setRender } = useStore();
 
     const palette = [
         { value: 'cherry', name: 'Cherry' },
         { value: 'rose', name: 'Rose' },
+        { value: 'lavender', name: 'Lavender' },
         { value: 'navy', name: 'Navy' },
         { value: 'teal', name: 'Teal' },
         { value: 'emerald', name: 'Emerald' },
@@ -20,6 +21,19 @@ function Settings() {
         { value: 'default', name: 'Default' },
         { value: 'home', name: 'Home' },
         { value: 'official-artwork', name: 'Official' },
+    ];
+
+    const pokemonRender = [
+        { value: 151, name: '151 (Kanto)' },
+        { value: 251, name: '251 (Johto)' },
+        { value: 386, name: '386 (Hoenn)' },
+        { value: 493, name: '493 (Sinnoh)' },
+        { value: 649, name: '649 (Unova)' },
+        { value: 721, name: '721 (Kalos)' },
+        { value: 809, name: '809 (Alola)' },
+        { value: 898, name: '898 (Galar)' },
+        { value: 1008, name: '1008 (Paldea)' },
+        { value: 1281, name: '1281 (All)' }, 
     ];
 
     const handleModeToggle = () => {
@@ -36,6 +50,10 @@ function Settings() {
 
     const themeHandler = (e) => {
         setThemeColor(e.target.value);
+    };
+
+    const rednderHandler = (e) => {
+        setRender(e.target.value);
     };
 
     return (
@@ -86,6 +104,31 @@ function Settings() {
                                             width: 20
                                         }}
                                     />
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
+                </Grid>
+                <Grid sx={{ py: 1 }} container direction="row" justifyContent="space-between" alignItems="center">
+                    <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+                        <Stack direction="column">
+                            <Box>
+                                <Typography variant="body1">Render Pokemon</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="caption" color="text.secondary">
+                                    number of Pokémon
+                                </Typography>
+                            </Box>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3} container justifyContent="flex-end">
+                        <TextField sx={{ minWidth: '140px' }} value={render} onChange={rednderHandler} select color={themeColor}>
+                            {pokemonRender.map((pokemonRender) => (
+                                <MenuItem key={pokemonRender.value} value={pokemonRender.value}>
+                                    <Typography variant='body2' sx={{ fontSize: '14px' }}>
+                                        {pokemonRender.name}
+                                    </Typography>
                                 </MenuItem>
                             ))}
                         </TextField>

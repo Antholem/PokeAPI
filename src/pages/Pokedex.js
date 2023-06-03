@@ -28,8 +28,9 @@ import { useTheme } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import StraightIcon from '@mui/icons-material/Straight';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import HeightIcon from '@mui/icons-material/Height';
+import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
 
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
 import DarkIcon from '../images/Pokemon_Type_Icon_Dark.svg';
@@ -63,7 +64,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 function PokeModal(props) {
-  const { mode, themeColor, hpColor, atkColor, defColor, sAtkColor, sDefColor, speedColor, totalColor, favorite, toggleFavorite } = useStore();
+  const { mode, themeColor, hpColor, atkColor, defColor, sAtkColor, sDefColor, speedColor, totalColor } = useStore();
   const [openModal, setOpenModal] = React.useState(false);
   const [value, setValue] = React.useState('summary');
 
@@ -79,17 +80,13 @@ function PokeModal(props) {
     setValue(newValue);
   };
 
-  const handleFavoriteToggle = () => {
-    toggleFavorite();
-  };
-
   const renderTabContent = () => {
     switch (value) {
       case 'summary':
         return <>
           <Grid container direction="row" justifyContent='center' alignItems='center' spacing={1}>
             <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-              <Stack direction='column' key={props.key}>
+              <Stack direction='column'>
                 <Box>
                   <Stack direction='row' justifyContent='center' alignItems='center'>
                     <Box>
@@ -106,22 +103,9 @@ function PokeModal(props) {
                   {props.pokeImage}
                 </Box>
                 <Box>
-                  <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
-                    <Box>
-                      <IconButton onClick={handleFavoriteToggle}>
-                        {favorite ? (
-                          <FavoriteIcon sx={{ color: mode === 'dark' ? red[400] : red[800], fontSize: '1em', mb: -0.3 }} />
-                        ) : (
-                          <FavoriteBorderIcon sx={{ color: mode === 'dark' ? red[400] : red[800], fontSize: '1em', mb: -0.3 }} />
-                        )}
-                      </IconButton>
-                    </Box>
-                    <Box>
-                      <Typography sx={{ textAlign: 'center' }} variant='body1'>
-                        {props.pokemonName}
-                      </Typography>
-                    </Box>
-                  </Stack>
+                  <Typography sx={{ textAlign: 'center' }} variant='body1'>
+                    {props.pokemonName}
+                  </Typography>
                 </Box>
                 <Box>
                   {props.pokemonType}
@@ -129,6 +113,38 @@ function PokeModal(props) {
               </Stack>
             </Grid>
             <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+
+              <Grid item sx={{mb: 1, px: 4}} xs={12} sm={12} md={12} lg={12} xl={12} container justifyContent="center" alignItems='center' spacing={1}>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Card sx={{ py: 0.3, textAlign: 'center' }}>
+                    <Stack direction='row' justifyContent="center" alignItems='center' spacing={1}>
+                      <Box>
+                        <HeightIcon sx={{fontSize: '0.7em'}} />
+                      </Box>
+                      <Box>
+                        <Typography variant='body2'>
+                          {props.pokemonHeight}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Card>
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Card sx={{ py: 0.3, textAlign: 'center' }}>
+                    <Stack direction='row' justifyContent="center" alignItems='center' spacing={1}>
+                      <Box>
+                        <FitnessCenterIcon sx={{ fontSize: '0.7em' }} />
+                      </Box>
+                      <Box>
+                        <Typography variant='body2'>
+                          {props.pokemonWeight}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Card>
+                </Grid>
+              </Grid> 
+
               {stats.map((stats) => (
                 <Box sx={{ width: '100%' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -156,9 +172,27 @@ function PokeModal(props) {
           </Grid>
         </>;
       case 'stats':
-        return <div>Content for Tab Two</div>;
-      case 'moves':
-        return <div>Content for Tab Three</div>;
+        return <Grid container sx={{textAlign: 'center'}} direction="row" justifyContent="center" alignItems="center" spacing={1}>
+          {info.map((info) => (
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} container justifyContent="center" alignItems='flex-start' spacing={1}>
+              <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                <Card sx={{ py: 0.3 }}>
+                  <Typography variant='body1'>
+                    {info.name}
+                  </Typography>
+                </Card>
+              </Grid>
+              <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+                <Card sx={{ py: 0.3 }}>
+                  <Typography variant='body1'>
+                    {info.value}
+                  </Typography>
+                </Card>
+              </Grid>
+            </Grid>   
+          ))}
+        </Grid>
+;
       default:
         return null;
     }
@@ -184,25 +218,36 @@ function PokeModal(props) {
     { name: "TOTAL", current: props.pokemonTotal, total: 720, color: totalColor },
   ]
 
+  const info = [
+    { name: "Color", value: props.pokemonColor },
+    { name: "Shape", value: props.pokemonShape },
+    { name: "Abilities", value: props.pokemonAbilities },
+    { name: "Group", value: props.pokemonEggGroup },
+    { name: "Growth", value: props.pokemonGrowthRate },
+    { name: "Habitat", value: props.pokemonHabitat },
+  ]
+
   return (
     <Fragment>
       <CardActionArea onClick={handleOpenModal}>
         {props.children}
       </CardActionArea>
       <Dialog
-        maxWidth='md'
+        maxWidth='sm'
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth
       >
-        <DialogContent>
+        <DialogContent sx={{ minHeight: { xs: 500, sm: 500, md: 320, lg: 320, xl: 320 } }}>
           <Box sx={{ width: '100%' }}>
             <Tabs
               value={value}
               onChange={handleChange}
               aria-label="secondary tabs example"
+              variant="scrollable"
+              scrollButtons="auto"
               sx={{
                 '& .MuiTabs-indicator': {
                   backgroundColor: color,
@@ -212,11 +257,12 @@ function PokeModal(props) {
                 },
               }}
             >
-              <Tab value="summary" label="Summary" />
-              <Tab value="stats" label="Stats" />
-              <Tab value="moves" label="Moves" />
+              <Tab value="summary" label="Stats" />
+              <Tab value="stats" label="Info" />
             </Tabs>
-            {renderTabContent()}
+            <Box sx={{ mt: 2 }}>
+              {renderTabContent()}
+            </Box>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -237,7 +283,7 @@ function capitalizeFirstLetter(str) {
 }
 
 function Pokedex() {
-  const { mode, shiny, themeColor, sprites } = useStore();
+  const { mode, shiny, themeColor, sprites, render } = useStore();
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
@@ -250,7 +296,7 @@ function Pokedex() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=24&offset=0');
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${render}&offset=0`);
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(
@@ -260,6 +306,7 @@ function Pokedex() {
 
             // Fetching generation information
             const speciesResponse = await axios.get(pokemonData.species.url);
+            const speciesData = speciesResponse.data;
             const generationUrl = speciesResponse.data.generation.url;
             const generationResponse = await axios.get(generationUrl);
             const generation = generationResponse.data.name;
@@ -267,6 +314,45 @@ function Pokedex() {
             // Fetching color information
             const colorResponse = await axios.get(pokemonData.species.url);
             const color = colorResponse.data.color.name;
+
+            // Fetching abilities information
+            const abilities = pokemonData.abilities.map((ability) => ability.ability.name);
+
+            // Fetching growth-rate information
+            const fetchGrowthRate = async (speciesData) => {
+              const growthRateUrl = speciesData.growth_rate.url;
+              const growthRateResponse = await axios.get(growthRateUrl);
+              const growthRate = growthRateResponse.data.name;
+              return growthRate;
+            };
+
+            // Fetching habitat information
+            const fetchHabitat = async (speciesData) => {
+              const habitatUrl = speciesData.habitat.url;
+              const habitatResponse = await axios.get(habitatUrl);
+              const habitat = habitatResponse.data.name;
+              return habitat;
+            };
+
+            // Fetching shape information
+            const fetchShape = async (speciesData) => {
+              const shapeUrl = speciesData.shape.url;
+              const shapeResponse = await axios.get(shapeUrl);
+              const shape = shapeResponse.data.name;
+              return shape;
+            };
+
+            // Fetching legendary status
+            const fetchLegendaryStatus = async (speciesData) => {
+              const isLegendary = speciesData.is_legendary;
+              return isLegendary;
+            };
+
+            // Fetching mythical status
+            const fetchMythicalStatus = async (speciesData) => {
+              const isMythical = speciesData.is_mythical;
+              return isMythical;
+            };
 
             const formattedPokemonData = {
               sprites: {
@@ -276,9 +362,9 @@ function Pokedex() {
                       sprites === 'official-artwork' ? pokemonData.sprites.other['official-artwork'].front_shiny :
                         pokemonData.sprites.front_shiny
                   ) : (
-                      sprites === 'home' ? pokemonData.sprites.other['home'].front_default :
-                        sprites === 'official-artwork' ? pokemonData.sprites.other['official-artwork'].front_default :
-                          pokemonData.sprites.front_default
+                    sprites === 'home' ? pokemonData.sprites.other['home'].front_default :
+                      sprites === 'official-artwork' ? pokemonData.sprites.other['official-artwork'].front_default :
+                        pokemonData.sprites.front_default
                   ),
               },
               id: pokemonData.id,
@@ -295,6 +381,13 @@ function Pokedex() {
               total: pokemonData.stats.reduce((total, stat) => total + stat.base_stat, 0),
               weight: pokemonData.weight,
               height: pokemonData.height,
+              abilities: abilities,
+              growthRate: await fetchGrowthRate(speciesData),
+              eggGroups: speciesData.egg_groups,
+              habitat: await fetchHabitat(speciesData),
+              shape: await fetchShape(speciesData),
+              is_legendary: await fetchLegendaryStatus(speciesData),
+              is_mythical: await fetchMythicalStatus(speciesData),
             };
             return formattedPokemonData;
           })
@@ -566,8 +659,9 @@ function Pokedex() {
   });
 
   const primary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
-  const secondary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png";
-  const tertiary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png";
+  const secondary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/timer-ball.png";
+  const tertiary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png";
+  const mythical = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png";
   const legendary = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png";
 
   const theme = useTheme();
@@ -767,16 +861,15 @@ function Pokedex() {
                   <Scale key={pokemon.id}>
                     <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
                       <PokeModal
-                        key={pokemon.id}
                         pokeImage={
                           pokemon.sprites.front_default ?
                             <CardMedia
-                              sx={{ width: 100, mx: 'auto' }}
+                              sx={{ width: 120, mx: 'auto' }}
                               component='img'
                               image={pokemon.sprites.front_default}
                               alt={pokemon.name}
                             />
-                            : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} /> 
+                            : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
                         }
                         pokemonName={truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
                         pokemonNumber={`${pokemon.id.toString().padStart(3, '0')}`}
@@ -808,6 +901,28 @@ function Pokedex() {
                         pokemonSdef={pokemon.specialDefense}
                         pokemonSpeed={pokemon.speed}
                         pokemonTotal={pokemon.total}
+                        pokemonHeight={`${pokemon.height / 10} m`}
+                        pokemonWeight={`${pokemon.weight / 10} kg`}
+                        pokemonAbilities={pokemon.abilities.map((abilities, index) => (
+                          <Fragment key={index}>
+                            {index > 0 && ' / '}
+                            {capitalizeFirstLetter(formattedPokemonName(abilities))}
+                          </Fragment>
+                        ))}
+                        pokemonEggGroup={pokemon.eggGroups.map((eggGroups, index) => (
+                          <React.Fragment key={index}>
+                            {index > 0 && ' / '}
+                            {capitalizeFirstLetter(formattedPokemonName(eggGroups.name))}
+                          </React.Fragment>
+                        ))}
+                        pokemonGrowthRate={capitalizeFirstLetter(formattedPokemonName(pokemon.growthRate))}
+                        pokemonColor={<Stack direction='row' alignItems='center' justifyContent='center' spacing={1}>
+                          <Box><SquareRoundedIcon sx={{ color: imageBackground, fontSize: '0.6em' }} /> </Box>
+                          <Box>{capitalizeFirstLetter(formattedPokemonName(pokemon.color))}</Box>
+                        </Stack>}
+                        pokemonHabitat={capitalizeFirstLetter(formattedPokemonName(pokemon.habitat))}
+                        pokemonShape={capitalizeFirstLetter(formattedPokemonName(pokemon.shape))}
+                        pokemonGen={pokemon.generation}
                       >
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
                           {
@@ -827,9 +942,12 @@ function Pokedex() {
                               <CardMedia
                                 sx={{ width: 25, ml: -0.7 }}
                                 component='img'
-                                image={pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
+                                image={
+                                  pokemon.is_legendary ? (legendary) :
+                                  pokemon.is_mythical ? (mythical) :
+                                  pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
                                   pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
-                                    pokemon.total >= 570 ? legendary : primary}
+                                  primary}
                               />
                             </Box>
                             <Box>

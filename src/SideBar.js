@@ -7,7 +7,6 @@ import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui
 import { red, pink, purple, blue, teal, green, yellow, orange, grey, deepOrange, indigo } from '@mui/material/colors';
 import MenuIcon from '@mui/icons-material/Menu';
 import ConstructionIcon from '@mui/icons-material/Construction';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
@@ -94,7 +93,6 @@ function SideBar(props) {
   const menu = [
     { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
     { title: 'Team Builder', path: '/team-builder', icon: <ConstructionIcon /> },
-    { title: 'Favorites', path: '/favorites', icon: <FavoriteIcon /> },
     { title: 'Comparator', path: '/comparator', icon: <CompareArrowsIcon /> },
     { title: 'Types', path: '/types', icon: <LocalFireDepartmentIcon /> },
     { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
@@ -164,7 +162,7 @@ function SideBar(props) {
                 <ListItemText primary={item.title} />
               </ListItemButton>
             </ListItem>
-            {(index === 3 || index === 7) && <Divider />}
+            {(index === 2 || index === 6) && <Divider />}
           </Fragment>
         ))}
       </List>

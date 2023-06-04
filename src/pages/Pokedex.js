@@ -19,7 +19,6 @@ import {
   ToggleButton,
   Avatar,
   LinearProgress,
-  IconButton
 } from '@mui/material';
 import Scale from '../animations/Scale';
 import { grey, green, yellow, blue, brown, orange, teal, pink, purple, red, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
@@ -57,8 +56,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -102,6 +99,39 @@ function PokeModal(props) {
                 <Box>
                   {props.pokeImage}
                 </Box>
+                {
+                  props.pokemonLegendary ? (
+                    <Box sx={{
+                      mx: 'auto',
+                      textAlign: 'center',
+                      borderRadius: '20px',
+                      color: 'white',
+                      background: 'linear-gradient(219deg, rgba(255,0,121,1) 0%, rgba(209,0,255,1) 38%, rgba(124,0,255,1) 65%, rgba(0,26,255,1) 100%)',
+                      width: '90px',
+                      mb: 1
+                    }}>
+                      <Typography sx={{ fontSize: '0.6em' }} variant='body2'>
+                        Legendary
+                      </Typography>
+                    </Box>
+                  ) :
+                  props.pokemonMythical ? (
+                      <Box sx={{
+                        mx: 'auto',
+                        textAlign: 'center',
+                        borderRadius: '20px',
+                        color: 'white',
+                        background: 'linear-gradient(219deg, rgba(255,0,0,1) 0%, rgba(255,68,0,1) 38%, rgba(255,132,0,1) 65%, rgba(255,214,0,1) 100%)',
+                        width: '90px',
+                        mb: 1
+                      }}>
+                        <Typography sx={{ fontSize: '0.6em' }} variant='body2'>
+                          Mythical
+                        </Typography>
+                      </Box>
+                  ) :
+                  (null)
+                }
                 <Box>
                   <Typography sx={{ textAlign: 'center' }} variant='body1'>
                     {props.pokemonName}
@@ -113,7 +143,6 @@ function PokeModal(props) {
               </Stack>
             </Grid>
             <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
-
               <Grid item sx={{mb: 1, px: 4}} xs={12} sm={12} md={12} lg={12} xl={12} container justifyContent="center" alignItems='center' spacing={1}>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                   <Card sx={{ py: 0.3, textAlign: 'center' }}>
@@ -144,7 +173,6 @@ function PokeModal(props) {
                   </Card>
                 </Grid>
               </Grid> 
-
               {stats.map((stats) => (
                 <Box sx={{ width: '100%' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -177,22 +205,21 @@ function PokeModal(props) {
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12} container justifyContent="center" alignItems='flex-start' spacing={1}>
               <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                 <Card sx={{ py: 0.3 }}>
-                  <Typography variant='body1'>
+                  <Typography variant='body2'>
                     {info.name}
                   </Typography>
                 </Card>
               </Grid>
               <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
                 <Card sx={{ py: 0.3 }}>
-                  <Typography variant='body1'>
+                  <Typography variant='body2'>
                     {info.value}
                   </Typography>
                 </Card>
               </Grid>
             </Grid>   
           ))}
-        </Grid>
-;
+        </Grid>;
       default:
         return null;
     }
@@ -221,7 +248,7 @@ function PokeModal(props) {
   const info = [
     { name: "Color", value: props.pokemonColor },
     { name: "Shape", value: props.pokemonShape },
-    { name: "Abilities", value: props.pokemonAbilities },
+    { name: "Ability", value: props.pokemonAbilities },
     { name: "Group", value: props.pokemonEggGroup },
     { name: "Growth", value: props.pokemonGrowthRate },
     { name: "Habitat", value: props.pokemonHabitat },
@@ -240,7 +267,7 @@ function PokeModal(props) {
         aria-describedby="alert-dialog-description"
         fullWidth
       >
-        <DialogContent sx={{ minHeight: { xs: 500, sm: 500, md: 320, lg: 320, xl: 320 } }}>
+        <DialogContent sx={{ minHeight: { xs: 515, sm: 515, md: 330, lg: 330, xl: 330 } }}>
           <Box sx={{ width: '100%' }}>
             <Tabs
               value={value}
@@ -890,9 +917,12 @@ function Pokedex() {
                         pokeball={<CardMedia
                           sx={{ width: 25, ml: -0.7 }}
                           component='img'
-                          image={pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
-                            pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
-                              pokemon.total >= 570 ? legendary : primary}
+                          image={pokemon.is_legendary ? (legendary) :
+                                  pokemon.is_mythical ? (mythical) :
+                                  pokemon.total <= 365 ? primary :
+                                  pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
+                                  pokemon.total >= 479 ? tertiary :
+                                  primary}
                         />}
                         pokemonHp={pokemon.hp}
                         pokemonAtk={pokemon.atk}
@@ -923,6 +953,8 @@ function Pokedex() {
                         pokemonHabitat={capitalizeFirstLetter(formattedPokemonName(pokemon.habitat))}
                         pokemonShape={capitalizeFirstLetter(formattedPokemonName(pokemon.shape))}
                         pokemonGen={pokemon.generation}
+                        pokemonLegendary={pokemon.is_legendary}
+                        pokemonMythical={pokemon.is_mythical}
                       >
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
                           {
@@ -945,8 +977,9 @@ function Pokedex() {
                                 image={
                                   pokemon.is_legendary ? (legendary) :
                                   pokemon.is_mythical ? (mythical) :
+                                  pokemon.total <= 365 ? primary :
                                   pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
-                                  pokemon.total >= 479 && pokemon.total <= 569 ? tertiary :
+                                  pokemon.total >= 479 ? tertiary :
                                   primary}
                               />
                             </Box>

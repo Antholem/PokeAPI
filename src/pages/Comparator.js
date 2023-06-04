@@ -7,7 +7,7 @@ function Comparator() {
 
     return (
         <Fragment>
-            Moves
+            Items
         </Fragment>
     );
 }

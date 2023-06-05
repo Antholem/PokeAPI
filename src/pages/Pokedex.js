@@ -51,6 +51,7 @@ import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
 import { CatchingPokemon } from '@mui/icons-material';
 
+import Sort from '../components/SortButton';
 import NoItem from '../components/Placeholder';
 
 // Modal
@@ -702,29 +703,7 @@ function Pokedex() {
       <Box sx={{ padding: '16px' }}>
         <Grid container sx={{ marginBottom: '16px' }} spacing={1}>
           <Grid item>
-            <ToggleButton
-              onClick={sortPokemonList}
-              value="check"
-              sx={{
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: theme.palette[themeColor].main, // Update this with the desired background color
-                '&:hover': {
-                  backgroundColor: theme.palette[themeColor].dark, // Update this with the desired hover background color
-                  transition: '0.3s'
-                },
-              }}
-            >
-              <StraightIcon
-                sx={{
-                  transform: `rotate(${sortOrder === 'desc' ? '180deg' : '0deg'})`,
-                  transition: 'transform 0.3s ease',
-                  color: mode === 'dark' ? grey[900] : grey[50]
-                }}
-              />
-            </ToggleButton>
+            <Sort onClick={sortPokemonList} sortOrder={sortOrder} />
           </Grid>
           <Grid item>
             <TextField

@@ -48,6 +48,7 @@ import { CatchingPokemon } from '@mui/icons-material';
 import Sort from '../components/SortButton';
 import NoItem from '../components/Placeholder';
 import SearchBar from '../components/Textfield';
+import SelectItem from '../components/SelectItem';
 
 // Modal
 import Button from '@mui/material/Button';
@@ -704,72 +705,10 @@ function Pokedex() {
             <SearchBar value={searchText} onChange={handleSearchTextChange} searchText={searchText} onClick={clearSearchText}/>
           </Grid>
           <Grid item>
-            <Select
-              color={themeColor}
-              id='outlined-select-type1'
-              value={selectedType1}
-              onChange={handleType1Change}
-              label='Type 1'
-              variant='outlined'
-              sx={{ minWidth: '125px' }}
-            >
-              <MenuItem value='Any'>
-                <Stack direction='row' spacing={1} alignItems='center'>
-                  <CatchingPokemon
-                    sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}
-                  />
-                  <Typography variant='body2' sx={{ fontSize: '14px' }}>
-                    Any
-                  </Typography>
-                </Stack>
-              </MenuItem>
-              {pokemonType.map((type) => (
-                <MenuItem value={type.value} key={type.value}>
-                  <Stack direction='row' spacing={1} alignItems='center'>
-                    <Box sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}>
-                      {getTypeIcon(type.value)}
-                    </Box>
-                    <Typography variant='body2' sx={{ fontSize: '14px' }}>
-                      {type.name}
-                    </Typography>
-                  </Stack>
-                </MenuItem>
-              ))}
-            </Select>
+            <SelectItem.SelectType value={selectedType1} onChange={handleType1Change} map={pokemonType} />
           </Grid>
           <Grid item>
-            <Select
-              color={themeColor}
-              id='outlined-select-type2'
-              value={selectedType2}
-              onChange={handleType2Change}
-              label='Type 2'
-              variant='outlined'
-              sx={{ minWidth: '125px' }}
-            >
-              <MenuItem value='Any'>
-                <Stack direction='row' spacing={1} alignItems='center'>
-                  <CatchingPokemon
-                    sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}
-                  />
-                  <Typography variant='body2' sx={{ fontSize: '14px' }}>
-                    Any
-                  </Typography>
-                </Stack>
-              </MenuItem>
-              {pokemonType.map((type) => (
-                <MenuItem value={type.value} key={type.value}>
-                  <Stack direction='row' spacing={1} alignItems='center'>
-                    <Box sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}>
-                      {getTypeIcon(type.value)}
-                    </Box>
-                    <Typography variant='body2' sx={{ fontSize: '14px' }}>
-                      {type.name}
-                    </Typography>
-                  </Stack>
-                </MenuItem>
-              ))}
-            </Select>
+            <SelectItem.SelectType value={selectedType2} onChange={handleType2Change} map={pokemonType} />
           </Grid>
           <Grid item>
             <Select

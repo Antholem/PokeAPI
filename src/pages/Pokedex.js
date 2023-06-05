@@ -12,11 +12,8 @@ import {
   Grid,
   Box,
   CircularProgress,
-  TextField,
-  InputAdornment,
   MenuItem,
   Select,
-  ToggleButton,
   Avatar,
   LinearProgress,
 } from '@mui/material';
@@ -24,9 +21,6 @@ import Scale from '../animations/Scale';
 import { grey, green, yellow, blue, brown, orange, teal, pink, purple, red, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 
-import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
-import StraightIcon from '@mui/icons-material/Straight';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import HeightIcon from '@mui/icons-material/Height';
 import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
@@ -53,6 +47,7 @@ import { CatchingPokemon } from '@mui/icons-material';
 
 import Sort from '../components/SortButton';
 import NoItem from '../components/Placeholder';
+import SearchBar from '../components/Textfield';
 
 // Modal
 import Button from '@mui/material/Button';
@@ -703,32 +698,10 @@ function Pokedex() {
       <Box sx={{ padding: '16px' }}>
         <Grid container sx={{ marginBottom: '16px' }} spacing={1}>
           <Grid item>
-            <Sort onClick={sortPokemonList} sortOrder={sortOrder} />
+            <Sort onClick={sortPokemonList} sortOrder={sortOrder}/>
           </Grid>
           <Grid item>
-            <TextField
-              color={themeColor}
-              sx={{ maxWidth: '220px' }}
-              id='outlined-basic'
-              label='Search'
-              variant='outlined'
-              value={searchText}
-              onChange={handleSearchTextChange}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    {searchText && (
-                      <CloseIcon onClick={clearSearchText} sx={{ cursor: 'pointer' }} />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <SearchBar value={searchText} onChange={handleSearchTextChange} searchText={searchText} onClick={clearSearchText}/>
           </Grid>
           <Grid item>
             <Select

@@ -447,31 +447,6 @@ function Pokedex() {
     fetchPokemonData();
   }, [selectedStat]);
 
-  const getTypeIcon = (type) => {
-    const typeIcons = {
-      bug: BugIcon,
-      dark: DarkIcon,
-      dragon: DragonIcon,
-      electric: ElectricIcon,
-      fairy: FairyIcon,
-      fighting: FightingIcon,
-      fire: FireIcon,
-      flying: FlyingIcon,
-      ghost: GhostIcon,
-      grass: GrassIcon,
-      ground: GroundIcon,
-      ice: IceIcon,
-      normal: NormalIcon,
-      poison: PoisonIcon,
-      psychic: PsychicIcon,
-      rock: RockIcon,
-      steel: SteelIcon,
-      water: WaterIcon,
-    };
-
-    return <img src={typeIcons[type]} alt={type} />;
-  };
-
   const getTypeIcon2 = (type) => {
     const typeIcons = {
       bug: BugIcon,
@@ -711,38 +686,7 @@ function Pokedex() {
             <SelectItem.SelectType value={selectedType2} onChange={handleType2Change} map={pokemonType} />
           </Grid>
           <Grid item>
-            <Select
-              color={themeColor}
-              id='outlined-select-gen'
-              value={selectedGen}
-              onChange={handleGenChange}
-              label='Generation'
-              variant='outlined'
-              sx={{ minWidth: '135px' }}
-            >
-              {pokemonGen.map((gen, index) => (
-                <MenuItem value={gen.value} key={gen.value}>
-                  <Stack direction='row' spacing={1} alignItems='center'>
-                    {
-                      index === 0 ? (
-                        <CatchingPokemon
-                          sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}
-                        />
-                      ) : (
-                        <CardMedia
-                          sx={{ width: '50px', height: '20px', ml: -2, mr: -1.9 }}
-                          component='img'
-                          image={gen.icon}
-                        />
-                      )
-                    }
-                    <Typography variant='body2' sx={{ fontSize: '14px', ml: -2 }}>
-                      {gen.name}
-                    </Typography>
-                  </Stack>
-                </MenuItem>
-              ))}
-            </Select>
+            <SelectItem.SelectGenaration value={selectedGen} onChange={handleGenChange} map={pokemonGen} />
           </Grid>
           <Grid item>
             <Select

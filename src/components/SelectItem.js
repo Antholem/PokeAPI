@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import useStore from '../Store';
 import axios from 'axios';
 import { CatchingPokemon } from '@mui/icons-material';
-import { Select, MenuItem, Stack, Typography, Box } from '@mui/material';
+import { Select, MenuItem, Stack, Typography, Box, CardMedia } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
@@ -98,4 +98,55 @@ function SelectType(props) {
     );
 }
 
-export default { SelectType };
+function SelectGenaration(props) {
+    const { mode, themeColor } = useStore();
+
+    const style = {
+        selectContainer: {
+            minWidth: '125px'
+        },
+        typeIcon: {
+            width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600]
+        },
+        pokeballText: {
+            fontSize: '14px'
+        }
+    }
+
+    return(
+        <Select
+            color={themeColor}
+            id='outlined-select-gen'
+            value={props.value}
+            onChange={props.onChange}
+            label='Generation'
+            variant='outlined'
+            sx={style.selectContainer}
+        >
+            {props.map.map((gen, index) => (
+                <MenuItem value={gen.value} key={gen.value}>
+                    <Stack direction='row' spacing={1} alignItems='center'>
+                        {
+                            index === 0 ? (
+                                <CatchingPokemon
+                                    sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}
+                                />
+                            ) : (
+                                <CardMedia
+                                    sx={{ width: '50px', height: '20px', ml: -2, mr: -1.9 }}
+                                    component='img'
+                                    image={gen.icon}
+                                />
+                            )
+                        }
+                        <Typography variant='body2' sx={{ fontSize: '14px', ml: -2 }}>
+                            {gen.name}
+                        </Typography>
+                    </Stack>
+                </MenuItem>
+            ))}
+        </Select>
+    );
+}
+
+export default { SelectType, SelectGenaration };

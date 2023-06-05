@@ -51,6 +51,8 @@ import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
 import { CatchingPokemon } from '@mui/icons-material';
 
+import NoItem from '../components/Placeholder';
+
 // Modal
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -102,6 +104,7 @@ function PokeModal(props) {
                 {
                   props.pokemonLegendary ? (
                     <Box sx={{
+                      cursor: 'default',
                       mx: 'auto',
                       textAlign: 'center',
                       borderRadius: '20px',
@@ -117,6 +120,7 @@ function PokeModal(props) {
                   ) :
                   props.pokemonMythical ? (
                       <Box sx={{
+                        cursor: 'default',
                         mx: 'auto',
                         textAlign: 'center',
                         borderRadius: '20px',
@@ -879,163 +883,168 @@ function Pokedex() {
             <CircularProgress size={60} color={themeColor} />
           </Box>
         ) : (
-          <Grid container spacing={2}>
-            {filteredPokemonList.map((pokemon, index) => {
-              const { cardBackground, imageBackground } = getColor(pokemon.color);
-
-              return (
-                <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
-                  <Scale key={pokemon.id}>
-                    <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
-                      <PokeModal
-                        pokeImage={
-                          pokemon.sprites.front_default ?
-                            <CardMedia
-                              sx={{ width: 120, mx: 'auto' }}
-                              component='img'
-                              image={pokemon.sprites.front_default}
-                              alt={pokemon.name}
-                            />
-                            : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
-                        }
-                        pokemonName={truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
-                        pokemonNumber={`${pokemon.id.toString().padStart(3, '0')}`}
-                        pokemonType={
-                          <Stack sx={{ marginTop: '8px' }} direction='row' justifyContent='center' spacing={1}>
-                            {pokemon.types.map((type, index) => (
-                              <Chip
-                                key={index}
-                                label={capitalizeFirstLetter(type.type.name)}
-                                avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
-                                variant='contained'
-                                size='small'
-                                sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
-                              />
-                            ))}
-                          </Stack>
-                        }
-                        pokeball={<CardMedia
-                          sx={{ width: 25, ml: -0.7 }}
-                          component='img'
-                          image={pokemon.is_legendary ? (legendary) :
-                                  pokemon.is_mythical ? (mythical) :
-                                  pokemon.total <= 365 ? primary :
-                                  pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
-                                  pokemon.total >= 479 ? tertiary :
-                                  primary}
-                        />}
-                        pokemonHp={pokemon.hp}
-                        pokemonAtk={pokemon.atk}
-                        pokemonDef={pokemon.def}
-                        pokemonSatk={pokemon.specialAttack}
-                        pokemonSdef={pokemon.specialDefense}
-                        pokemonSpeed={pokemon.speed}
-                        pokemonTotal={pokemon.total}
-                        pokemonHeight={`${pokemon.height / 10} m`}
-                        pokemonWeight={`${pokemon.weight / 10} kg`}
-                        pokemonAbilities={pokemon.abilities.map((abilities, index) => (
-                          <Fragment key={index}>
-                            {index > 0 && ' / '}
-                            {capitalizeFirstLetter(formattedPokemonName(abilities))}
-                          </Fragment>
-                        ))}
-                        pokemonEggGroup={pokemon.eggGroups.map((eggGroups, index) => (
-                          <React.Fragment key={index}>
-                            {index > 0 && ' / '}
-                            {capitalizeFirstLetter(formattedPokemonName(eggGroups.name))}
-                          </React.Fragment>
-                        ))}
-                        pokemonGrowthRate={capitalizeFirstLetter(formattedPokemonName(pokemon.growthRate))}
-                        pokemonColor={<Stack direction='row' alignItems='center' justifyContent='center' spacing={1}>
-                          <Box><SquareRoundedIcon sx={{ color: imageBackground, fontSize: '0.6em' }} /> </Box>
-                          <Box>{capitalizeFirstLetter(formattedPokemonName(pokemon.color))}</Box>
-                        </Stack>}
-                        pokemonHabitat={capitalizeFirstLetter(formattedPokemonName(pokemon.habitat))}
-                        pokemonShape={capitalizeFirstLetter(formattedPokemonName(pokemon.shape))}
-                        pokemonGen={pokemon.generation}
-                        pokemonLegendary={pokemon.is_legendary}
-                        pokemonMythical={pokemon.is_mythical}
-                      >
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
-                          {
-                            pokemon.sprites.front_default ?
-                              <CardMedia
-                                sx={{ maxWidth: 150 }}
-                                component='img'
-                                image={pokemon.sprites.front_default}
-                                alt={pokemon.name}
-                              />
-                              : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
-                          }
-                        </Box>
-                        <CardContent>
-                          <Stack direction='row' alignItems="center">
-                            <Box>
-                              <CardMedia
-                                sx={{ width: 25, ml: -0.7 }}
-                                component='img'
-                                image={
-                                  pokemon.is_legendary ? (legendary) :
-                                  pokemon.is_mythical ? (mythical) :
-                                  pokemon.total <= 365 ? primary :
-                                  pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
-                                  pokemon.total >= 479 ? tertiary :
-                                  primary}
-                              />
-                            </Box>
-                            <Box>
-                              <Typography variant='body2' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
-                                {selectedStat === 'id'
-                                  ? `#${pokemon.id.toString().padStart(3, '0')}`
-                                  : selectedStat === 'hp'
-                                    ? `${pokemon.hp} HP`
-                                    : selectedStat === 'atk'
-                                      ? `${pokemon.atk}`
-                                      : selectedStat === 'def'
-                                        ? `${pokemon.def}`
-                                        : selectedStat === 'specialAttack'
-                                          ? `${pokemon.specialAttack}`
-                                          : selectedStat === 'specialDefense'
-                                            ? `${pokemon.specialDefense}`
-                                            : selectedStat === 'speed'
-                                              ? `${pokemon.speed}`
-                                              : selectedStat === 'total'
-                                                ? `${pokemon.total}`
-                                                : selectedStat === 'height'
-                                                  ? `${pokemon.height / 10} m`
-                                                  : selectedStat === 'weight'
-                                                    ? `${pokemon.weight / 10} kg`
-                                                    : `#${pokemon.id.toString().padStart(3, '0')}`}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                          <Typography
-                            sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
-                            variant='h6'
-                            component='div'
-                          >
-                            {truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
-                          </Typography>
-                          <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
-                            {pokemon.types.map((type, index) => (
-                              <Chip
-                                key={index}
-                                label={capitalizeFirstLetter(type.type.name)}
-                                avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
-                                variant='contained'
-                                size='small'
-                                sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
-                              />
-                            ))}
-                          </Stack>
-                        </CardContent>
-                      </PokeModal>
-                    </Card>
-                  </Scale>
-                </Grid>
-              );
-            })}
-          </Grid>
+              filteredPokemonList.length === 0 ? (
+              <Fragment>
+                <NoItem text={`Pokémon`} />
+              </Fragment>
+              ) : (
+             <Grid container spacing={2}>
+                    {filteredPokemonList.map((pokemon, index) => {
+                      const { cardBackground, imageBackground } = getColor(pokemon.color);
+                      return (
+                        <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
+                          <Scale key={pokemon.id}>
+                            <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
+                              <PokeModal
+                                pokeImage={
+                                  pokemon.sprites.front_default ?
+                                    <CardMedia
+                                      sx={{ width: 120, mx: 'auto' }}
+                                      component='img'
+                                      image={pokemon.sprites.front_default}
+                                      alt={pokemon.name}
+                                    />
+                                    : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
+                                }
+                                pokemonName={truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
+                                pokemonNumber={`${pokemon.id.toString().padStart(3, '0')}`}
+                                pokemonType={
+                                  <Stack sx={{ marginTop: '8px' }} direction='row' justifyContent='center' spacing={1}>
+                                    {pokemon.types.map((type, index) => (
+                                      <Chip
+                                        key={index}
+                                        label={capitalizeFirstLetter(type.type.name)}
+                                        avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
+                                        variant='contained'
+                                        size='small'
+                                        sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
+                                      />
+                                    ))}
+                                  </Stack>
+                                }
+                                pokeball={<CardMedia
+                                  sx={{ width: 25, ml: -0.7 }}
+                                  component='img'
+                                  image={pokemon.is_legendary ? (legendary) :
+                                    pokemon.is_mythical ? (mythical) :
+                                      pokemon.total <= 365 ? primary :
+                                        pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
+                                          pokemon.total >= 479 ? tertiary :
+                                            primary}
+                                />}
+                                pokemonHp={pokemon.hp}
+                                pokemonAtk={pokemon.atk}
+                                pokemonDef={pokemon.def}
+                                pokemonSatk={pokemon.specialAttack}
+                                pokemonSdef={pokemon.specialDefense}
+                                pokemonSpeed={pokemon.speed}
+                                pokemonTotal={pokemon.total}
+                                pokemonHeight={`${pokemon.height / 10} m`}
+                                pokemonWeight={`${pokemon.weight / 10} kg`}
+                                pokemonAbilities={pokemon.abilities.map((abilities, index) => (
+                                  <Fragment key={index}>
+                                    {index > 0 && ' / '}
+                                    {capitalizeFirstLetter(formattedPokemonName(abilities))}
+                                  </Fragment>
+                                ))}
+                                pokemonEggGroup={pokemon.eggGroups.map((eggGroups, index) => (
+                                  <React.Fragment key={index}>
+                                    {index > 0 && ' / '}
+                                    {capitalizeFirstLetter(formattedPokemonName(eggGroups.name))}
+                                  </React.Fragment>
+                                ))}
+                                pokemonGrowthRate={capitalizeFirstLetter(formattedPokemonName(pokemon.growthRate))}
+                                pokemonColor={<Stack direction='row' alignItems='center' justifyContent='center' spacing={1}>
+                                  <Box><SquareRoundedIcon sx={{ color: imageBackground, fontSize: '0.6em' }} /> </Box>
+                                  <Box>{capitalizeFirstLetter(formattedPokemonName(pokemon.color))}</Box>
+                                </Stack>}
+                                pokemonHabitat={capitalizeFirstLetter(formattedPokemonName(pokemon.habitat))}
+                                pokemonShape={capitalizeFirstLetter(formattedPokemonName(pokemon.shape))}
+                                pokemonGen={pokemon.generation}
+                                pokemonLegendary={pokemon.is_legendary}
+                                pokemonMythical={pokemon.is_mythical}
+                              >
+                                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
+                                  {
+                                    pokemon.sprites.front_default ?
+                                      <CardMedia
+                                        sx={{ maxWidth: 150 }}
+                                        component='img'
+                                        image={pokemon.sprites.front_default}
+                                        alt={pokemon.name}
+                                      />
+                                      : <CatchingPokemon sx={{ fontSize: '11.25em', color: mode === 'dark' ? grey[200] : grey[600], maxWidth: 150 }} />
+                                  }
+                                </Box>
+                                <CardContent>
+                                  <Stack direction='row' alignItems="center">
+                                    <Box>
+                                      <CardMedia
+                                        sx={{ width: 25, ml: -0.7 }}
+                                        component='img'
+                                        image={
+                                          pokemon.is_legendary ? (legendary) :
+                                            pokemon.is_mythical ? (mythical) :
+                                              pokemon.total <= 365 ? primary :
+                                                pokemon.total >= 366 && pokemon.total <= 469 ? secondary :
+                                                  pokemon.total >= 479 ? tertiary :
+                                                    primary}
+                                      />
+                                    </Box>
+                                    <Box>
+                                      <Typography variant='body2' color='text.secondary' sx={{ color: pokemon.color === 'black' ? grey[200] : pokemon.color === 'white' ? grey[700] : 'none' }}>
+                                        {selectedStat === 'id'
+                                          ? `#${pokemon.id.toString().padStart(3, '0')}`
+                                          : selectedStat === 'hp'
+                                            ? `${pokemon.hp} HP`
+                                            : selectedStat === 'atk'
+                                              ? `${pokemon.atk}`
+                                              : selectedStat === 'def'
+                                                ? `${pokemon.def}`
+                                                : selectedStat === 'specialAttack'
+                                                  ? `${pokemon.specialAttack}`
+                                                  : selectedStat === 'specialDefense'
+                                                    ? `${pokemon.specialDefense}`
+                                                    : selectedStat === 'speed'
+                                                      ? `${pokemon.speed}`
+                                                      : selectedStat === 'total'
+                                                        ? `${pokemon.total}`
+                                                        : selectedStat === 'height'
+                                                          ? `${pokemon.height / 10} m`
+                                                          : selectedStat === 'weight'
+                                                            ? `${pokemon.weight / 10} kg`
+                                                            : `#${pokemon.id.toString().padStart(3, '0')}`}
+                                      </Typography>
+                                    </Box>
+                                  </Stack>
+                                  <Typography
+                                    sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
+                                    variant='h6'
+                                    component='div'
+                                  >
+                                    {truncatePokemonName(capitalizeFirstLetter(formattedPokemonName(pokemon.name)), 15)}
+                                  </Typography>
+                                  <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
+                                    {pokemon.types.map((type, index) => (
+                                      <Chip
+                                        key={index}
+                                        label={capitalizeFirstLetter(type.type.name)}
+                                        avatar={<Avatar alt={type.type.name} src={getTypeIcon2(type.type.name)} />}
+                                        variant='contained'
+                                        size='small'
+                                        sx={{ color: grey[50], backgroundColor: getTypeIconColor(type.type.name) }}
+                                      />
+                                    ))}
+                                  </Stack>
+                                </CardContent>
+                              </PokeModal>
+                            </Card>
+                          </Scale>
+                        </Grid>
+                      );
+                    })}
+              </Grid>
+            )
         )}
       </Box>
     </Fragment>

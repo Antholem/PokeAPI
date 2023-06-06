@@ -1,6 +1,5 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React from 'react';
 import useStore from '../Store';
-import axios from 'axios';
 import { CatchingPokemon } from '@mui/icons-material';
 import { Select, MenuItem, Stack, Typography, Box, CardMedia } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -57,7 +56,9 @@ function SelectType(props) {
             minWidth: '125px'
         },
         typeIcon: {
-            width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600]
+            width: '20px',
+            height: '20px',
+            color: mode === 'dark' ? grey[200] : grey[600]
         },
         pokeballText: {
             fontSize: '14px'
@@ -65,15 +66,7 @@ function SelectType(props) {
     }
 
     return (
-        <Select
-            color={themeColor}
-            id='outlined-select-type'
-            value={props.value}
-            onChange={props.onChange}
-            label='Pokemon Type Filter'
-            variant='outlined'
-            sx={style.selectContainer}
-        >
+        <Select sx={style.selectContainer} color={themeColor} id='outlined-select-type' value={props.value} onChange={props.onChange} label='Pokemon Type Filter' variant='outlined'>
             <MenuItem value='Any'>
                 <Stack direction='row' spacing={1} alignItems='center'>
                     <CatchingPokemon sx={style.typeIcon} />
@@ -106,40 +99,35 @@ function SelectGenaration(props) {
             minWidth: '125px'
         },
         typeIcon: {
-            width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600]
+            width: '50px',
+            height: '20px',
+            ml: -2,
+            mr: -1.9
         },
-        pokeballText: {
-            fontSize: '14px'
-        }
+        placeholderIcon: {
+            width: '20px',
+            height: '20px',
+            color: mode === 'dark' ? grey[200] : grey[600]
+        },
+        generationText: {
+            fontSize: '14px',
+            ml: -2
+        },
     }
 
     return(
-        <Select
-            color={themeColor}
-            id='outlined-select-gen'
-            value={props.value}
-            onChange={props.onChange}
-            label='Generation'
-            variant='outlined'
-            sx={style.selectContainer}
-        >
+        <Select sx={style.selectContainer} color={themeColor} id='outlined-select-gen' value={props.value} onChange={props.onChange} label='Generation' variant='outlined'>
             {props.map.map((gen, index) => (
                 <MenuItem value={gen.value} key={gen.value}>
                     <Stack direction='row' spacing={1} alignItems='center'>
                         {
                             index === 0 ? (
-                                <CatchingPokemon
-                                    sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}
-                                />
+                                <CatchingPokemon sx={style.placeholderIcon} />
                             ) : (
-                                <CardMedia
-                                    sx={{ width: '50px', height: '20px', ml: -2, mr: -1.9 }}
-                                    component='img'
-                                    image={gen.icon}
-                                />
+                                <CardMedia sx={style.typeIcon} component='img' image={gen.icon}/>
                             )
                         }
-                        <Typography variant='body2' sx={{ fontSize: '14px', ml: -2 }}>
+                        <Typography variant='body2' sx={style.generationText}>
                             {gen.name}
                         </Typography>
                     </Stack>
@@ -149,4 +137,39 @@ function SelectGenaration(props) {
     );
 }
 
-export default { SelectType, SelectGenaration };
+function SelectStat(props) {
+    const { mode, themeColor } = useStore();
+
+    const style = {
+        selectContainer: {
+            minWidth: '125px'
+        },
+    }
+
+    return (
+        <Select
+            sx={style.selectContainer}
+            color={themeColor}
+            id='outlined-select-stat'
+            value={props.value}
+            onChange={props.onChange}
+            label='Stat'
+            variant='outlined'
+        >
+            {props.map.map((type) => (
+                <MenuItem value={type.value} key={type.value}>
+                    <Stack direction='row' spacing={1} alignItems='center'>
+                        <CatchingPokemon
+                            sx={{ width: '20px', height: '20px', color: mode === 'dark' ? grey[200] : grey[600] }}
+                        />
+                        <Typography variant='body2' sx={{ fontSize: '14px' }}>
+                            {type.name}
+                        </Typography>
+                    </Stack>
+                </MenuItem>
+            ))}
+        </Select>
+    );
+}
+
+export default { SelectType, SelectGenaration, SelectStat };

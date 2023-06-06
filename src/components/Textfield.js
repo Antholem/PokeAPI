@@ -1,6 +1,5 @@
 import React from 'react';
 import useStore from '../Store';
-import axios from 'axios';
 import { TextField, InputAdornment } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';

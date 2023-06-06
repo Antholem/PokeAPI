@@ -30,7 +30,7 @@ function Sort(props) {
     }
 
     return (
-        <ToggleButton onClick={props.onClick} value="check" sx={style.toggleButton}>
+        <ToggleButton onClick={props.onClick} value='check' sx={style.toggleButton}>
             <StraightIcon sx={style.toggleIcon} />
         </ToggleButton>
     );

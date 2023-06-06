@@ -256,4 +256,12 @@ function ColorSquare(props) {
     );
 }
 
-export default { Pokeball, Sprites, Type, Name, StatName, ID, SelectedStat, ColorSquare };
+function AbilityDesc(props) {
+    return (
+        <Fragment>
+            {truncatePokemonName(props.name)}
+        </Fragment>
+    );
+}
+
+export default { Pokeball, Sprites, Type, Name, StatName, ID, SelectedStat, ColorSquare, AbilityDesc };

@@ -27,7 +27,7 @@ const useStore = create((set) => ({
     });
   },
 
-  render: localStorage.getItem('render') || 1008,
+  render: localStorage.getItem('render') || 493,
   setRender: (render) => {
     set(() => {
       localStorage.setItem('render', render);

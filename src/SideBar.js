@@ -92,12 +92,10 @@ function SideBar(props) {
 
   const menu = [
     { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
-    { title: 'Team Builder', path: '/team-builder', icon: <ConstructionIcon /> },
-    { title: 'Comparator', path: '/comparator', icon: <CompareArrowsIcon /> },
-    { title: 'Types', path: '/types', icon: <LocalFireDepartmentIcon /> },
-    { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
-    { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
+    { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
+    { title: 'Types', path: '/types', icon: <LocalFireDepartmentIcon /> },
+    { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
   ];
 
@@ -162,7 +160,7 @@ function SideBar(props) {
                 <ListItemText primary={item.title} />
               </ListItemButton>
             </ListItem>
-            {(index === 2 || index === 6) && <Divider />}
+            {(index === 2 || index === 4) && <Divider />}
           </Fragment>
         ))}
       </List>

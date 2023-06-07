@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import useStore from '../Store';
 import { Avatar, Box, CardMedia, Chip, Stack } from '@mui/material';
 import { CatchingPokemon } from '@mui/icons-material';
-import { grey, green, yellow, blue, brown, orange, teal, pink, purple, red, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
+import { grey, blue, brown, pink, purple, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
 
 import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';

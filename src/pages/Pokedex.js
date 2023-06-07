@@ -26,7 +26,7 @@ function Pokedex() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${render}&offset=0`);
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${render}&offset=0`); // 1,010
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(

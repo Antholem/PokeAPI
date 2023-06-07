@@ -1,8 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import SideBar from './SideBar';
 import Pokedex from './pages/Pokedex';
-import TeamBuilder from './pages/TeamBuilder';
-import Comparator from './pages/Comparator';
 import Types from './pages/Types';
 import Abilities from './pages/Abilities';
 import Items from './pages/Item';
@@ -11,8 +9,6 @@ import Settings from './pages/Settings';
 
 const router = [
     { path: '/', element: <Pokedex /> },
-    { path: '/team-builder', element: <TeamBuilder /> },
-    { path: '/comparator', element: <Comparator /> },
     { path: '/types', element: <Types /> },
     { path: '/abilities', element: <Abilities /> },
     { path: '/items', element: <Items /> },

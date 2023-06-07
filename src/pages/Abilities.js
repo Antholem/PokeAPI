@@ -24,7 +24,7 @@ function Ability() {
         // Fetch ability data when component mounts
         const fetchAbilityData = async () => {
             try {
-                const response = await axios.get('https://pokeapi.co/api/v2/ability?limit=100');
+                const response = await axios.get('https://pokeapi.co/api/v2/ability?limit=50');
                 const data = response.data.results;
 
                 const formattedAbilityList = await Promise.all(

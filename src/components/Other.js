@@ -123,6 +123,28 @@ function Sprites(props) {
     );
 }
 
+function ItemSprites(props) {
+    const style = {
+        cardMedia: {
+            maxWidth: props.maxWidth,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            mx: 'auto',
+            my: 'auto',
+        }
+    }
+
+    return(
+        <CardMedia
+            sx={style.cardMedia}
+            component="img"
+            alt={props.alt}
+            src={props.src}
+        />
+    );
+}
+
 function Type(props) {
     const { mode } = useStore();
 
@@ -264,4 +286,4 @@ function AbilityDesc(props) {
     );
 }
 
-export default { Pokeball, Sprites, Type, Name, StatName, ID, SelectedStat, ColorSquare, AbilityDesc };
+export default { Pokeball, Sprites, Type, Name, StatName, ID, SelectedStat, ColorSquare, AbilityDesc, ItemSprites };

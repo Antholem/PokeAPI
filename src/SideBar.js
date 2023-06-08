@@ -94,7 +94,6 @@ function SideBar(props) {
     { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
     { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
-    { title: 'Types', path: '/types', icon: <LocalFireDepartmentIcon /> },
     { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
   ];
@@ -160,7 +159,7 @@ function SideBar(props) {
                 <ListItemText primary={item.title} />
               </ListItemButton>
             </ListItem>
-            {(index === 2 || index === 4) && <Divider />}
+            {(index === 0 || index === 3) && <Divider />}
           </Fragment>
         ))}
       </List>

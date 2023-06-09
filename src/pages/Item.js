@@ -155,7 +155,7 @@ function Items() {
                             {filteredItemList.map((item, index) => (
                                 <Grid item key={index} xs={6} sm={6} md={3} lg={2} xl={2}>
                                     <Scale key={item.id}>
-                                        <Card key={item.id} variant="outlined">
+                                        <Card key={item.id}>
                                             <ItemModal
                                                 itemName={<Pokemon.Name name={item.name} />}
                                                 itemId={item.id}

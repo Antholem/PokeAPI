@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import useStore from '../Store';
 import { Avatar, Box, CardMedia, Chip, Stack } from '@mui/material';
 import { CatchingPokemon } from '@mui/icons-material';
-import { grey, blue, brown, pink, purple, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime } from '@mui/material/colors';
+import { grey, blue, brown, pink, purple, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime, red } from '@mui/material/colors';
 
 import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
@@ -23,6 +23,9 @@ import PsychicIcon from '../images/Pokemon_Type_Icon_Psychic.svg';
 import RockIcon from '../images/Pokemon_Type_Icon_Rock.svg';
 import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
+import StatusIcon from '../images/Pokemon_Status.png'
+import PhysicalIcon from '../images/Pokemon_Physical.png'
+import SpecialIcon from '../images/Pokemon_Special.png'
 
 function capitalizeFirstLetter(str) {
     return str
@@ -228,6 +231,124 @@ function Type(props) {
     );
 }
 
+function TypeMove(props) {
+    const { mode } = useStore();
+
+    const getTypeIcon = (type) => {
+        const typeIcons = {
+            bug: BugIcon,
+            dark: DarkIcon,
+            dragon: DragonIcon,
+            electric: ElectricIcon,
+            fairy: FairyIcon,
+            fighting: FightingIcon,
+            fire: FireIcon,
+            flying: FlyingIcon,
+            ghost: GhostIcon,
+            grass: GrassIcon,
+            ground: GroundIcon,
+            ice: IceIcon,
+            normal: NormalIcon,
+            poison: PoisonIcon,
+            psychic: PsychicIcon,
+            rock: RockIcon,
+            steel: SteelIcon,
+            water: WaterIcon,
+        };
+
+        return typeIcons[type];
+    };
+
+    const getTypeIconColor = (type) => {
+        const typeIconColors = {
+            bug: lime[900],
+            dark: grey[900],
+            dragon: cyan[700],
+            electric: amber[800],
+            fairy: purple.A400,
+            fighting: pink[900],
+            fire: deepOrange[700],
+            flying: lightBlue[800],
+            ghost: indigo[900],
+            grass: lightGreen[800],
+            ground: deepOrange.A400,
+            ice: lightBlue[600],
+            normal: grey[700],
+            poison: deepPurple[500],
+            psychic: pink.A400,
+            rock: brown[600],
+            steel: blueGrey[700],
+            water: blue.A700,
+        };
+
+        return typeIconColors[type];
+    };
+
+    const style = {
+        chipContainer: {
+            marginTop: '8px'
+        },
+        placeholder: {
+            fontSize: '11.25em',
+            color: mode === 'dark' ? grey[200] : grey[600],
+            maxWidth: 150
+        },
+        chip: {
+            color: grey[50]
+        }
+    }
+
+    return (
+        <Chip
+            label={capitalizeFirstLetter(props.name)}
+            avatar={<Avatar alt={props.name} src={getTypeIcon(props.name)} />}
+            variant='contained'
+            size='small'
+            sx={[style.chip, { backgroundColor: getTypeIconColor(props.name) }]}
+        />
+    );
+}
+
+function DamageClass(props) {
+    const { mode } = useStore();
+
+    const getClassIcon = (type) => {
+        const classIcons = {
+            physical: PhysicalIcon,
+            status: StatusIcon,
+            special: SpecialIcon,
+        };
+
+        return classIcons[type];
+    };
+
+    const getClassIconColor = (type) => {
+        const classIconColors = {
+            physical: red[900],
+            status: blue[900],
+            special: grey[600],
+        };
+
+        return classIconColors[type];
+    };
+
+    const style = {
+        chip: {
+            color: grey[50]
+        }
+    }
+
+    return (
+        <Chip
+            label={capitalizeFirstLetter(props.name)}
+            avatar={<Avatar alt={props.name} src={getClassIcon(props.name)} />}
+            variant='contained'
+            size='small'
+            sx={[style.chip, { backgroundColor: getClassIconColor(props.name) }]}
+        />
+    );
+}
+
 function SelectedStat(props) {
     return (
         <Fragment>
@@ -286,4 +407,4 @@ function AbilityDesc(props) {
     );
 }
 
-export default { Pokeball, Sprites, Type, Name, StatName, ID, SelectedStat, ColorSquare, AbilityDesc, ItemSprites };
+export default { Pokeball, Sprites, Type, TypeMove, DamageClass,Name, StatName, ID, SelectedStat, ColorSquare, AbilityDesc, ItemSprites };

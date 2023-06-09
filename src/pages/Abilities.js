@@ -24,7 +24,7 @@ function Ability() {
         // Fetch ability data when component mounts
         const fetchAbilityData = async () => {
             try {
-                const response = await axios.get('https://pokeapi.co/api/v2/ability?limit=50');
+                const response = await axios.get('https://pokeapi.co/api/v2/ability?limit=10');
                 const data = response.data.results;
 
                 const formattedAbilityList = await Promise.all(
@@ -171,7 +171,7 @@ function Ability() {
                             {filteredAbilityList.map((ability, index) => (
                                 <Grid item key={index} xs={12} sm={12} md={6} lg={4} xl={4}>
                                     <Scale key={ability.id}>
-                                        <Card key={ability.id} variant="outlined">
+                                        <Card key={ability.id}>
                                             <AbilityModal
                                                 abilityName={<Pokemon.Name name={ability.name} />}
                                                 abilityEffect={ability.effect}

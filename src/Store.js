@@ -82,6 +82,24 @@ const useStore = create((set) => ({
     localStorage.setItem('totalColor', totalColor);
     set({ totalColor });
   },
+
+  powColor: localStorage.getItem('powColor') || 'cherry',
+  setPowColor: (powColor) => {
+    localStorage.setItem('powColor', powColor);
+    set({ powColor });
+  },
+
+  ppColor: localStorage.getItem('ppColor') || 'emerald',
+  setPpColor: (ppColor) => {
+    localStorage.setItem('ppColor', ppColor);
+    set({ ppColor });
+  },
+
+  accColor: localStorage.getItem('accColor') || 'indigo',
+  setAccColor: (accColor) => {
+    localStorage.setItem('accColor', accColor);
+    set({ accColor });
+  },
 }));
 
 export default useStore;

@@ -53,6 +53,14 @@ function Name(props) {
     );
 }
 
+function MoveName(props) {
+    return (
+        <Fragment>
+            {capitalizeFirstLetter(formattedPokemonName(props.name))}
+        </Fragment>
+    );
+}
+
 function StatName(props) {
     return (
         <Fragment>
@@ -138,7 +146,7 @@ function ItemSprites(props) {
         }
     }
 
-    return(
+    return (
         <CardMedia
             sx={style.cardMedia}
             component="img"
@@ -407,4 +415,4 @@ function AbilityDesc(props) {
     );
 }
 
-export default { Pokeball, Sprites, Type, TypeMove, DamageClass,Name, StatName, ID, SelectedStat, ColorSquare, AbilityDesc, ItemSprites };
+export default { Pokeball, Sprites, Type, TypeMove, DamageClass, Name, MoveName, StatName, ID, SelectedStat, ColorSquare, AbilityDesc, ItemSprites };

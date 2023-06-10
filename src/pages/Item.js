@@ -18,7 +18,7 @@ function Items() {
     const [isLoading, setIsLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
 
-    const [selectedStat, setSelectedStat] = useState(localStorage.getItem('selectedStat') || 'name');
+    const [selectedStat, setSelectedStat] = useState(localStorage.getItem('selectedStat') || 'id');
 
     useEffect(() => {
         const fetchItemData = async () => {

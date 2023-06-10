@@ -4,17 +4,34 @@ import { Card, Stack, Typography, Grid, Box, LinearProgress, CardActionArea, But
 import { Dialog, DialogActions, DialogContent } from '@mui/material/';
 
 function MoveModal(props) {
-    const { mode, themeColor, powColor, ppColor, accColor } = useStore();
-    const [openModal, setOpenModal] = React.useState(false);
+    const { themeColor, powColor, ppColor, accColor } = useStore(); // Accessing from the useStore hook
+    const [openModal, setOpenModal] = React.useState(false); // State variables
 
+    // Open the modal
     const handleOpenModal = () => {
         setOpenModal(true);
     };
 
+    // Close the modal
     const handleCloseModal = () => {
         setOpenModal(false);
     };
 
+    // Array containing move statistics
+    const stats = [
+        { name: 'POW', current: props.movePower, total: 250, color: powColor },
+        { name: 'PP', current: props.movePp, total: 40, color: ppColor },
+        { name: 'ACC', current: props.moveAccuracy, total: 100, color: accColor },
+    ]
+
+    // Array containing move information
+    const info = [
+        { name: 'Ailment', value: props.moveAilment },
+        { name: 'Target', value: props.moveTarget },
+        { name: 'Category', value: props.moveCategory },
+    ]
+
+    // Inline styles for components
     const style = {
         moveName: {
             textAlign: 'center'
@@ -50,23 +67,13 @@ function MoveModal(props) {
         },
     }
 
-    const stats = [
-        { name: 'POW', current: props.movePower, total: 250, color: powColor },
-        { name: 'PP', current: props.movePp, total: 40, color: ppColor },
-        { name: 'ACC', current: props.moveAccuracy, total: 100, color: accColor },
-    ]
-
-    const info = [
-        { name: 'Ailment', value: props.moveAilment },
-        { name: 'Target', value: props.moveTarget },
-        { name: 'Category', value: props.moveCategory },
-    ]
-
     return (
         <Fragment>
+            {/* CardActionArea triggers the modal */}
             <CardActionArea onClick={handleOpenModal}>
                 {props.children}
             </CardActionArea>
+            {/* Dialog component for the modal */}
             <Dialog
                 maxWidth='sm'
                 open={openModal}
@@ -78,15 +85,17 @@ function MoveModal(props) {
                 <DialogTitle>
                     #{props.moveId} {props.moveName}
                 </DialogTitle>
+                {/* Modal content */}
                 <DialogContent>
+                    {/* Grid container for displaying Pokémon moves */}
                     <Grid container direction='row' justifyContent='center' alignItems='center' spacing={1}>
                         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <Typography sx={style.moveName} variant="body1" component="div">
+                            <Typography sx={style.moveName} variant='body1' component='div'>
                                 {props.moveName}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <Stack direction='row' justifyContent="center" alignItems="center" spacing={1}>
+                            <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>
                                 <Box>
                                     {props.moveType}
                                 </Box>
@@ -147,6 +156,7 @@ function MoveModal(props) {
                         ))}
                     </Grid>
                 </DialogContent>
+                {/* Dialog actions */}
                 <DialogActions>
                     <Button onClick={handleCloseModal} color={themeColor} autoFocus>
                         Close

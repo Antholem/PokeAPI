@@ -1,32 +1,32 @@
 import React, { Fragment, useEffect, useState, useMemo } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
+import useStore from './Store';
 import PropTypes from 'prop-types';
 import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
-import { red, pink, purple, blue, teal, green, yellow, orange, grey, deepOrange, indigo } from '@mui/material/colors';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { red, pink, purple, blue, teal, green, yellow, orange, grey, indigo } from '@mui/material/colors';
 import MenuIcon from '@mui/icons-material/Menu';
-import ConstructionIcon from '@mui/icons-material/Construction';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Logo from './images/Pokemon_Icon_PokeAPI.svg';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import useStore from './Store';
 
 const drawerWidth = 200;
 
 function SideBar(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { mode, themeColor } = useStore();
-  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false); // State variables
+  const { mode, themeColor } = useStore(); // Accessing from the useStore hook
+
+  const { window } = props; // props for Sidebar
+
+  const location = useLocation(); // useLocation for routing
   const path = location.pathname;
 
+  // open and close toggle of Sidebar in mobile view
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -35,6 +35,7 @@ function SideBar(props) {
     localStorage.setItem('mode', mode);
   }, [mode]);
 
+  // Define other color options based on mode and themeColor
   const theme = useMemo(
     () =>
       createTheme({
@@ -90,6 +91,7 @@ function SideBar(props) {
     [mode],
   );
 
+// Array containing menu title, path, and icon in the Sidebar
   const menu = [
     { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
@@ -98,6 +100,7 @@ function SideBar(props) {
     { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
   ];
 
+  // Inline styles for components
   const style = {
     drawerContainer: {
       display: 'flex'
@@ -145,6 +148,7 @@ function SideBar(props) {
 
   const drawer = (
     <Fragment>
+      {/* Render the logo, toolbar, and list of menu items */}
       <CardMedia component='img' image={Logo} sx={style.logo} />
       <Toolbar />
       <List>
@@ -166,7 +170,6 @@ function SideBar(props) {
     </Fragment>
   );
 
-
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
@@ -174,6 +177,7 @@ function SideBar(props) {
       <ThemeProvider theme={theme}>
         <Box sx={style.drawerContainer}>
           <CssBaseline />
+          {/* Render the app bar */}
           <AppBar position='fixed' sx={{ ...style.appBar, backgroundColor: mode === 'dark' ? 'none' : theme.palette[themeColor].main }}>
             <Toolbar>
               <IconButton
@@ -192,6 +196,7 @@ function SideBar(props) {
               </Typography>
             </Toolbar>
           </AppBar>
+          {/* Render the drawer */}
           <Box component='nav' sx={style.nav} aria-label='mailbox folders' >
             <Drawer
               container={container}

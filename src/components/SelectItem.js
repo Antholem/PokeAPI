@@ -1,9 +1,8 @@
 import React from 'react';
 import useStore from '../Store';
-import { CatchingPokemon } from '@mui/icons-material';
 import { Select, MenuItem, Stack, Typography, Box, CardMedia } from '@mui/material';
 import { grey, red, blue } from '@mui/material/colors';
-
+import { CatchingPokemon } from '@mui/icons-material';
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
 import DarkIcon from '../images/Pokemon_Type_Icon_Dark.svg';
 import DragonIcon from '../images/Pokemon_Type_Icon_Dragon.svg';
@@ -26,6 +25,7 @@ import StatusIcon from '../images/Pokemon_Status.png'
 import PhysicalIcon from '../images/Pokemon_Physical.png'
 import SpecialIcon from '../images/Pokemon_Special.png'
 
+// Pokémon types icon
 const getTypeIcon = (type) => {
     const typeIcons = {
         bug: BugIcon,
@@ -51,6 +51,7 @@ const getTypeIcon = (type) => {
     return <img src={typeIcons[type]} alt={type} />;
 };
 
+// Pokémon damage class icon
 const getClassIcon = (type) => {
     const classIcons = {
         physical: PhysicalIcon,
@@ -61,9 +62,11 @@ const getClassIcon = (type) => {
     return <img src={classIcons[type]} style={{width: '17px'}} alt={type} />;
 };
 
+// Menu item for Pokémon types
 function SelectType(props) {
-    const { mode, themeColor } = useStore();
+    const { mode, themeColor } = useStore(); // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         selectContainer: {
             minWidth: '125px'
@@ -104,9 +107,11 @@ function SelectType(props) {
     );
 }
 
+// Menu item for Pokémon generation
 function SelectGenaration(props) {
-    const { mode, themeColor } = useStore();
+    const { mode, themeColor } = useStore(); // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         selectContainer: {
             minWidth: '125px'
@@ -150,9 +155,11 @@ function SelectGenaration(props) {
     );
 }
 
+// Menu item for Pokémon statistics
 function SelectStat(props) {
-    const { mode, themeColor } = useStore();
+    const { mode, themeColor } = useStore(); // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         selectContainer: {
             minWidth: '125px'
@@ -185,9 +192,11 @@ function SelectStat(props) {
     );
 }
 
+// Menu item for Pokémon damage class
 function SelectDamageClass(props) {
-    const { mode, themeColor } = useStore();
+    const { mode, themeColor } = useStore(); // Accessing from the useStore hook
 
+    // Pokémon damage class icon theme color
     const getClassIconColor = (type) => {
         const classIconColors = {
             physical: red[900],
@@ -198,6 +207,7 @@ function SelectDamageClass(props) {
         return classIconColors[type];
     };
 
+    // Inline styles for components
     const style = {
         selectContainer: {
             minWidth: '130px'

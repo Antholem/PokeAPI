@@ -13,7 +13,9 @@ import Pokemon from '../components/Other';
 import PokeModal from '../components/PokedexModal';
 
 function Pokedex() {
-  const { mode, shiny, sprites, render } = useStore();
+  // Accessing from the useStore hook
+  const { mode, shiny, sprites, renderPokemon } = useStore();
+  // State variables
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
@@ -23,10 +25,11 @@ function Pokedex() {
   const [selectedGen, setSelectedGen] = useState(localStorage.getItem('selectedGen') || 'generation-i');
   const [selectedStat, setSelectedStat] = useState(localStorage.getItem('selectedStat') || 'id');
 
+  // Fetch Pokémon data from PokeAPI
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${render}&offset=0`); // 1,010
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${renderPokemon}&offset=0`); // 1,010
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(
@@ -132,6 +135,7 @@ function Pokedex() {
           }
         });
 
+        // Set the formatted Pokémon list
         setPokemonList(sortedList);
         setIsLoading(false);
       } catch (error) {
@@ -149,31 +153,34 @@ function Pokedex() {
     fetchPokemonData();
   }, [selectedStat]);
 
+  // get Pokémon color based on the pokemon.color
   const getColor = (color) => {
+    // Pokémon card
     const pokemonColorCard = {
-      black: mode === 'dark' ? grey[900] : grey[800], ////
-      blue: mode === 'dark' ? blue[900] : blue[200], ////
-      brown: mode === 'dark' ? brown[900] : brown[200], ////
-      gray: mode === 'dark' ? blueGrey[900] : blueGrey[200], ////
-      green: mode === 'dark' ? green[900] : green[200], ////
-      pink: mode === 'dark' ? pink[400] : pink[100], //
-      purple: mode === 'dark' ? purple[900] : purple[200], //
-      red: mode === 'dark' ? red[900] : red[200], ////
+      black: mode === 'dark' ? grey[900] : grey[800],
+      blue: mode === 'dark' ? blue[900] : blue[200],
+      brown: mode === 'dark' ? brown[900] : brown[200],
+      gray: mode === 'dark' ? blueGrey[900] : blueGrey[200],
+      green: mode === 'dark' ? green[900] : green[200],
+      pink: mode === 'dark' ? pink[400] : pink[100],
+      purple: mode === 'dark' ? purple[900] : purple[200],
+      red: mode === 'dark' ? red[900] : red[200],
       white: mode === 'dark' ? grey[300] : grey[50],
-      yellow: mode === 'dark' ? yellow[800] : yellow[200], //
+      yellow: mode === 'dark' ? yellow[800] : yellow[200],
     };
 
+    // Pokémon image container
     const pokemonColorImage = {
-      black: mode === 'dark' ? grey[800] : grey[900], ////
-      blue: mode === 'dark' ? blue[300] : blue[500], ////
-      brown: mode === 'dark' ? brown[300] : brown[500], ////
-      gray: mode === 'dark' ? blueGrey[500] : blueGrey[500], ////
-      green: mode === 'dark' ? green[300] : green[500], ////
-      pink: mode === 'dark' ? pink[100] : pink[400], //
-      purple: mode === 'dark' ? purple[200] : purple[400], //
-      red: mode === 'dark' ? red[300] : red[500], ////
-      white: mode === 'dark' ? grey[50] : grey[300], //
-      yellow: mode === 'dark' ? yellow[200] : yellow[500], //
+      black: mode === 'dark' ? grey[800] : grey[900],
+      blue: mode === 'dark' ? blue[300] : blue[500],
+      brown: mode === 'dark' ? brown[300] : brown[500],
+      gray: mode === 'dark' ? blueGrey[500] : blueGrey[500],
+      green: mode === 'dark' ? green[300] : green[500],
+      pink: mode === 'dark' ? pink[100] : pink[400],
+      purple: mode === 'dark' ? purple[200] : purple[400],
+      red: mode === 'dark' ? red[300] : red[500],
+      white: mode === 'dark' ? grey[50] : grey[300],
+      yellow: mode === 'dark' ? yellow[200] : yellow[500],
     };
 
     return {
@@ -182,6 +189,7 @@ function Pokedex() {
     };
   };
 
+  // Array of Pokémon type
   const pokemonType = [
     { name: 'Bug', value: 'bug' },
     { name: 'Dark', value: 'dark' },
@@ -203,9 +211,11 @@ function Pokedex() {
     { name: 'Water', value: 'water' },
   ];
 
+  // Get Pokémon sprites
   const defaultSprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
   const shinySprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/';
 
+  // Array of Pokémon generation
   const pokemonGen = [
     { name: 'All Gen', value: 'All' },
     { name: 'Gen I', value: 'generation-i', icon: shiny ? `${shinySprite}1.png` : `${defaultSprite}1.png` },
@@ -219,6 +229,7 @@ function Pokedex() {
     { name: 'Gen IX', value: 'generation-ix', icon: shiny ? `${shinySprite}172.png` : `${defaultSprite}172.png` },
   ];
 
+  // Array of Pokémon statistics
   const pokemonStat = [
     { name: 'ID', value: 'id' },
     { name: 'HP', value: 'hp' },
@@ -232,6 +243,7 @@ function Pokedex() {
     { name: 'WGT', value: 'weight' }
   ];
 
+  // sort filtered Pokémon based on sortOrder
   const sortPokemonList = () => {
     const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     setSortOrder(newSortOrder); // Update sortOrder state
@@ -249,10 +261,17 @@ function Pokedex() {
     localStorage.setItem('sortOrder', newSortOrder);
   };
 
+  // Get the value of search text
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
   };
 
+  // Clear the text
+  const clearSearchText = () => {
+    setSearchText('');
+  };
+
+  // Get and update Pokémon type 1
   const handleType1Change = (event) => {
     setSelectedType1(event.target.value);
 
@@ -260,6 +279,7 @@ function Pokedex() {
     localStorage.setItem('selectedType1', event.target.value);
   };
 
+  // Get and update Pokémon type 2
   const handleType2Change = (event) => {
     setSelectedType2(event.target.value);
 
@@ -267,6 +287,7 @@ function Pokedex() {
     localStorage.setItem('selectedType2', event.target.value);
   };
 
+  // Get and update Pokémon generation
   const handleGenChange = (event) => {
     setSelectedGen(event.target.value);
 
@@ -274,6 +295,7 @@ function Pokedex() {
     localStorage.setItem('selectedGen', event.target.value);
   };
 
+  // Get and update Pokémon statistics
   const handleStatChange = (event) => {
     setSelectedStat(event.target.value)
 
@@ -281,10 +303,7 @@ function Pokedex() {
     localStorage.setItem('selectedStat', event.target.value);
   }
 
-  const clearSearchText = () => {
-    setSearchText('');
-  };
-
+  // Pokémon filtered
   const filteredPokemonList = pokemonList.filter((pokemon) => {
     // Filter based on search text
     if (searchText !== '' && !pokemon.name.toLowerCase().includes(searchText.toLowerCase())) {
@@ -309,42 +328,76 @@ function Pokedex() {
     return true;
   });
 
+  const style = {
+    pageContainer: {
+      padding: '16px'
+    },
+    filteringContainer: {
+      marginBottom: '16px'
+    },
+    sprites: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      m: 0.7, borderRadius: '5px'
+    },
+    pokemonName: {
+      lineHeight: 1.2,
+      maxHeight: '2.4em',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis' 
+    },
+    pokemonType: {
+      marginTop: '8px'
+    }
+  }
+
   return (
     <Fragment>
-      <Box sx={{ padding: '16px' }}>
-        <Grid container sx={{ marginBottom: '16px' }} spacing={1}>
+      <Box sx={style.pageContainer}>
+        <Grid container sx={style.filteringContainer} spacing={1}>
           <Grid item>
+            {/* Sort toggle by ascending/descending */}
             <Sort onClick={sortPokemonList} sortOrder={sortOrder}/>
           </Grid>
           <Grid item>
+            {/* Search Pokémon */}
             <SearchBar value={searchText} onChange={handleSearchTextChange} searchText={searchText} onClick={clearSearchText}/>
           </Grid>
           <Grid item>
+            {/* Select Pokémon type 1 */}
             <SelectItem.SelectType value={selectedType1} onChange={handleType1Change} map={pokemonType}/>
           </Grid>
           <Grid item>
+            {/* Select Pokémon type 2 */}
             <SelectItem.SelectType value={selectedType2} onChange={handleType2Change} map={pokemonType}/>
           </Grid>
           <Grid item>
+            {/* Select Pokémon generation */}
             <SelectItem.SelectGenaration value={selectedGen} onChange={handleGenChange} map={pokemonGen}/>
           </Grid>
           <Grid item>
+            {/* Select Pokémon statistics */}
             <SelectItem.SelectStat value={selectedStat} onChange={handleStatChange} map={pokemonStat}/>
           </Grid>
         </Grid>
         {isLoading ? (
+          // display when fetching data
           <Loading />
         ) : (
           filteredPokemonList.length === 0 ? (
+            // display when there is no data based on the filter
               <NoItem text={`Pokémon`} />
           ) : (
+            // Grid container for displaying Pokémon move
             <Grid container spacing={2}>
               {filteredPokemonList.map((pokemon, index) => {
+                // Pokémon card container and card color
                 const { cardBackground, imageBackground } = getColor(pokemon.color);
                 
                 return (
                   <Grid item key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
-                    <Scale key={pokemon.id}>
+                    <Scale key={pokemon.id}>{/* Scale in/out animation for card */}
                       <Card key={pokemon.id} sx={{ backgroundColor: cardBackground }}>
                         <PokeModal
                           pokeImage={<Pokemon.Sprites sprites={pokemon.sprites.front_default} name={pokemon.name} />}
@@ -383,7 +436,7 @@ function Pokedex() {
                           pokemonLegendary={pokemon.is_legendary}
                           pokemonMythical={pokemon.is_mythical}
                         >
-                          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: imageBackground, m: 0.7, borderRadius: '5px' }}>
+                          <Box sx={[style.sprites, { backgroundColor: imageBackground }]}>
                             <Pokemon.Sprites sprites={pokemon.sprites.front_default} name={pokemon.name}/>
                           </Box>
                           <CardContent>
@@ -410,13 +463,13 @@ function Pokedex() {
                               </Box>
                             </Stack>
                             <Typography
-                              sx={{ lineHeight: 1.2, maxHeight: '2.4em', overflow: 'hidden', textOverflow: 'ellipsis', color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }}
+                              sx={[style.pokemonName, { color: pokemon.color === 'black' ? grey[50] : pokemon.color === 'white' ? grey[900] : 'none' }]}
                               variant='h6'
                               component='div'
                             >
                               <Pokemon.Name name={pokemon.name} />
                             </Typography>
-                            <Stack sx={{ marginTop: '8px' }} direction='row' spacing={1}>
+                            <Stack sx={style.pokemonType} direction='row' spacing={1}>
                               <Pokemon.Type map={pokemon.types} />
                             </Stack>
                           </CardContent>

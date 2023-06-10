@@ -7,22 +7,28 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import HeightIcon from '@mui/icons-material/Height';
 
 function PokeModal(props) {
+    // Accessing from the useStore hook
     const { mode, themeColor, hpColor, atkColor, defColor, sAtkColor, sDefColor, speedColor, totalColor } = useStore();
+    // State variables
     const [openModal, setOpenModal] = React.useState(false);
     const [value, setValue] = React.useState('summary');
 
+    // Open the modal
     const handleOpenModal = () => {
         setOpenModal(true);
     };
 
+    // Close the modal
     const handleCloseModal = () => {
         setOpenModal(false);
     };
 
+    // Change tab
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    // Inline styles for components
     const style = {
         pokemonID: {
             textAlign: 'center'
@@ -85,6 +91,7 @@ function PokeModal(props) {
         }
     }
 
+    // Render different content based on the selected tab
     const renderTabContent = () => {
         switch (value) {
             case 'summary':
@@ -201,16 +208,17 @@ function PokeModal(props) {
         }
     };
 
+    // Determine the color based on themeColor and mode
     const color = themeColor === 'cherry' ? (mode === 'dark' ? red[400] : red[800]) :
         themeColor === 'rose' ? (mode === 'dark' ? pink[200] : pink[600]) :
-            themeColor === 'lavender' ? (mode === 'dark' ? purple[300] : purple[700]) :
-                themeColor === 'teal' ? (mode === 'dark' ? teal[200] : teal[700]) :
-                    themeColor === 'emerald' ? (mode === 'dark' ? green[400] : green[800]) :
-                        themeColor === 'amber' ? (mode === 'dark' ? yellow[400] : yellow[800]) :
-                            themeColor === 'apricot' ? (mode === 'dark' ? orange[300] : orange[800]) :
-                                (mode === 'dark' ? blue[300] : blue[800])
-        ;
+        themeColor === 'lavender' ? (mode === 'dark' ? purple[300] : purple[700]) :
+        themeColor === 'teal' ? (mode === 'dark' ? teal[200] : teal[700]) :
+        themeColor === 'emerald' ? (mode === 'dark' ? green[400] : green[800]) :
+        themeColor === 'amber' ? (mode === 'dark' ? yellow[400] : yellow[800]) :
+        themeColor === 'apricot' ? (mode === 'dark' ? orange[300] : orange[800]) :
+        (mode === 'dark' ? blue[300] : blue[800]);
 
+    // Array containing move statistics
     const stats = [
         { name: 'HP', current: props.pokemonHp, total: 255, color: hpColor },
         { name: 'ATK', current: props.pokemonAtk, total: 181, color: atkColor },
@@ -221,6 +229,7 @@ function PokeModal(props) {
         { name: 'TOTAL', current: props.pokemonTotal, total: 720, color: totalColor },
     ]
 
+    // Array containing move information
     const info = [
         { name: 'Color', value: props.pokemonColor },
         { name: 'Shape', value: props.pokemonShape },
@@ -232,9 +241,11 @@ function PokeModal(props) {
 
     return (
         <Fragment>
+            {/* CardActionArea triggers the modal */}
             <CardActionArea onClick={handleOpenModal}>
                 {props.children}
             </CardActionArea>
+            {/* Dialog component for the modal */}
             <Dialog
                 maxWidth='sm'
                 open={openModal}
@@ -243,30 +254,28 @@ function PokeModal(props) {
                 aria-describedby='alert-dialog-description'
                 fullWidth
             >
+                {/* Dialog's content of Pokémon */}
                 <DialogContent sx={style.dialogContent}>
                     <Box sx={style.tabContainer}>
-                        <Tabs sx={{
-                            '& .MuiTabs-indicator': {
-                                backgroundColor: color,
-                            },
-                            '& .Mui-selected': {
-                                color: color,
-                            }
-                        }}
+                        {/* Tab selection */}
+                        <Tabs 
+                            sx={{'& .MuiTabs-indicator': {backgroundColor: color}, '& .Mui-selected': {color: color}}}
                             value={value}
                             onChange={handleChange}
-                            aria-label='secondary tabs example'
+                            aria-label='pokémon tabs'
                             variant='scrollable'
                             scrollButtons='auto'
                         >
                             <Tab value='summary' label='Stats' />
                             <Tab value='info' label='Info' />
                         </Tabs>
+                        {/* Render different content based on the selected tab */}
                         <Box sx={style.tabRenderContent}>
                             {renderTabContent()}
                         </Box>
                     </Box>
                 </DialogContent>
+                {/* Dialog actions */}
                 <DialogActions>
                     <Button onClick={handleCloseModal} color={themeColor} autoFocus>
                         Close

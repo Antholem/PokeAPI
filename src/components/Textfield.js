@@ -5,8 +5,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 
 function SearchBar(props) {
-    const { themeColor } = useStore();
+    const { themeColor } = useStore();  // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         textField: {
             maxWidth: '220px'
@@ -33,7 +34,7 @@ function SearchBar(props) {
                 ),
                 endAdornment: (
                     <InputAdornment position='end'>
-                        {props.searchText && (<CloseIcon sx={style.closeIcon} onClick={props.onClick} /> )}
+                        {props.searchText && (<CloseIcon sx={style.closeIcon} onClick={props.onClick} />)}
                     </InputAdornment>
                 ),
             }}

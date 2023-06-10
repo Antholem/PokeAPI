@@ -3,7 +3,6 @@ import useStore from '../Store';
 import { Avatar, Box, CardMedia, Chip, Stack } from '@mui/material';
 import { CatchingPokemon } from '@mui/icons-material';
 import { grey, blue, brown, pink, purple, blueGrey, lightBlue, lightGreen, indigo, deepOrange, deepPurple, cyan, amber, lime, red } from '@mui/material/colors';
-
 import SquareRoundedIcon from '@mui/icons-material/SquareRounded';
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
 import DarkIcon from '../images/Pokemon_Type_Icon_Dark.svg';
@@ -27,6 +26,7 @@ import StatusIcon from '../images/Pokemon_Status.png'
 import PhysicalIcon from '../images/Pokemon_Physical.png'
 import SpecialIcon from '../images/Pokemon_Special.png'
 
+// Capitalize every first letter
 function capitalizeFirstLetter(str) {
     return str
         .split(' ')
@@ -34,6 +34,7 @@ function capitalizeFirstLetter(str) {
         .join(' ');
 }
 
+// Ellipsis for long text
 const truncatePokemonName = (name, maxLength) => {
     if (name.length <= maxLength) {
         return name;
@@ -41,10 +42,13 @@ const truncatePokemonName = (name, maxLength) => {
     return `${name.slice(0, maxLength)}...`;
 };
 
+// Replacing the '-' into white space
 const formattedPokemonName = (name) => {
     return name.replace(/-/g, ' ');
 };
 
+
+// Formatted Pokémon name
 function Name(props) {
     return (
         <Fragment>
@@ -53,6 +57,7 @@ function Name(props) {
     );
 }
 
+// Formatted Pokémon moves
 function MoveName(props) {
     return (
         <Fragment>
@@ -61,6 +66,7 @@ function MoveName(props) {
     );
 }
 
+// Formatted move's statistics name
 function StatName(props) {
     return (
         <Fragment>
@@ -69,6 +75,7 @@ function StatName(props) {
     );
 }
 
+// Formatted ID
 function ID(props) {
     return (
         <Fragment>
@@ -77,13 +84,16 @@ function ID(props) {
     );
 }
 
+// Conditional rendering for pokéball sprites
 function Pokeball(props) {
+    // Sprites
     const primary = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
     const secondary = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/timer-ball.png';
     const tertiary = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png';
     const mythical = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png';
     const legendary = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
 
+    // Inline styles for components
     const style = {
         img: {
             width: 25,
@@ -98,20 +108,22 @@ function Pokeball(props) {
                 component='img'
                 image={
                     props.legendary ? legendary :
-                        props.mythical ? mythical :
-                            props.total <= 365 ? primary :
-                                props.total >= 366 && props.total <= 469 ? secondary :
-                                    props.total >= 479 ? tertiary :
-                                        primary
+                    props.mythical ? mythical :
+                    props.total <= 365 ? primary :
+                    props.total >= 366 && props.total <= 469 ? secondary :
+                    props.total >= 479 ? tertiary :
+                    primary
                 }
             />
         </Fragment>
     );
 }
 
+// Pokémon sprites
 function Sprites(props) {
-    const { mode } = useStore();
+    const { mode } = useStore(); // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         img: {
             maxWidth: 145
@@ -134,7 +146,9 @@ function Sprites(props) {
     );
 }
 
+// Item sprites
 function ItemSprites(props) {
+    // Inline styles for components
     const style = {
         cardMedia: {
             maxWidth: props.maxWidth,
@@ -149,16 +163,18 @@ function ItemSprites(props) {
     return (
         <CardMedia
             sx={style.cardMedia}
-            component="img"
+            component='img'
             alt={props.alt}
             src={props.src}
         />
     );
 }
 
+// Pokémon Type icon and theme color
 function Type(props) {
-    const { mode } = useStore();
+    const { mode } = useStore(); // Accessing from the useStore hook
 
+    // Pokémon types icon
     const getTypeIcon = (type) => {
         const typeIcons = {
             bug: BugIcon,
@@ -184,6 +200,7 @@ function Type(props) {
         return typeIcons[type];
     };
 
+    // Pokémon types icon theme color
     const getTypeIconColor = (type) => {
         const typeIconColors = {
             bug: lime[900],
@@ -209,6 +226,7 @@ function Type(props) {
         return typeIconColors[type];
     };
 
+    // Inline styles for components
     const style = {
         chipContainer: {
             marginTop: '8px'
@@ -239,9 +257,11 @@ function Type(props) {
     );
 }
 
+// Pokémon Type icon and theme color in Pokémon moves
 function TypeMove(props) {
-    const { mode } = useStore();
+    const { mode } = useStore(); // Accessing from the useStore hook
 
+    // Pokémon types icon
     const getTypeIcon = (type) => {
         const typeIcons = {
             bug: BugIcon,
@@ -267,6 +287,7 @@ function TypeMove(props) {
         return typeIcons[type];
     };
 
+    // Pokémon types icon theme color
     const getTypeIconColor = (type) => {
         const typeIconColors = {
             bug: lime[900],
@@ -292,6 +313,7 @@ function TypeMove(props) {
         return typeIconColors[type];
     };
 
+    // Inline styles for components
     const style = {
         chipContainer: {
             marginTop: '8px'
@@ -317,9 +339,9 @@ function TypeMove(props) {
     );
 }
 
+// Pokémon damage class icon and theme color in Pokémon moves
 function DamageClass(props) {
-    const { mode } = useStore();
-
+    // Pokémon damage class icon
     const getClassIcon = (type) => {
         const classIcons = {
             physical: PhysicalIcon,
@@ -330,6 +352,7 @@ function DamageClass(props) {
         return classIcons[type];
     };
 
+    // Pokémon damage class icon theme color
     const getClassIconColor = (type) => {
         const classIconColors = {
             physical: red[900],
@@ -340,6 +363,7 @@ function DamageClass(props) {
         return classIconColors[type];
     };
 
+    // Inline styles for components
     const style = {
         chip: {
             color: grey[50]
@@ -357,35 +381,30 @@ function DamageClass(props) {
     );
 }
 
+// Conditional rendering for Pokémon stats
 function SelectedStat(props) {
     return (
         <Fragment>
-            {props.selectedStat === 'id'
-                ? <ID id={props.id} />
-                : props.selectedStat === 'hp'
-                    ? `${props.hp} HP`
-                    : props.selectedStat === 'atk'
-                        ? `${props.atk}`
-                        : props.selectedStat === 'def'
-                            ? `${props.def}`
-                            : props.selectedStat === 'specialAttack'
-                                ? `${props.satk}`
-                                : props.selectedStat === 'specialDefense'
-                                    ? `${props.sdef}`
-                                    : props.selectedStat === 'speed'
-                                        ? `${props.spd}`
-                                        : props.selectedStat === 'total'
-                                            ? `${props.total}`
-                                            : props.selectedStat === 'height'
-                                                ? `${props.ht / 10} m`
-                                                : props.selectedStat === 'weight'
-                                                    ? `${props.wt / 10} kg`
-                                                    : <ID id={props.id} />}
+            {
+                props.selectedStat === 'id' ? <ID id={props.id} /> :
+                props.selectedStat === 'hp' ? `${props.hp} HP` :
+                props.selectedStat === 'atk' ? `${props.atk}` :
+                props.selectedStat === 'def' ? `${props.def}` :
+                props.selectedStat === 'specialAttack' ? `${props.satk}` :
+                props.selectedStat === 'specialDefense' ? `${props.sdef}` :
+                props.selectedStat === 'speed' ? `${props.spd}` :
+                props.selectedStat === 'total' ? `${props.total}` :
+                props.selectedStat === 'height' ? `${props.ht / 10} m` :
+                props.selectedStat === 'weight' ? `${props.wt / 10} kg` :
+                <ID id={props.id} />
+            }
         </Fragment>
     );
 }
 
+// Pokémon color icon
 function ColorSquare(props) {
+    // Inline styles for components
     const style = {
         icon: {
             color: props.color,
@@ -407,6 +426,7 @@ function ColorSquare(props) {
     );
 }
 
+// Pokémon ability effect
 function AbilityDesc(props) {
     return (
         <Fragment>

@@ -5,14 +5,20 @@ import { Box, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 function NoItem(props) {
-    const { mode } = useStore();
+    const { mode } = useStore(); // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         noItemContainer: {
-            display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh', textAlign: 'center'
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50vh',
+            textAlign: 'center'
         },
         noItemIcon: {
-            fontSize: '4em', color: mode === 'dark' ? grey[200] : grey[600]
+            fontSize: '4em',
+            color: mode === 'dark' ? grey[200] : grey[600]
         }
     }
 

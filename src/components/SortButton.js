@@ -6,10 +6,11 @@ import { grey } from '@mui/material/colors';
 import { ToggleButton } from '@mui/material';
 
 function Sort(props) {
-    const { mode, themeColor } = useStore();
+    const { mode, themeColor } = useStore(); // Accessing from the useStore hook
 
-    const theme = useTheme();
+    const theme = useTheme(); // Accessing theme from the mui
 
+    // Inline styles for components
     const style = {
         toggleButton: {
             height: '100%',

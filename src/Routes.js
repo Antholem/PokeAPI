@@ -6,6 +6,7 @@ import Items from './pages/Item';
 import Moves from './pages/Moves';
 import Settings from './pages/Settings';
 
+// Define an array of routes with their respective paths and elements
 const router = [
     { path: '/', element: <Pokedex /> },
     { path: '/abilities', element: <Abilities /> },
@@ -15,9 +16,10 @@ const router = [
 ]
 
 const MenuRoutes = () => {
-    return(
+    return (
         <Routes>
             <Route element={<SideBar />}>
+                {/* Iterate over the router array and create a Route for each item */}
                 {router.map((item) => (
                     <Route path={item.path} element={item.element} />
                 ))}

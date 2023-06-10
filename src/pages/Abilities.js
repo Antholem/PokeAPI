@@ -1,10 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
+import useStore from '../Store';
 import { Card, CardContent, Typography, Box, Grid, CardMedia, Stack } from '@mui/material';
 import { grey, green, yellow, blue, brown, pink, purple, red, blueGrey } from '@mui/material/colors';
 import { CatchingPokemon } from '@mui/icons-material';
-
-import useStore from '../Store';
 import Scale from '../animations/Scale';
 import Loading from '../components/Loading';
 import Pokemon from '../components/Other';
@@ -14,7 +13,8 @@ import Sort from '../components/SortButton';
 import AbilityModal from '../components/AbilitiesModal';
 
 function Ability() {
-    const { mode } = useStore();
+    const { mode, renderAbility } = useStore(); // Accessing from the useStore hook
+    // State variables
     const [abilityList, setAbilityList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
@@ -24,7 +24,7 @@ function Ability() {
         // Fetch ability data when component mounts
         const fetchAbilityData = async () => {
             try {
-                const response = await axios.get('https://pokeapi.co/api/v2/ability?limit=100');
+                const response = await axios.get(`https://pokeapi.co/api/v2/ability?limit=${renderAbility}`);
                 const data = response.data.results;
 
                 const formattedAbilityList = await Promise.all(
@@ -75,15 +75,17 @@ function Ability() {
         fetchAbilityData();
     }, []);
 
-
+    // Clear the value of searchText
     const clearSearchText = () => {
         setSearchText('');
     };
 
+    // Get the value of searchText
     const handleSearchTextChange = (event) => {
         setSearchText(event.target.value);
     };
 
+    // Sort the Pokémon ability by ascending/descending
     const sortAbilityList = () => {
         const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
         setSortOrder(newSortOrder);
@@ -100,10 +102,12 @@ function Ability() {
         setAbilityList(sortedAbilityList);
     };
 
+    // Filtering the Pokémon ability
     const filteredAbilityList = abilityList.filter((ability) =>
         ability.name.toLowerCase().includes(searchText.toLowerCase())
     );
 
+    // Pokémon color
     const getColor = (color) => {
         const pokemonColorImage = {
             black: mode === 'dark' ? grey[900] : grey[800],
@@ -123,7 +127,14 @@ function Ability() {
         };
     };
 
+    // Inline styles for components
     const style = {
+        pageContainer: {
+            padding: '16px'
+        },
+        filteringContainer: {
+            marginBottom: '16px'
+        },
         abilityName: {
             textAlign: 'center'
         },
@@ -152,25 +163,30 @@ function Ability() {
 
     return (
         <Fragment>
-            <Box sx={{ padding: '16px' }}>
-                <Grid container sx={{ marginBottom: '16px' }} spacing={1}>
+            <Box sx={style.pageContainer}>
+                <Grid container sx={style.filteringContainer} spacing={1}>
                     <Grid item>
+                        {/* Sort toggle by ascending/descending */}
                         <Sort onClick={sortAbilityList} sortOrder={sortOrder} />
                     </Grid>
                     <Grid item>
+                        {/* Search ability */}
                         <SearchBar value={searchText} onChange={handleSearchTextChange} searchText={searchText} onClick={clearSearchText} />
                     </Grid>
                 </Grid>
                 {isLoading ? (
+                    // display when fetching data
                     <Loading />
                 ) : (
                     filteredAbilityList.length === 0 ? (
+                        // display when there is no data based on the filter
                         <NoItem text={`Ability`} />
                     ) : (
+                        // Grid container for displaying Pokémon abilities
                         <Grid container direction='row' spacing={1}>
                             {filteredAbilityList.map((ability, index) => (
                                 <Grid item key={index} xs={12} sm={12} md={6} lg={4} xl={4}>
-                                    <Scale key={ability.id}>
+                                    <Scale key={ability.id}>  {/* Scale in/out animation for card */}
                                         <Card key={ability.id}>
                                             <AbilityModal
                                                 abilityName={<Pokemon.Name name={ability.name} />}
@@ -181,12 +197,12 @@ function Ability() {
                                                 <CardContent>
                                                     <Stack direction='column' justifyContent='center' alignItems='center' spacing={1}>
                                                         <Box>
-                                                            <Typography sx={style.abilityName} variant="h6" component="div">
+                                                            <Typography sx={style.abilityName} variant='h6' component='div'>
                                                                 <Pokemon.Name name={ability.name} />
                                                             </Typography>
                                                         </Box>
                                                         <Box>
-                                                            <Typography sx={style.abilityEffect} variant="body2" color="text.secondary">
+                                                            <Typography sx={style.abilityEffect} variant='body2' color='text.secondary'>
                                                                 {ability.effect}
                                                             </Typography>
                                                         </Box>
@@ -197,7 +213,7 @@ function Ability() {
                                                                 {pokemonIndex < 3 && (
                                                                     <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                                                                         {pokemon.url ? (
-                                                                            <CardMedia sx={style.pokemonImg} component="img" alt={pokemon.name} src={pokemon.url} />
+                                                                            <CardMedia sx={style.pokemonImg} component='img' alt={pokemon.name} src={pokemon.url} />
                                                                         ) : (
                                                                             <CatchingPokemon sx={style.imgPlaceholder} />
                                                                         )}

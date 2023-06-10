@@ -5,23 +5,27 @@ import Pokemon from '../components/Other';
 import useStore from '../Store';
 
 function ItemModal(props) {
-    const [openModal, setOpenModal] = React.useState(false);
-    const { themeColor } = useStore();
+    const { themeColor } = useStore(); // Accessing from the useStore hook
+    const [openModal, setOpenModal] = React.useState(false); // State variables
 
+    // Open the modal
     const handleOpenModal = () => {
         setOpenModal(true);
     };
 
+    // Close the modal
     const handleCloseModal = () => {
         setOpenModal(false);
     };
 
+    // Array containing item information
     const info = [
         { name: 'Effect', value: props.itemEffect },
         { name: 'Category', value: props.itemCategory },
         { name: 'Attribute', value: props.itemAttribrute },
-    ]
+    ]; 
 
+    // Inline styles for components
     const style = {
         dialogTitle: {
             textAlign: 'center'
@@ -34,13 +38,15 @@ function ItemModal(props) {
         valueContainer: {
             mb: { xs: 1, sm: 1, md: 0, lg: 0, xl: 0 }
         }
-    }
+    };
 
     return (
         <Fragment>
+            {/* CardActionArea triggers the modal */}
             <CardActionArea onClick={handleOpenModal}>
                 {props.children}
             </CardActionArea>
+            {/* Dialog component for the modal */}
             <Dialog
                 maxWidth='md'
                 open={openModal}
@@ -65,11 +71,13 @@ function ItemModal(props) {
                         </Box>
                     </Stack>
                 </DialogTitle>
+                {/* Modal content */}
                 <DialogContent>
-                    <Grid container direction="row" alignItems='center' justifyContent='center' spacing={1}>
+                    {/* Grid container for displaying Pokémon items */}
+                    <Grid container direction='row' alignItems='center' justifyContent='center' spacing={1}>
                         <Grid item xs={12} sm={12} md={12} lg={12} xl={12} container justifyContent='center' alignItems='flex-start' spacing={1}>
                             {info.map((info) => (
-                                <Fragment>
+                                <Fragment key={info.name}>
                                     <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
                                         <Card>
                                             <Typography sx={style.cardInfo} variant='body2'>
@@ -89,6 +97,7 @@ function ItemModal(props) {
                         </Grid>
                     </Grid>
                 </DialogContent>
+                {/* Dialog actions */}
                 <DialogActions>
                     <Button onClick={handleCloseModal} color={themeColor} autoFocus>
                         Close

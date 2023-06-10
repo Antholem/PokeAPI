@@ -1,11 +1,11 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React from 'react';
 import useStore from '../Store';
-import axios from 'axios';
 import { Box, CircularProgress } from '@mui/material';
 
 function Loading() {
-    const { themeColor } = useStore();
+    const { themeColor } = useStore(); // Accessing from the useStore hook
 
+    // Inline styles for components
     const style = {
         loadingContainer: {
             display: 'flex',

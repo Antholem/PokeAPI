@@ -11,17 +11,22 @@ import Sort from '../components/SortButton';
 import SelectItem from '../components/SelectItem';
 import MoveModal from '../components/MoveModal';
 
-import { Box, Card, CardActionArea, CardContent, CardMedia, Chip, Grid, Stack, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Grid, MenuItem, Select, Stack, Typography } from '@mui/material';
 
 function Moves() {
     const { mode } = useStore();
     const [moveList, setMoveList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchText, setSearchText] = useState('');
+    const [selectedType, setSelectedType] = useState(localStorage.getItem('selectedType') || 'Any');
+    const [selectedClass, setSelectedClass] = useState(localStorage.getItem('selectedClass') || 'Any');
+    const [selectedStat, setSelectedStat] = useState(localStorage.getItem('selectedStat') || 'id');
+    const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
 
     useEffect(() => {
         const fetchMoveData = async () => {
             try {
-                const response = await axios.get('https://pokeapi.co/api/v2/move?limit=100');
+                const response = await axios.get('https://pokeapi.co/api/v2/move?limit=10');
                 const data = response.data.results;
 
                 const formattedMoveList = await Promise.all(
@@ -54,23 +59,132 @@ function Moves() {
         fetchMoveData();
     }, []);
 
+    useEffect(() => {
+        sortMoveList();
+    }, [selectedStat]); // Trigger the effect whenever selectedStat changes
+
+    const handleClassChange = (event) => {
+        setSelectedClass(event.target.value);
+        localStorage.setItem('selectedClass', event.target.value);
+    };
+
+    const damageClass = [
+        { name: 'Physical', value: 'physical' },
+        { name: 'Status', value: 'status' },
+        { name: 'Special', value: 'special' },
+    ];
+
+    const stat = [
+        { name: 'ID', value: 'id' },
+        { name: 'NAME', value: 'name' },
+        { name: 'POW', value: 'power' },
+        { name: 'PP', value: 'pp' },
+        { name: 'ACC', value: 'accuracy' },
+    ];
+
+    const pokemonType = [
+        { name: 'Bug', value: 'bug' },
+        { name: 'Dark', value: 'dark' },
+        { name: 'Dragon', value: 'dragon' },
+        { name: 'Electric', value: 'electric' },
+        { name: 'Fairy', value: 'fairy' },
+        { name: 'Fighting', value: 'fighting' },
+        { name: 'Fire', value: 'fire' },
+        { name: 'Flying', value: 'flying' },
+        { name: 'Ghost', value: 'ghost' },
+        { name: 'Grass', value: 'grass' },
+        { name: 'Ground', value: 'ground' },
+        { name: 'Ice', value: 'ice' },
+        { name: 'Normal', value: 'normal' },
+        { name: 'Poison', value: 'poison' },
+        { name: 'Psychic', value: 'psychic' },
+        { name: 'Rock', value: 'rock' },
+        { name: 'Steel', value: 'steel' },
+        { name: 'Water', value: 'water' },
+    ];
+
+    const handleTypeChange = (event) => {
+        setSelectedType(event.target.value);
+        localStorage.setItem('selectedType', event.target.value);
+    };
+
+    const filteredMovesByClass =
+        selectedClass === 'Any' ? moveList : moveList.filter((move) => move.damageClass === selectedClass);
+
+    const filteredMovesByType =
+        selectedType === 'Any' ? filteredMovesByClass : filteredMovesByClass.filter((move) => move.type === selectedType);
+
+    const handleSearchTextChange = (event) => {
+        setSearchText(event.target.value);
+    };
+
+    const clearSearchText = () => {
+        setSearchText('');
+    };
+
+    const filteredMovesByName = filteredMovesByType.filter((move) =>
+        move.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const sortMoveList = () => {
+        const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+
+        const sortedList = [...filteredMovesByName].sort((a, b) => {
+            if (selectedStat === "name") {
+                if (newSortOrder === "asc") {
+                    return a[selectedStat].localeCompare(b[selectedStat]);
+                } else {
+                    return b[selectedStat].localeCompare(a[selectedStat]);
+                }
+            } else {
+                if (newSortOrder === "asc") {
+                    return a[selectedStat] - b[selectedStat];
+                } else {
+                    return b[selectedStat] - a[selectedStat];
+                }
+            }
+        });
+
+        setMoveList(sortedList);
+        setSortOrder(newSortOrder);
+        localStorage.setItem("sortOrder", newSortOrder);
+    };
+
+    const handleStatChange = (event) => {
+        setSelectedStat(event.target.value);
+        localStorage.setItem("selectedStat", event.target.value);
+        sortMoveList(); // Add this line to trigger sorting
+    };
+
     return (
         <Fragment>
             <Box sx={{ padding: '16px' }}>
                 <Grid container sx={{ marginBottom: '16px' }} spacing={1}>
                     <Grid item>
-                        <Sort />
+                        <Sort onClick={sortMoveList} sortOrder={sortOrder} />
                     </Grid>
                     <Grid item>
-                        <SearchBar />
+                        <SearchBar value={searchText} onChange={handleSearchTextChange} searchText={searchText} onClick={clearSearchText} />
+                    </Grid>
+                    <Grid item>
+                        <SelectItem.SelectDamageClass value={selectedClass} onChange={handleClassChange} map={damageClass} />
+                    </Grid>
+                    <Grid item>
+                        <SelectItem.SelectType value={selectedType} onChange={handleTypeChange} map={pokemonType} />
+                    </Grid>
+                    <Grid item>
+                        <SelectItem.SelectStat value={selectedStat} onChange={handleStatChange} map={stat} />
                     </Grid>
                 </Grid>
                 {isLoading ? (
                     <Loading />
+                ) : filteredMovesByName.length === 0 ? (
+                    <NoItem text={`Item`} />
                 ) : (
-                        <Grid container direction="row" spacing={1}>
-                            {moveList.map((move, index) => (
-                                <Grid item key={index} xs={12} sm={12} md={6} lg={4} xl={4}>
+                    <Grid container direction="row" spacing={1}>
+                        {filteredMovesByName.map((move, index) => (
+                            <Grid item key={index} xs={12} sm={12} md={6} lg={4} xl={4}>
+                                <Scale key={move.id}>
                                     <Card>
                                         <CardMedia>
                                             <MoveModal
@@ -79,31 +193,33 @@ function Moves() {
                                                 movePower={move.power ? move.power : 0}
                                                 movePp={move.pp}
                                                 moveAccuracy={move.accuracy ? move.accuracy : 0}
-                                                moveAilment={<Pokemon.MoveName name={move.ailment}/>}
+                                                moveAilment={<Pokemon.MoveName name={move.ailment} />}
                                                 moveTarget={<Pokemon.MoveName name={move.target} />}
                                                 moveCategory={<Pokemon.MoveName name={move.category} />}
                                                 moveEffect={move.effect}
-                                                moveType={<Pokemon.TypeMove name={move.type}/>}
-                                                moveDamageClass={<Pokemon.DamageClass name={move.damageClass}/>}
+                                                moveType={<Pokemon.TypeMove name={move.type} />}
+                                                moveDamageClass={<Pokemon.DamageClass name={move.damageClass} />}
                                             >
                                                 <CardContent>
-                                                    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" spacing={1}>
+                                                    <Box
+                                                        display="flex"
+                                                        flexDirection="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        spacing={1}
+                                                    >
                                                         <Typography variant="h6" component="div">
                                                             <Pokemon.MoveName name={move.name} />
                                                         </Typography>
-                                                        <Stack direction='row' justifyContent="center" alignItems="center" spacing={1}>
+                                                        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
                                                             <Box>
-                                                                <Pokemon.TypeMove
-                                                                    name={move.type}
-                                                                />
+                                                                <Pokemon.TypeMove name={move.type} />
                                                             </Box>
                                                             <Box>
-                                                                <Pokemon.DamageClass
-                                                                    name={move.damageClass}
-                                                                />
+                                                                <Pokemon.DamageClass name={move.damageClass} />
                                                             </Box>
                                                         </Stack>
-                                                        <Stack sx={{ mt: 2 }} direction='row' justifyContent="space-between" alignItems="center" spacing={5}>
+                                                        <Stack sx={{ mt: 2 }} direction="row" justifyContent="space-between" alignItems="center" spacing={5}>
                                                             <Box>
                                                                 <Typography variant="body2" color="text.secondary">
                                                                     ACC: {move.accuracy ? move.accuracy : 0}%
@@ -125,9 +241,10 @@ function Moves() {
                                             </MoveModal>
                                         </CardMedia>
                                     </Card>
-                                </Grid>
-                            ))}
-                        </Grid>
+                                </Scale>
+                            </Grid>
+                        ))}
+                    </Grid>
                 )}
             </Box>
         </Fragment>

@@ -2,7 +2,7 @@ import React from 'react';
 import useStore from '../Store';
 import { CatchingPokemon } from '@mui/icons-material';
 import { Select, MenuItem, Stack, Typography, Box, CardMedia } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { grey, red, blue } from '@mui/material/colors';
 
 import BugIcon from '../images/Pokemon_Type_Icon_Bug.svg';
 import DarkIcon from '../images/Pokemon_Type_Icon_Dark.svg';
@@ -22,6 +22,9 @@ import PsychicIcon from '../images/Pokemon_Type_Icon_Psychic.svg';
 import RockIcon from '../images/Pokemon_Type_Icon_Rock.svg';
 import SteelIcon from '../images/Pokemon_Type_Icon_Steel.svg';
 import WaterIcon from '../images/Pokemon_Type_Icon_Water.svg';
+import StatusIcon from '../images/Pokemon_Status.png'
+import PhysicalIcon from '../images/Pokemon_Physical.png'
+import SpecialIcon from '../images/Pokemon_Special.png'
 
 const getTypeIcon = (type) => {
     const typeIcons = {
@@ -46,6 +49,16 @@ const getTypeIcon = (type) => {
     };
 
     return <img src={typeIcons[type]} alt={type} />;
+};
+
+const getClassIcon = (type) => {
+    const classIcons = {
+        physical: PhysicalIcon,
+        status: StatusIcon,
+        special: SpecialIcon,
+    };
+
+    return <img src={classIcons[type]} style={{width: '17px'}} alt={type} />;
 };
 
 function SelectType(props) {
@@ -172,4 +185,61 @@ function SelectStat(props) {
     );
 }
 
-export default { SelectType, SelectGenaration, SelectStat };
+function SelectDamageClass(props) {
+    const { mode, themeColor } = useStore();
+
+    const getClassIconColor = (type) => {
+        const classIconColors = {
+            physical: red[900],
+            status: blue[900],
+            special: grey[600],
+        };
+
+        return classIconColors[type];
+    };
+
+    const style = {
+        selectContainer: {
+            minWidth: '130px'
+        },
+        typeIcon: {
+            width: '20px',
+            height: '20px',
+            color: mode === 'dark' ? grey[200] : grey[600],
+            borderRadius: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        pokeballText: {
+            fontSize: '14px'
+        }
+    }
+
+    return (
+        <Select sx={style.selectContainer} color={themeColor} id='outlined-select-type' value={props.value} onChange={props.onChange} label='Pokemon Type Filter' variant='outlined'>
+            <MenuItem value='Any'>
+                <Stack direction='row' spacing={1} alignItems='center'>
+                    <CatchingPokemon sx={style.typeIcon} />
+                    <Typography sx={style.pokeballText} variant='body2'>
+                        Any
+                    </Typography>
+                </Stack>
+            </MenuItem>
+            {props.map.map((type) => (
+                <MenuItem value={type.value} key={type.value}>
+                    <Stack direction='row' spacing={1} alignItems='center'>
+                        <Box sx={[style.typeIcon, { backgroundColor: getClassIconColor(type.value) }]}>
+                            {getClassIcon(type.value)}
+                        </Box>
+                        <Typography sx={style.pokeballText} variant='body2'>
+                            {type.name}
+                        </Typography>
+                    </Stack>
+                </MenuItem>
+            ))}
+        </Select>
+    );
+}
+
+export default { SelectType, SelectGenaration, SelectStat, SelectDamageClass };

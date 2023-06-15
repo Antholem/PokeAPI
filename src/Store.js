@@ -34,7 +34,7 @@ const useStore = create((set) => ({
   },
 
   // State for render pokemon
-  renderPokemon: localStorage.getItem('renderPokemon') || 493,
+  renderPokemon: localStorage.getItem('renderPokemon') || 386,
   // Function to set the render pokemon
   setRenderPokemon: (renderPokemon) => {
     set(() => {

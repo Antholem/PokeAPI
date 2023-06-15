@@ -109,7 +109,7 @@ function SelectType(props) {
 
 // Menu item for Pokémon generation
 function SelectGenaration(props) {
-    const { mode, themeColor } = useStore(); // Accessing from the useStore hook
+    const { mode, themeColor, renderPokemon } = useStore(); // Accessing from the useStore hook
 
     // Inline styles for components
     const style = {
@@ -133,19 +133,40 @@ function SelectGenaration(props) {
         },
     }
 
+    // Conditional rendering in renderingPokemon for array
+    let render;
+
+    if (renderPokemon === 151) {
+        render = 2;
+    } else if (renderPokemon === 251) {
+        render = 3;
+    } else if (renderPokemon === 386) {
+        render = 4;
+    } else if (renderPokemon === 493) {
+        render = 5;
+    } else if (renderPokemon === 649) {
+        render = 6;
+    } else if (renderPokemon === 721) {
+        render = 7;
+    } else if (renderPokemon === 809) {
+        render = 8;
+    } else if (renderPokemon === 1008) {
+        render = 9;
+    } else {
+        render = 10;
+    }
+
     return(
         <Select sx={style.selectContainer} color={themeColor} id='outlined-select-gen' value={props.value} onChange={props.onChange} label='Generation' variant='outlined'>
-            {props.map.map((gen, index) => (
+            {props.map.slice(0, render).map((gen, index) => (
                 <MenuItem value={gen.value} key={gen.value}>
-                    <Stack direction='row' spacing={1} alignItems='center'>
-                        {
-                            index === 0 ? (
-                                <CatchingPokemon sx={style.placeholderIcon} />
-                            ) : (
-                                <CardMedia sx={style.typeIcon} component='img' image={gen.icon}/>
-                            )
-                        }
-                        <Typography variant='body2' sx={style.generationText}>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        {index === 0 ? (
+                            <CatchingPokemon sx={style.placeholderIcon} />
+                        ) : (
+                            <CardMedia sx={style.typeIcon} component="img" image={gen.icon} />
+                        )}
+                        <Typography variant="body2" sx={style.generationText}>
                             {gen.name}
                         </Typography>
                     </Stack>

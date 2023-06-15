@@ -18,7 +18,7 @@ function Ability() {
     const [abilityList, setAbilityList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
-    const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
+    const [sortOrderAbility, setsortOrderAbility] = useState(localStorage.getItem('sortOrderAbility') || 'asc');
 
     useEffect(() => {
         // Fetch ability data when component mounts
@@ -58,7 +58,7 @@ function Ability() {
                 );
 
                 const sortedAbilityList = formattedAbilityList.sort((a, b) => {
-                    if (sortOrder === 'asc') {
+                    if (sortOrderAbility === 'asc') {
                         return a.name.localeCompare(b.name);
                     } else {
                         return b.name.localeCompare(a.name);
@@ -87,12 +87,12 @@ function Ability() {
 
     // Sort the Pokémon ability by ascending/descending
     const sortAbilityList = () => {
-        const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-        setSortOrder(newSortOrder);
-        localStorage.setItem('sortOrder', newSortOrder);
+        const newsortOrderAbility = sortOrderAbility === 'asc' ? 'desc' : 'asc';
+        setsortOrderAbility(newsortOrderAbility);
+        localStorage.setItem('sortOrderAbility', newsortOrderAbility);
 
         const sortedAbilityList = [...abilityList].sort((a, b) => {
-            if (newSortOrder === 'asc') {
+            if (newsortOrderAbility === 'asc') {
                 return a.name.localeCompare(b.name);
             } else {
                 return b.name.localeCompare(a.name);
@@ -167,7 +167,7 @@ function Ability() {
                 <Grid container sx={style.filteringContainer} spacing={1}>
                     <Grid item>
                         {/* Sort toggle by ascending/descending */}
-                        <Sort onClick={sortAbilityList} sortOrder={sortOrder} />
+                        <Sort onClick={sortAbilityList} sortOrder={sortOrderAbility} />
                     </Grid>
                     <Grid item>
                         {/* Search ability */}

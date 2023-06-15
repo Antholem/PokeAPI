@@ -16,11 +16,11 @@ function Items() {
     const { renderItem } = useStore();
     // State variables
     const [itemList, setItemList] = useState([]);
-    const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
+    const [sortOrderItem, setsortOrderItem] = useState(localStorage.getItem('sortOrderItem') || 'asc');
     const [filteredItemList, setFilteredItemList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
-    const [selectedStat, setSelectedStat] = useState(localStorage.getItem('selectedStat') || 'id');
+    const [selectedStatItem, setselectedStatItem] = useState(localStorage.getItem('selectedStatItem') || 'id');
 
     // Fetch item data from PokeAPI
     useEffect(() => {
@@ -60,18 +60,18 @@ function Items() {
         fetchItemData();
     }, []);
 
-    // Sort and filter the item list based on selectedStat and sortOrder
+    // Sort and filter the item list based on selectedStatItem and sortOrderItem
     useEffect(() => {
         let sortedList = [...itemList];
 
-        if (sortOrder === 'asc') {
-            sortedList.sort((a, b) => (a[selectedStat] > b[selectedStat] ? 1 : -1));
+        if (sortOrderItem === 'asc') {
+            sortedList.sort((a, b) => (a[selectedStatItem] > b[selectedStatItem] ? 1 : -1));
         } else {
-            sortedList.sort((a, b) => (a[selectedStat] < b[selectedStat] ? 1 : -1));
+            sortedList.sort((a, b) => (a[selectedStatItem] < b[selectedStatItem] ? 1 : -1));
         }
 
         setFilteredItemList(sortedList);
-    }, [selectedStat, sortOrder, itemList]);
+    }, [selectedStatItem, sortOrderItem, itemList]);
 
     // Render the attributes of an item
     const renderAttributes = (item) =>
@@ -102,29 +102,29 @@ function Items() {
     // Event handler for stat change
     const handleStatChange = (event) => {
         const stat = event.target.value;
-        setSelectedStat(stat);
+        setselectedStatItem(stat);
 
-        // Save selectedStat to localStorage
-        localStorage.setItem('selectedStat', stat);
+        // Save selectedStatItem to localStorage
+        localStorage.setItem('selectedStatItem', stat);
     };
 
     // Sort the item list
     const sortItemList = () => {
-        const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-        setSortOrder(newSortOrder);
+        const newsortOrderItem = sortOrderItem === 'asc' ? 'desc' : 'asc';
+        setsortOrderItem(newsortOrderItem);
 
         const sortedList = [...filteredItemList].sort((a, b) => {
-            if (selectedStat === 'id') {
-                return newSortOrder === 'asc' ? a.id - b.id : b.id - a.id;
-            } else if (selectedStat === 'name') {
-                return newSortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+            if (selectedStatItem === 'id') {
+                return newsortOrderItem === 'asc' ? a.id - b.id : b.id - a.id;
+            } else if (selectedStatItem === 'name') {
+                return newsortOrderItem === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
             }
         });
 
         setFilteredItemList(sortedList);
 
-        // Save sortOrder to localStorage
-        localStorage.setItem('sortOrder', newSortOrder);
+        // Save sortOrderItem to localStorage
+        localStorage.setItem('sortOrderItem', newsortOrderItem);
     };
 
     // Array containing item
@@ -156,7 +156,7 @@ function Items() {
                 <Grid container sx={style.filteringContainer} spacing={1}>
                     <Grid item>
                         {/* Sort toggle by ascending/descending */}
-                        <Sort onClick={sortItemList} sortOrder={sortOrder} />
+                        <Sort onClick={sortItemList} sortOrder={sortOrderItem} />
                     </Grid>
                     <Grid item>
                         {/* Search item */}
@@ -164,7 +164,7 @@ function Items() {
                     </Grid>
                     <Grid item>
                         {/* Select statistics */}
-                        <SelectItem.SelectStat value={selectedStat} onChange={handleStatChange} map={item} />
+                        <SelectItem.SelectStat value={selectedStatItem} onChange={handleStatChange} map={item} />
                     </Grid>
                 </Grid>
                 {isLoading ? (

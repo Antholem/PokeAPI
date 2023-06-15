@@ -18,7 +18,7 @@ function Pokedex() {
   // State variables
   const [pokemonList, setPokemonList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
+  const [sortOrderPokemon, setsortOrderPokemon] = useState(localStorage.getItem('sortOrderPokemon') || 'asc');
   const [searchText, setSearchText] = useState('');
   const [selectedType1, setSelectedType1] = useState(localStorage.getItem('selectedType1') || 'Any');
   const [selectedType2, setSelectedType2] = useState(localStorage.getItem('selectedType2') || 'Any');
@@ -29,7 +29,7 @@ function Pokedex() {
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${renderPokemon}&offset=0`); // 1,010
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${renderPokemon}&offset=0`);
         const data = response.data.results;
 
         const formattedPokemonList = await Promise.all(
@@ -128,7 +128,7 @@ function Pokedex() {
 
         // Sort the list based on the selected stat
         const sortedList = [...formattedPokemonList].sort((a, b) => {
-          if (sortOrder === 'asc') {
+          if (sortOrderPokemon === 'asc') {
             return a[selectedStat] - b[selectedStat]; // Ascending order
           } else {
             return b[selectedStat] - a[selectedStat]; // Descending order
@@ -143,7 +143,7 @@ function Pokedex() {
       }
 
       // Save state values to localStorage
-      localStorage.setItem('sortOrder', sortOrder);
+      localStorage.setItem('sortOrderPokemon', sortOrderPokemon);
       localStorage.setItem('selectedType1', selectedType1);
       localStorage.setItem('selectedType2', selectedType2);
       localStorage.setItem('selectedGen', selectedGen);
@@ -243,13 +243,13 @@ function Pokedex() {
     { name: 'WGT', value: 'weight' }
   ];
 
-  // sort filtered Pokémon based on sortOrder
+  // sort filtered Pokémon based on sortOrderPokemon
   const sortPokemonList = () => {
-    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-    setSortOrder(newSortOrder); // Update sortOrder state
+    const newsortOrderPokemon = sortOrderPokemon === 'asc' ? 'desc' : 'asc';
+    setsortOrderPokemon(newsortOrderPokemon); // Update sortOrderPokemon state
 
     const sortedList = [...filteredPokemonList].sort((a, b) => {
-      if (newSortOrder === 'asc') {
+      if (newsortOrderPokemon === 'asc') {
         return a[selectedStat] - b[selectedStat]; // Ascending order
       } else {
         return b[selectedStat] - a[selectedStat]; // Descending order
@@ -257,8 +257,8 @@ function Pokedex() {
     });
     setPokemonList(sortedList);
 
-    // Save sortOrder to localStorage
-    localStorage.setItem('sortOrder', newSortOrder);
+    // Save sortOrderPokemon to localStorage
+    localStorage.setItem('sortOrderPokemon', newsortOrderPokemon);
   };
 
   // Get the value of search text
@@ -358,7 +358,7 @@ function Pokedex() {
         <Grid container sx={style.filteringContainer} spacing={1}>
           <Grid item>
             {/* Sort toggle by ascending/descending */}
-            <Sort onClick={sortPokemonList} sortOrder={sortOrder}/>
+            <Sort onClick={sortPokemonList} sortOrder={sortOrderPokemon}/>
           </Grid>
           <Grid item>
             {/* Search Pokémon */}

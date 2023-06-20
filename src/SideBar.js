@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { CatchingPokemon } from '@mui/icons-material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Logo from './images/Pokemon_Icon_PokeAPI.svg';
@@ -93,11 +94,12 @@ function SideBar(props) {
 
 // Array containing menu title, path, and icon in the Sidebar
   const menu = [
-    { title: 'Pokédex', path: '/', icon: <CatchingPokemon /> },
+    { title: 'Pokédex', path: '/pokedex', icon: <CatchingPokemon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
     { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
     { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+    { title: 'Exit', path: '/', icon: <ExitToAppIcon /> },
   ];
 
   // Inline styles for components

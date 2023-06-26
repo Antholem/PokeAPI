@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../Store';
-import { Box, Button, CardMedia, CssBaseline, Grid, IconButton, Stack, ThemeProvider, Typography, createTheme } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, CssBaseline, Grid, IconButton, Stack, ThemeProvider, Typography, createTheme } from '@mui/material';
 import { Facebook, Instagram, Twitter, YouTube } from '@mui/icons-material';
 import Logo from '../images/Pokemon_Icon_PokeAPI.svg';
 import { blue, lightBlue, pink, red } from '@mui/material/colors';
@@ -37,10 +37,10 @@ const Home = () => {
     }, [images.length]);
 
     const socialIcons = [
-        { name: 'fb', icon: <Facebook sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? blue[400] : blue[900] },
-        { name: 'ig', icon: <Instagram sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? pink[300] : pink[600] },
-        { name: 'tw', icon: <Twitter sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? lightBlue[300] : lightBlue[600] },
-        { name: 'yt', icon: <YouTube sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? red[400] : red[700] }
+        { name: 'fb', icon: <Facebook sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? blue[400] : blue[900] },
+        { name: 'ig', icon: <Instagram sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? pink[300] : pink[600] },
+        { name: 'tw', icon: <Twitter sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? lightBlue[300] : lightBlue[600] },
+        { name: 'yt', icon: <YouTube sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? red[400] : red[700] }
     ];
 
     return (
@@ -49,12 +49,12 @@ const Home = () => {
                 <CssBaseline />
                 <Grid container sx={{ height: '100vh', px: { xs: 1, md: 4, lg: 8 }, zIndex: 1, }} justifyContent='center' alignItems='center'>
                     <Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}>
-                        <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={4} justifyContent='center'>
+                        <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={{xs: 2, md: 4}} justifyContent='center'>
                             <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                                 <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={2}>
                                     <Box>
                                         <CardMedia
-                                            sx={{ width: '70%', mx: { xs: 'auto', md: 0 } }}
+                                            sx={{ width: {xs: '40%', md: '70%'}, mx: { xs: 'auto', md: 0 } }}
                                             component='img'
                                             image={Logo}
                                             alt='Pikachu'
@@ -91,31 +91,31 @@ const Home = () => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
-                        <Box sx={{ height: '100%' }}>
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 2 }}
-                                unmountOnExit // Add this prop
-                            >
+                            <Box sx={{ height: '100%' }}>
                                 <motion.div
-                                    key={currentImage}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 2 }}
+                                    unmountOnExit // Add this prop
                                 >
-                                    <CardMedia
-                                        sx={{ width: '60%', mx: 'auto', my: 'auto' }}
-                                        component='img'
-                                        image={images[currentImage]}
-                                        alt='Pikachu'
-                                        transition={{ duration: 2 }} // Add this prop
-                                    />
+                                    <motion.div
+                                        key={currentImage}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 2 }}
+                                    >
+                                        <CardMedia
+                                            sx={{ width: '60%', mx: 'auto', my: 'auto' }}
+                                            component='img'
+                                            image={images[currentImage]}
+                                            alt='Pikachu'
+                                            transition={{ duration: 2 }} // Add this prop
+                                        />
+                                    </motion.div>
                                 </motion.div>
-                            </motion.div>
-                        </Box>
+                            </Box>
                     </Grid>
                 </Grid>
                 <Box

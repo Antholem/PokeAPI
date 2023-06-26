@@ -9,7 +9,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { red, pink, purple, blue, teal, green, yellow, orange, grey, indigo } from '@mui/material/colors';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { CatchingPokemon } from '@mui/icons-material';
@@ -96,7 +96,7 @@ function SideBar(props) {
   const menu = [
     { title: 'Pokédex', path: '/pokedex', icon: <CatchingPokemon /> },
     { title: 'Moves', path: '/moves', icon: <PetsIcon /> },
-    { title: 'Abilities', path: '/abilities', icon: <TipsAndUpdatesIcon /> },
+    { title: 'Abilities', path: '/abilities', icon: <LightbulbIcon /> },
     { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
     { title: 'Exit', path: '/', icon: <ExitToAppIcon /> },

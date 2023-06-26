@@ -37,10 +37,10 @@ const Home = () => {
     }, [images.length]);
 
     const socialIcons = [
-        { name: 'fb', icon: <Facebook sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? blue[400] : blue[900] },
-        { name: 'ig', icon: <Instagram sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? pink[300] : pink[600] },
-        { name: 'tw', icon: <Twitter sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? lightBlue[300] : lightBlue[600] },
-        { name: 'yt', icon: <YouTube sx={{ fontSize: { xs: '0.8em', md: '1.5em' } }} />, color: mode === 'dark' ? red[400] : red[700] }
+        { name: 'fb', icon: <Facebook sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? blue[400] : blue[900] },
+        { name: 'ig', icon: <Instagram sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? pink[300] : pink[600] },
+        { name: 'tw', icon: <Twitter sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? lightBlue[300] : lightBlue[600] },
+        { name: 'yt', icon: <YouTube sx={{ fontSize: '1.5em' }} />, color: mode === 'dark' ? red[400] : red[700] }
     ];
 
     return (
@@ -62,7 +62,7 @@ const Home = () => {
                                     </Box>
                                     <Box>
                                         <Typography variant="body2" color='text.secondary'>
-                                            Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community. Delve into the vast world of Pokémon as you explore an extensive Pokédex and much more.
+                                            Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community.
                                         </Typography>
                                     </Box>
                                 </Stack>

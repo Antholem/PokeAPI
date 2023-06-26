@@ -49,20 +49,21 @@ const Home = () => {
                 <CssBaseline />
                 <Grid container sx={{ height: '100vh', px: { xs: 1, md: 4, lg: 8 }, zIndex: 1, }} justifyContent='center' alignItems='center'>
                     <Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}>
-                        <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={{xs: 2, md: 4}} justifyContent='center'>
+                        <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={{xs: 8, md: 4}} justifyContent='center'>
                             <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                                 <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={2}>
                                     <Box>
                                         <CardMedia
-                                            sx={{ width: {xs: '40%', md: '70%'}, mx: { xs: 'auto', md: 0 } }}
+                                            sx={{ width: '70%', mx: { xs: 'auto', md: 0 } }}
                                             component='img'
                                             image={Logo}
                                             alt='Pikachu'
                                         />
                                     </Box>
-                                    <Box>
+                                    {/* remove */}
+                                    <Box sx={{display: 'none'}}> 
                                         <Typography variant="body2" color='text.secondary'>
-                                            Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community.
+                                            Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community. Delve into the vast world of Pokémon as you explore an extensive Pokédex and much more.
                                         </Typography>
                                     </Box>
                                 </Stack>
@@ -72,7 +73,8 @@ const Home = () => {
                                     Get Started
                                 </Button>
                             </Box>
-                            <Box>
+                            {/* remove */}
+                            <Box sx={{ display: 'none' }}>
                                 <Stack
                                     sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}
                                     direction='row'

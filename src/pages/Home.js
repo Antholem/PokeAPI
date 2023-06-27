@@ -1,12 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../Store';
-import { Box, Button, Card, CardContent, CardMedia, CssBaseline, Grid, IconButton, Stack, ThemeProvider, Typography, createTheme } from '@mui/material';
+import { Box, Button, CardMedia, CssBaseline, Grid, IconButton, Stack, ThemeProvider, Typography, createTheme } from '@mui/material';
 import { Facebook, Instagram, Twitter, YouTube } from '@mui/icons-material';
 import Logo from '../images/Pokemon_Icon_PokeAPI.svg';
-import { blue, lightBlue, pink, red } from '@mui/material/colors';
+import { blue, grey, lightBlue, pink, red } from '@mui/material/colors';
 import { CatchingPokemon } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+
+import Hero1 from '../images/Pokemon_Hero_1.png';
+import Hero2 from '../images/Pokemon_Hero_2.png';
+import Hero3 from '../images/Pokemon_Hero_3.png';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -20,10 +24,9 @@ const Home = () => {
     });
 
     const images = [
-        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/25.png',
-        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1.png',
-        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/4.png',
-        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/7.png',
+        Hero1,
+        Hero2,
+        Hero3,
     ];
 
     useEffect(() => {
@@ -47,9 +50,9 @@ const Home = () => {
         <Fragment>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
-                <Grid container sx={{ height: '100vh', px: { xs: 1, md: 4, lg: 8 }, zIndex: 1, }} justifyContent='center' alignItems='center'>
+                <Grid container sx={{ height: '100vh', px: { xs: 1, md: 4, lg: 8 }, py: 10, zIndex: 1 }} justifyContent='center' alignItems='center'>
                     <Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}>
-                        <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={{xs: 8, md: 4}} justifyContent='center'>
+                        <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={4} justifyContent='center'>
                             <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
                                 <Stack sx={{ alignItems: { xs: 'center', md: 'flex-start' } }} direction='column' spacing={2}>
                                     <Box>
@@ -60,8 +63,7 @@ const Home = () => {
                                             alt='Pikachu'
                                         />
                                     </Box>
-                                    {/* remove */}
-                                    <Box sx={{display: 'none'}}> 
+                                    <Box> 
                                         <Typography variant="body2" color='text.secondary'>
                                             Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community. Delve into the vast world of Pokémon as you explore an extensive Pokédex and much more.
                                         </Typography>
@@ -73,8 +75,7 @@ const Home = () => {
                                     Get Started
                                 </Button>
                             </Box>
-                            {/* remove */}
-                            <Box sx={{ display: 'none' }}>
+                            <Box>
                                 <Stack
                                     sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}
                                     direction='row'
@@ -93,7 +94,7 @@ const Home = () => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
-                            <Box sx={{ height: '100%' }}>
+                            <Box sx={{ height: {xs: '230px', md: '100%'} }}>
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -135,7 +136,7 @@ const Home = () => {
                     >
                         <CatchingPokemon
                             sx={{
-                                color: mode === 'dark' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.2)',
+                                color: mode === 'dark' ? grey[900] : grey[300],
                                 fontSize: { xs: '20em', md: '35em' },
                             }}
                         />

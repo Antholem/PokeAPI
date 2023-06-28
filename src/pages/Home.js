@@ -100,7 +100,7 @@ const Home = () => {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 2 }}
-                                    unmountOnExit // Add this prop
+                                    unmountOnExit
                                 >
                                     <motion.div
                                         key={currentImage}
@@ -114,7 +114,7 @@ const Home = () => {
                                             component='img'
                                             image={images[currentImage]}
                                             alt='Pikachu'
-                                            transition={{ duration: 2 }} // Add this prop
+                                            transition={{ duration: 2 }}
                                         />
                                     </motion.div>
                                 </motion.div>

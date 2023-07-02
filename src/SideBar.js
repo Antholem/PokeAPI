@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState, useMemo } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import useStore from './Store';
+import CloseModal from './components/CloseModal';
 import PropTypes from 'prop-types';
 import { Toolbar, AppBar, Box, CssBaseline, CardMedia } from '@mui/material/';
 import { Divider, Drawer, Typography, IconButton } from '@mui/material/';
@@ -99,7 +100,6 @@ function SideBar(props) {
     { title: 'Abilities', path: '/abilities', icon: <LightbulbIcon /> },
     { title: 'Items', path: '/items', icon: <ShoppingBagIcon /> },
     { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
-    { title: 'Exit', path: '/', icon: <ExitToAppIcon /> },
   ];
 
   // Inline styles for components
@@ -168,6 +168,12 @@ function SideBar(props) {
             {(index === 0 || index === 3) && <Divider />}
           </Fragment>
         ))}
+        <CloseModal>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary='Exit' />
+        </CloseModal>
       </List>
     </Fragment>
   );

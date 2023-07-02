@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useStore from '../Store';
+import FadeIn from '../animations/FadeIn';
 import { Box, Button, CardMedia, CssBaseline, Grid, IconButton, Stack, ThemeProvider, Typography, createTheme } from '@mui/material';
 import { blue, grey, lightBlue, pink, red, purple, indigo, teal, yellow, orange, green } from '@mui/material/colors';
 import { Facebook, Instagram, Twitter, YouTube } from '@mui/icons-material';
@@ -30,14 +31,14 @@ const Home = () => {
             mode: mode === 'dark' ? 'dark' : 'light',
             primary: {
                 main: themeColor === 'cherry' ? (mode === 'dark' ? red[400] : red[800]) :
-                      themeColor === 'rose' ? (mode === 'dark' ? pink[200] : pink[600]) :
-                      themeColor === 'lavender' ? (mode === 'dark' ? purple[200] : purple[800]) :
-                      themeColor === 'navy' ? (mode === 'dark' ? blue[300] : blue[800]) : 
-                      themeColor === 'indigo' ? (mode === 'dark' ? indigo[300] : indigo[800]) :
-                      themeColor === 'teal' ? (mode === 'dark' ? teal[200] : teal[700]) :
-                      themeColor === 'emerald' ? (mode === 'dark' ? green[400] : green[800]) :
-                      themeColor === 'amber' ? (mode === 'dark' ? yellow[400] : yellow[800]) :
-                    (mode === 'dark' ? orange[300] : orange[800]) ,
+                    themeColor === 'rose' ? (mode === 'dark' ? pink[200] : pink[600]) :
+                        themeColor === 'lavender' ? (mode === 'dark' ? purple[200] : purple[800]) :
+                            themeColor === 'navy' ? (mode === 'dark' ? blue[300] : blue[800]) :
+                                themeColor === 'indigo' ? (mode === 'dark' ? indigo[300] : indigo[800]) :
+                                    themeColor === 'teal' ? (mode === 'dark' ? teal[200] : teal[700]) :
+                                        themeColor === 'emerald' ? (mode === 'dark' ? green[400] : green[800]) :
+                                            themeColor === 'amber' ? (mode === 'dark' ? yellow[400] : yellow[800]) :
+                                                (mode === 'dark' ? orange[300] : orange[800]),
                 contrastText: mode === 'dark' ? grey[900] : grey[50],
             },
         },
@@ -125,57 +126,59 @@ const Home = () => {
 
     return (
         <Fragment>
-            <ThemeProvider theme={darkTheme}>
-                <CssBaseline />
-                <Grid container sx={style.homeContainer} justifyContent='center' alignItems='center'>
-                    <Grid item sx={style.leftContainer} xs={12} md={6}>
-                        <Stack sx={style.leftContainerAlignments} direction='column' spacing={4} justifyContent='center'>
-                            <Box sx={style.headerContainer}>
-                                <Stack sx={style.headerContainerAlignments} direction='column' spacing={2}>
-                                    <Box>
-                                        <CardMedia sx={style.logo} component='img' image={Logo} alt='PokéAPI' />
-                                    </Box>
-                                    <Box>
-                                        <Typography variant='body2' color='text.secondary'>
-                                            Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community. Delve into the vast world of Pokémon as you explore an extensive Pokédex and much more.
-                                        </Typography>
-                                    </Box>
-                                </Stack>
-                            </Box>
-                            <Box>
-                                <Button variant='contained' color='primary' onClick={() => navigate('/pokedex')}>
-                                    Get Started
-                                </Button>
-                            </Box>
-                            <Box>
-                                <Stack sx={style.socialIconsContainer} direction='row' spacing={3} alignItems='center'>
-                                    {socialIcons.map((icon) => (
-                                        <Box key={icon.name}>
-                                            <IconButton sx={[style.socialIconsButton, { color: icon.color }]}>
-                                                {icon.icon}
-                                            </IconButton>
+            <FadeIn>
+                <ThemeProvider theme={darkTheme}>
+                    <CssBaseline />
+                    <Grid container sx={style.homeContainer} justifyContent='center' alignItems='center'>
+                        <Grid item sx={style.leftContainer} xs={12} md={6}>
+                            <Stack sx={style.leftContainerAlignments} direction='column' spacing={4} justifyContent='center'>
+                                <Box sx={style.headerContainer}>
+                                    <Stack sx={style.headerContainerAlignments} direction='column' spacing={2}>
+                                        <Box>
+                                            <CardMedia sx={style.logo} component='img' image={Logo} alt='PokéAPI' />
                                         </Box>
-                                    ))}
-                                </Stack>
-                            </Box>
-                        </Stack>
-                    </Grid>
-                    <Grid item sx={style.rightContainer} xs={12} md={6}>
-                        <Box sx={style.pokemonImageContainer}>
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 2 }} unmountOnExit>
-                                <motion.div key={currentImage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 2 }}>
-                                    <CardMedia sx={style.pokemonImage} component='img' image={images[currentImage]} alt='Starter Pokemon' transition={{ duration: 2 }} />
+                                        <Box>
+                                            <Typography variant='body2' color='text.secondary'>
+                                                Greetings, Pokémon Trainers! Welcome to our comprehensive platform designed for Pokémon Community. Delve into the vast world of Pokémon as you explore an extensive Pokédex and much more.
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+                                </Box>
+                                <Box>
+                                    <Button variant='contained' color='primary' onClick={() => navigate('/pokedex')}>
+                                        Get Started
+                                    </Button>
+                                </Box>
+                                <Box>
+                                    <Stack sx={style.socialIconsContainer} direction='row' spacing={3} alignItems='center'>
+                                        {socialIcons.map((icon) => (
+                                            <Box key={icon.name}>
+                                                <IconButton sx={[style.socialIconsButton, { color: icon.color }]}>
+                                                    {icon.icon}
+                                                </IconButton>
+                                            </Box>
+                                        ))}
+                                    </Stack>
+                                </Box>
+                            </Stack>
+                        </Grid>
+                        <Grid item sx={style.rightContainer} xs={12} md={6}>
+                            <Box sx={style.pokemonImageContainer}>
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 2 }} unmountOnExit>
+                                    <motion.div key={currentImage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 2 }}>
+                                        <CardMedia sx={style.pokemonImage} component='img' image={images[currentImage]} alt='Starter Pokemon' transition={{ duration: 2 }} />
+                                    </motion.div>
                                 </motion.div>
-                            </motion.div>
-                        </Box>
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Box sx={style.background}>
-                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}>
-                        <CatchingPokemon sx={style.backgroundImage} />
-                    </motion.div>
-                </Box>
-            </ThemeProvider>
+                    <Box sx={style.background}>
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}>
+                            <CatchingPokemon sx={style.backgroundImage} />
+                        </motion.div>
+                    </Box>
+                </ThemeProvider>
+            </FadeIn>
         </Fragment>
     );
 };

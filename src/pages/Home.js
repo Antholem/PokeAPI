@@ -11,6 +11,11 @@ import { motion } from 'framer-motion';
 import Hero1 from '../images/Pokemon_Hero_1.png';
 import Hero2 from '../images/Pokemon_Hero_2.png';
 import Hero3 from '../images/Pokemon_Hero_3.png';
+import Hero4 from '../images/Pokemon_Hero_4.png';
+import Hero5 from '../images/Pokemon_Hero_5.png';
+import Hero6 from '../images/Pokemon_Hero_6.png';
+import Hero7 from '../images/Pokemon_Hero_7.png';
+import Hero8 from '../images/Pokemon_Hero_8.png';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -27,6 +32,11 @@ const Home = () => {
         Hero1,
         Hero2,
         Hero3,
+        Hero4,
+        Hero5,
+        Hero6,
+        Hero7,
+        Hero8
     ];
 
     useEffect(() => {

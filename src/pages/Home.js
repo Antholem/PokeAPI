@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useStore from '../Store';
 import { Box, Button, CardMedia, CssBaseline, Grid, IconButton, Stack, ThemeProvider, Typography, createTheme } from '@mui/material';
-import { blue, grey, lightBlue, pink, red } from '@mui/material/colors';
+import { blue, grey, lightBlue, pink, red, purple, indigo, teal, yellow, orange, green } from '@mui/material/colors';
 import { Facebook, Instagram, Twitter, YouTube } from '@mui/icons-material';
 import { CatchingPokemon } from '@mui/icons-material';
 import Logo from '../images/Pokemon_Icon_PokeAPI.svg';
@@ -17,18 +17,36 @@ import Hero7 from '../images/Pokemon_Hero_7.png';
 import Hero8 from '../images/Pokemon_Hero_8.png';
 
 const Home = () => {
+    // useNavigate for routing
     const navigate = useNavigate();
+    // Accessing from the useStore hook
     const { mode, themeColor } = useStore();
+    // State variables
     const [currentImage, setCurrentImage] = useState(0);
 
+    // Custom theme
     const darkTheme = createTheme({
         palette: {
             mode: mode === 'dark' ? 'dark' : 'light',
+            primary: {
+                main: themeColor === 'cherry' ? (mode === 'dark' ? red[400] : red[800]) :
+                      themeColor === 'rose' ? (mode === 'dark' ? pink[200] : pink[600]) :
+                      themeColor === 'lavender' ? (mode === 'dark' ? purple[200] : purple[800]) :
+                      themeColor === 'navy' ? (mode === 'dark' ? blue[300] : blue[800]) : 
+                      themeColor === 'indigo' ? (mode === 'dark' ? indigo[300] : indigo[800]) :
+                      themeColor === 'teal' ? (mode === 'dark' ? teal[200] : teal[700]) :
+                      themeColor === 'emerald' ? (mode === 'dark' ? green[400] : green[800]) :
+                      themeColor === 'amber' ? (mode === 'dark' ? yellow[400] : yellow[800]) :
+                    (mode === 'dark' ? orange[300] : orange[800]) ,
+                contrastText: mode === 'dark' ? grey[900] : grey[50],
+            },
         },
     });
 
+    // Array containing image
     const images = [Hero1, Hero2, Hero3, Hero4, Hero5, Hero6, Hero7, Hero8];
 
+    // Changing the image dynamically
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImage((prevImage) => (prevImage + 1) % images.length);
@@ -39,6 +57,7 @@ const Home = () => {
         };
     }, [images.length]);
 
+    // Inline styles for components
     const style = {
         homeContainer: {
             height: '100vh',
@@ -96,6 +115,7 @@ const Home = () => {
         }
     }
 
+    // Inline styles for social icons
     const socialIcons = [
         { name: 'fb', icon: <Facebook sx={style.socialIcons} />, color: mode === 'dark' ? blue[400] : blue[900] },
         { name: 'ig', icon: <Instagram sx={style.socialIcons} />, color: mode === 'dark' ? pink[300] : pink[600] },
@@ -123,7 +143,7 @@ const Home = () => {
                                 </Stack>
                             </Box>
                             <Box>
-                                <Button variant='contained' onClick={() => navigate('/pokedex')}>
+                                <Button variant='contained' color='primary' onClick={() => navigate('/pokedex')}>
                                     Get Started
                                 </Button>
                             </Box>
